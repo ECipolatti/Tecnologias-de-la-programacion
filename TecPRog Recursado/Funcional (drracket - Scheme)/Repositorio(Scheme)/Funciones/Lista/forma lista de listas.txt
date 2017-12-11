@@ -1,0 +1,9 @@
+(define formar_lista
+  (lambda (lista)
+    (if (null? lista)
+        '()
+        (if (eqv? (car lista) #\space)
+            '()
+            (if (eqv? (car lista) #\return)
+                '()                
+            (cons (car lista) (formar_lista (cdr lista))) )))))

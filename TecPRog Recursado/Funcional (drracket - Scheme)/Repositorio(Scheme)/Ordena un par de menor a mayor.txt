@@ -1,0 +1,12 @@
+(define orden-pair
+  (lambda (x)
+    (if (null? x)
+        '()
+        (if (< (car (car x)) (cdr (car x)))
+            (cons (cons (car (car x)) (cdr (car x)))(orden-pair (cdr x)))
+            (cons (cons (cdr (car x)) (car (car x)))(orden-pair (cdr x)))
+            )
+        )
+    )
+  )
+(orden-pair '((1 . 2) (3 . 1) (4 . 5) (5 . 1)))

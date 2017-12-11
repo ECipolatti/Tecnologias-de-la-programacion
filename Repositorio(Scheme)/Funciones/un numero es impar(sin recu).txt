@@ -1,0 +1,10 @@
+(define odd
+  (lambda (x)
+    (if (eqv? (remainder x 2) 0)
+        #f
+        #t
+        )
+    )
+  )
+(odd 54)
+        

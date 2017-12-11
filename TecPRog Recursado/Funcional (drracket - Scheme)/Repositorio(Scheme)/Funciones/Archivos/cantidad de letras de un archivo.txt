@@ -1,0 +1,10 @@
+(define cantlet
+  (lambda (archi)
+    (let ((tempo (read-char archi)))
+      (if (eof-object? tempo)
+          0
+          (if (eqv? tempo #\space )
+              (cantlet archi)
+              (+ (cantlet archi ) 1)
+          )))))
+(cantlet (open-input-file "hola.txt"))

@@ -1,0 +1,121 @@
+ Tecnologías de programación
+Cipolatti Edgardo	
+DNI: 35215385					      
+TP-10 Logico
+
+-----------------------------------------------Ejercicio 1-----------------------------------
+f(1).
+f(2).
+f(a).
+
+lista(L):-findall(X,(f(X),number(X)),L).
+
+-----------------------------------------------Ejercicio 2-----------------------------------
+
+forall(member(X,[1,2,3,4]),number(L)).
+
+-----------------------------------------------Ejercicio 3-----------------------------------
+
+forall(member(X=Y,[1 = 2, 2 = 2, 3 = 1 + 2] ),X=:=Y).
+
+-----------------------------------------------Ejercicio 4-----------------------------------
+
+:-dynamic(f/1).
+f(1).
+f(3).
+f(4).
+
+agregar(X):-not(f(X)), assert(f(X)).
+
+o
+
+:-dynamic(f/1).
+f(1).
+f(3).
+f(4).
+
+agregar(X):-findall(X,f(X),L),not(member(X,L)),assert(f(X)).
+
+-----------------------------------------------Ejercicio 5-----------------------------------
+
+lista(L):-forall(member(X,L),number(X)),!.
+lista(L):-forall(member(X,L),atom(X)),!.
+lista(L):-forall(member(X,Ligualdad),(not(number(X)),not(atom(X)))).
+
+-----------------------------------------------Ejercicio 6-----------------------------------
+
+--------------HACER
+
+-----------------------------------------------Ejercicio 7-----------------------------------
+
+oper(+).
+oper(-).
+oper(*).
+
+listaari([X],[X]):-!.
+listaari([X|R],[X, Op| Rari]):-oper(Op), listaari(R, Rari).
+
+calcular([X],X).
+calcular([X,+,Y|L], R):- !, Z is X+Y, calcular([Z|L],R).
+calcular([X,-,Y|L], R):- !, Z is X-Y, calcular([Z|L],R).
+calcular([X,*,Y|L], R):- Z is X*Y, calcular([Z|L],R).
+
+
+
+igu(L,LF):- append(L1,L2,L),L1\=[],L2\=[], 
+		listaari(L1,L1ari), listaari(L2,L2ari), 
+		calcular(L1ari,R), calcular(L2ari,R),!,
+		append(L1ari,[=|L2ari],LF).
+
+
+-----------------------------------------------Ejercicio 8-----------------------------------
+
+validar([]):-true,!.
+validar([X|L]):-not(member(X,L)), validar(L).
+
+unir([],L2,L2):- validar(L2),!.
+unir([X|L1],L2,[X|LF]):- validar([X|L1]),not(member(X,L2)), unir(L1,L2,LF),!.
+unir([_|L1],L2,LF):- validar(L1), unir(L1,L2,LF).
+
+inter([],_,[]):-!.
+inter([X|L1],L2,[X|LF]):-validar([X|L1]),validar(L2), member(X,L2),inter(L1,L2,LF),!.
+inter([_|L1],L2,LF):-validar(L1),validar(L2), inter(L1,L2,LF).
+
+dif([],_,[]):-!.
+dif([X|L1],L2,[X|LF]):- validar([X|L1]),validar(L2),not(member(X,L2)),dif(L1,L2,LF) ,!.
+dif([_|L1],L2,LF):- validar(L1),validar(L2),dif(L1,L2,LF).
+
+-----------------------------------------------Ejercicio 9-----------------------------------
+
+p(árbol).
+p(animal).
+p(base).
+p(caramelo).
+p(caracol).
+p(curso).
+p(dedo).
+p(dedal).
+p(diferencia).
+p(diferencial).
+p(diferente).
+p(elefante).
+p(electricidad).
+p(esfera).
+p(fenómeno).
+p(fiera).
+p(guante).
+p(hormiga).
+p(hormigón).
+p(irlanda).
+
+buscar(P,L):-findall(X,p(X),D), match(P,D,L).
+
+match(_,[],[]):-!.
+match(P,[X|R],[X|R1]):- atom_chars(P,Pl), atom_chars(X,Xl), verifica(Pl,Xl), !, match(P,R,R1).
+match(P,[_|R],R1):- match(P,R,R1).
+
+verifica([*],[]):-!.
+verifica([],[]):-!.
+verifica([?|Pr],[_|Dr]):- !, verifica(Pr,Dr).
+verifica([*|Pr],[X|Dr]):-  verifica(Pr,[X|Dr]) ; verifica([*|Pr],Dr) .
+verifica([X|Pr],[X|Dr]):- verifica(Pr,Dr).

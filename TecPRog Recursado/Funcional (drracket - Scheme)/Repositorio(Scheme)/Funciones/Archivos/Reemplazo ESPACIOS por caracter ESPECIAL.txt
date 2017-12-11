@@ -1,0 +1,11 @@
+(define muestra
+  (lambda (archi)
+    (let ((tempo (read-char archi)))
+    (if (eof-object? tempo)
+        (display #\ )
+        (cond 
+          ((eqv? tempo #\space)(display #\|)(muestra archi))
+              (else (display tempo)(muestra archi)))
+        ))))
+            
+(muestra (open-input-file "hola.txt"))

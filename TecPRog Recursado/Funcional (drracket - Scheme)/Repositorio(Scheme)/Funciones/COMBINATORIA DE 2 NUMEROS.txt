@@ -1,0 +1,30 @@
+;;;;;;COMBINATORIA DE 2 NUMEROS
+
+
+(define comb
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (cons (append (list x) (list(car l1))) (comb x (cdr l1)))
+        )
+    )
+  )
+
+(define extraer
+  (lambda (n l1)
+    (if (eqv? n 1)
+        (car l1)
+        (extraer (- n 1) (cdr l1))
+        )
+    )
+  )
+
+(define combinatoria
+  (lambda (n l1)
+    (if (eqv? n (+ (length l1) 1))
+        '()
+        (append (comb(extraer n l1) l1) (combinatoria (+ n 1) l1))
+        )
+    )
+  )
+(combinatoria 1 '(1 2 3))

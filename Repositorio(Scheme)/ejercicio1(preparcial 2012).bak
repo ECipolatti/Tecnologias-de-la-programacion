@@ -1,0 +1,25 @@
+(define raiz
+  (lambda (arbol)
+    (car arbol)
+    ))
+(define maxlvl
+  (lambda (A)
+    (if (null? A)
+        0
+        (+ 1 (max (maxlvl(car(cdr A))) (maxlvl(car(cdr(cdr A))))))
+        )
+    )
+  )
+(define peso-nivel
+  (lambda (n A)
+    (if (null? (cdr A))
+        0
+        (if (eqv? 0 n)
+            (raiz A)
+            (+ (peso-nivel(- n 1) (car(cdr A))) (peso-nivel (- n 1)(cdr A)))
+            )
+        )
+    )
+  )
+
+(peso-nivel 1 '(3 (2 (2)) (4) (1 (8) (1))))

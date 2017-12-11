@@ -1,0 +1,36 @@
+Durante el TC2000 se han registrado distintos parámetros sobre el consumo de combustible de un vehículo testigo. El controlador de sensores transmite los datos a la central receptora en formato string con el identificador de la la variable censada y el valor relevado. Los valores que se transmiten pueden ser "Mxx" "Ixx" "Xxx" "Axx" "Fxx" donde xx es el valor medido. Dependiendo de los datos tomados se enviaron n variables juntas. Estos datos se han agrupado en instantes de tiempo representados por una lista que contiene las variables del mismo. Se desea obtener cual fue el consumo medio del auto en todo el trayecto calculado mismo como la media de la media de los consumos de los intervalos.
+
+
+Restricciones: 
+- Crear el programa utilizando una única sentencia "define".
+- No se podrá utilizar la función "substring".
+- El programa recibirá como parámetro la lista con todos los datos y devolverá el valor requerido.
+- La función deberá llamarse "promedio-consumo".
+Ejemplo: (promedio-consumo '(("M72" "I65" "X77" "A21") ("M82" "I54") ("A23" "I59" "X73") ....) ---> 49
+
+(define promedio-consumo
+(lambda (lista)
+     (letrec ((sumas
+           (lambda (x)
+                (if (null? x)
+                    0
+                    (+ (car x) (sumas (cdr x)))))))
+   
+     (letrec ((promedio
+                (lambda (l)
+                 (* (/ (sumas l) (length l))1.0))))    
+     
+     (letrec ((promlistas
+                  (lambda (p)
+                    (map (lambda (h) (promedio h)) p))))
+          
+     (letrec ((transforma
+                    (lambda (li)
+                      (map (lambda (x) (string->number (list->string (cons (car(cdr (string->list x))) (cdr(cdr (string->list x))))))) li))))
+            
+    (letrec ((transformo
+                      (lambda (y)
+                        (map (lambda (x) (transforma x)) y))))
+              (promedio (promlistas (transformo lista))))))))))
+
+ (promedio-consumo '(("M72" "I65" "X77" "A21") ("M82" "I54") ("A23" "I59" "X73")))

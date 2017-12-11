@@ -1,0 +1,261 @@
+Tecnologías de la Programación
+Cipolatti Edgardo
+DNI: 35215385
+
+------------Ejercicio 1---------------------------------------------------------------
+
+(define-struct punto (x y))
+
+(define p1 (make-punto 1 2))
+(define p2 (make-punto 1 6))
+
+(define (distancia p1 p2)
+  (sqrt (+ (* (- (punto-x p2) (punto-x p1)) (- (punto-x p2) (punto-x p1))) 
+           (* (- (punto-y p2) (punto-y p1)) (- (punto-y p2) (punto-y p1)))
+           ))
+  ) 
+
+
+(distancia p1 p2)
+
+
+
+------------Ejercicio 2----------------------------------------------------------------
+(define sumax
+  (lambda (l)
+    (if (null? l)
+        0
+        (+ (punto-x (car l)) (sumax (cdr l)))
+        )))
+(define sumay
+  (lambda (l)
+    (if (null? l)
+        0
+        (+ (punto-y (car l)) (sumay (cdr l)))
+        )))
+(define sumaz
+  (lambda (l)
+    (if (null? l)
+        0
+        (+ (punto-z (car l)) (sumaz (cdr l)))
+        )))
+
+
+;reeplaza las tres funciones suma que estan arriba
+(define suma
+  (lambda (l componente)
+    (if (null? l)
+        0
+        (+ (componente (car l)) (suma (cdr l) componente))
+        )))
+
+
+(define-struct punto (x y z))
+
+(define p1 (make-punto 1 1 1))
+(define p2 (make-punto 1 6 4))
+(define p3 (make-punto 1 3 4))
+(define lista (list p1 p2 p3))
+
+
+(define centro
+  (lambda (l)
+    (if (null? l)
+        (display "la lista esta vacia")
+        (map (lambda(n) (/ n (length l)))
+              (list (suma l punto-x) 
+                    (suma l punto-y)
+                    (suma l punto-z)))
+        )))
+;
+
+(centro lista)
+
+------------Ejercicio 3-----------------------------------------------------------------------
+
+(define (distancia p1 p2)
+  (sqrt (+ (* (- (punto-x p2) (punto-x p1)) (- (punto-x p2) (punto-x p1))) 
+           (* (- (punto-y p2) (punto-y p1)) (- (punto-y p2) (punto-y p1)))
+           (* (- (punto-z p2) (punto-z p1)) (- (punto-z p2) (punto-z p1)))
+           ))
+  ) 
+(define suma  (lambda (l componente)
+                (if (null? l)
+                    0
+                    (+ (componente (car l)) (suma (cdr l) componente))
+                    )))
+
+(define-struct punto (x y z))
+(define p1 (make-punto 1 1 1))
+(define p2 (make-punto 8 2 4))
+(define p3 (make-punto 1 6 2))
+(define lista (list p1 p2 p3))
+
+(define max-dist
+  (lambda (l)
+    (if (< (length l) 2)
+        (display "la lista tiene menos de dos puntos")
+        (if (= (length l) 2)
+            (distancia (car l) (car (cdr l)))
+            (list-max 
+             (cons 
+              (max-dist (cdr l))
+              (map distancia 
+                   (vector->list (make-vector (length (cdr l)) (car l))) 
+                   (cdr l)
+                   )
+	       ;o se puede hacer
+              ;(map (lambda (v)
+              ;        (distancia (car l) v)
+              ;      )
+              ;     (cdr l)
+              )
+             )
+            )
+        )))
+  
+  (define list-max (lambda (lista)
+                     (if (= (length lista) 1)
+                         (car lista)
+                         (let ((maxcdr (list-max (cdr lista))))
+                           (if (> (car lista) maxcdr)
+                               (car lista)
+                               maxcdr
+                               )))))
+  
+
+------------Ejercicio 4----------------------
+
+(define contar
+  (lambda (path)
+    (contaraux (open-input-file path))
+    ))
+
+(define contaraux
+  (lambda (file)
+    (let ((linea (read-line file)))
+    (if (eof-object? linea)
+        '(0 0 0 
+        (let ((resto (contaraux file)))
+          (list (+ 1 (car resto)) 
+                (+ (contarpalabras linea) (car (cdr resto)))
+                (+ (string-length linea) (car (cdr (cdr resto))))
+                )
+          )
+        )
+      )
+    ))
+
+(define contarpalabras
+  (lambda (str)
+    (contarpalabrasaux (open-input-string str))))
+
+(define contarpalabrasaux
+  (lambda (Sfile)
+    (let ((palabra (read Sfile)))
+      (if (eof-object? palabra)
+          0
+          (+ 1 (contarpalabrasaux Sfile))
+          ))))
+
+
+------------Ejercicio 5----------------------
+(define geringoso
+  (lambda ()
+    (let ((linea (open-input-string (read-line))))
+      (geringosoaux linea)
+      )))
+
+(define geringosoaux
+  (lambda (str)
+    (let ((c (read-char str)))
+      (if (eof-object? c)
+          ""
+          (string-append (convertir c) (geringosoaux str))
+          ))))
+
+(define convertir
+  (lambda (letra)
+    (if (eqv? #\a letra)
+        (list->string (list #\a #\p #\a))
+        (if (eqv? #\e letra)
+            (list->string (list #\e #\p #\e))
+            (if (eqv? #\i letra)
+                (list->string (list #\i #\p #\i))
+                (if (eqv? #\o letra)
+                    (list->string (list #\o #\p #\o))
+                    (if (eqv? #\u letra)
+                        (list->string (list #\u #\p #\u))
+                        (make-string 1 letra)
+                        )
+                    ))))))
+(geringoso)
+
+------------Ejercicio 6----------------------
+
+(define encriptar
+  (lambda (path)
+    (encriptaux (open-input-file path) (string->list (read-line)))
+    ))
+
+(define encriptaux
+  (lambda (h p)
+    (let ((hchar (read-char h)))
+      (if (not (eof-object? hchar))            
+          (if (or (< (char->integer hchar) (char->integer #\a))
+                  (> (char->integer hchar) (char->integer #\z)))
+              (begin
+                (display hchar)
+                (encriptaux h (append (cdr p) (list (car p))))
+                )
+              (begin
+                (display (encript-char hchar (car p)))
+                (encriptaux h (append (cdr p) (list (car p))))
+                )
+              )
+          ))))  
+
+(define encript-char
+  (lambda (c p)
+    (let ((ec (- (char->integer c) (char->integer #\a))) ;lo llevo al principio osea entre 0 y 25
+          (cp (- (char->integer p) (char->integer #\a))))
+      (if (> (+ ec cp) 25)
+          (integer->char (+ (- (+ ec cp) 25) (char->integer #\a)))
+          (integer->char (+ ec cp (char->integer #\a)))
+          ))))
+
+------------Ejercicio 7----------------------
+
+(define to-base24
+  (lambda (n)
+    (let ((b24 (vector #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\A #\B #\C #\D #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N)))
+          (letrec ((convert (lambda (n)
+                              (if (< n 23)
+                                  (list (vector-ref b24 n))
+                                  (cons (vector-ref b24 (remainder n 24)) (convert (quotient n 24)))
+                                        ))))
+            (list->string (reverse (convert n)))
+            ))))
+	    
+(define from-base24
+  (lambda (num)
+    (let ((n (string->list num)))
+      (letrec ((convert (lambda (n)
+                          (if (null? n)
+                              '()
+                              (if (< (- (char->integer (car n)) (char->integer #\1)) 10)
+                                  (cons (+ 1 (- (char->integer (car n)) (char->integer #\1)))
+                                        (convert (cdr n)))
+                                  (cons (+ (+ 10 (* 10 (quotient (- (char->integer (car n)) (char->integer #\A)) 10)))
+                                           (remainder (- (char->integer (car n)) (char->integer #\A)) 10))
+                                        (convert (cdr n)))
+                                  ))))
+               (formar (lambda (ls)
+                         (if (null? ls)
+                             0
+                             (+ (* (car ls) (expt 24 (- (length ls) 1))) (formar (cdr ls))))
+                         ))
+               )
+        (formar (convert n))
+        ))))
+

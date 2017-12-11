@@ -1,0 +1,7 @@
+(define calcula-cuadrados
+  (lambda (l1)
+            (map (lambda(r)(* r r)) l1)
+    
+    )
+  )
+(calcula-cuadrados '(1 2 3 4))

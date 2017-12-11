@@ -1,0 +1,9 @@
+(define factorial
+  (lambda (x)
+    (if (eqv? x 1)
+        1
+        (* (factorial (- x 1)) x))
+     )
+   )
+
+ (factorial 5)

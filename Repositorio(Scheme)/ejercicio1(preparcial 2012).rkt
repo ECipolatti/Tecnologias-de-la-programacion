@@ -1,0 +1,31 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1)(concat (cdr l1) l2))
+        )))
+
+(define suma
+  (lambda (l)
+    (if (null? l) 0
+        (if (list? (car l)) (+ 0 (suma (cdr l)))
+            (+ (car l) (suma (cdr l)))))))
+
+(define eliminar
+  (lambda (l)
+    (if (null? l) '()
+        (if (list? (car l)) (concat (cons (car(car l)) (cdr(car l))) (eliminar (cdr l)))
+            (eliminar (cdr l))))))
+
+
+(define tree
+  (lambda (arbol nivel)
+    (if (null? arbol) 0
+        (if (= nivel 0) (car arbol)
+            (if (= nivel 1)
+                (if (list? (car arbol)) (+ (suma (car arbol)) (tree (cdr arbol) nivel))
+                    (tree (cdr arbol) nivel))
+                (tree (eliminar arbol) (- nivel 1)))))))
+           
+
+(tree '(3 (4 (5 6)) (5) (2 (8 9))) 2)

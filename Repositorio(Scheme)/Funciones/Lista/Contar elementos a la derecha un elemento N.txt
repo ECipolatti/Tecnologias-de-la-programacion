@@ -1,0 +1,17 @@
+(define contar(lambda (L) 
+                  (if (null? L)
+                      0
+                      (+ 1 (contar (cdr L)))
+                      )
+                )
+  )
+
+(define cont-der(lambda (L x) 
+                   (if (null? L)
+                       0
+                       (if (eqv? (car L) x)
+                           (contar (cdr L))
+                           (cont-der (cdr L) x)
+                              ))))
+
+(cont-der (list 1 2 3 4) 2)

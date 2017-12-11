@@ -1,0 +1,69 @@
+eliminar_primero([],_,_).
+eliminar_primero([C|D],L,M) :- C = L, M = D, !.
+eliminar_primero([C|D],L,[C|X]) :- C \= L,  eliminar_primero(D,L,X).
+
+
+% el error cometido.,....
+%eliminar_primero([],_,R) :- !.
+%eliminar_primero([C|D],C,X) :- eliminar_primero([],_,D).
+%eliminar_primero([C|D],L,X) :- eliminar_primero(D,L,[C|X]).
+
+% eliminar_primero([1,2,3,4,5,6,7,8,4],4,K).
+
+
+2---------
+
+agregar_nuevo(D,[], X) :- X = [D], !.
+agregar_nuevo(D,[C|L],X) :- D = C, X = L, !.
+agregar_nuevo(D,[C|L],[C|X]) :- C \= L, agregar_nuevo(D,L,X).
+   
+
+
+% agregar_nuevo(a, [1, 2, 3], X).
+
+3-----------
+cuento([],0).
+cuento([_|L], X) :- cuento(L,X2), X is X2 +1. 
+
+semejanza([],L2,S) :-  cuento(L2,T),S is -1 * T , !.
+semejanza(L1,[],S) :-  cuento(L1,T), S is -1 * T, !.
+semejanza([],[],0) :- !.
+semejanza([X|L1], [Y|L2], S) :- X = Y, semejanza(L1,L2,T), S is T +1.
+semejanza([X|L1], [Y|L2], S):- X \= Y, semejanza(L1,L2,T), S is T -1.
+dic([sanar, hola, sabana, sabalo, prueba, computadora, cartera, mate, termo, mesa, silla, sarna]).
+
+busco(_,[],_):- !,fail.
+busco(P,[C|_],T) :- atom_chars(P,LP), atom_chars(C,LC) ,cuento(LC,N1), cuento(LP,N2),
+                   semejanza(LP,LC, N3), N1 = N2, N1 = N3, T=[P], !.
+busco(P,[_|L],T) :- busco(P,L,T).
+
+listo(_,[],[]) :-!.
+listo(P,[C|L],[LI|D]) :- atom_chars(P,LP), atom_chars(C,LC), semejanza(LP,LC, R), R > 0, LI = [C|[R]], listo(P,L,D).
+listo(P,[_|L],D) :-  listo(P,L,D).
+
+
+buscar(P,L):- dic(X), busco(P,X,L).
+buscar(P,L):- dic(X), listo(P,X,L).
+
+4-------------
+
+reemplazar(_,_,_,_,[],[]) :-!.
+reemplazar(_,_,_,Cuantos,_,_) :- Cuantos < -1,!, fail.
+reemplazar(_,_,_,0,_,_) :- !, fail.
+reemplazar(_,_,Desde,_,_,_):- Desde < 1,!,fail.     
+reemplazar(Old,New,_,-1,[C|L],R)            :- C == Old,  reemplazar(Old,New,_,-1,L,T), R = [New|T]. 
+reemplazar(Old,New,_,-1,[C|L],R)            :- C \= Old , reemplazar(Old,New,_,-1,L,T), R =   [C|T]. 
+reemplazar(Old,New,1,Cuantos,[Old|L],R)     :- Cuantos  > 1, Cu is Cuantos-1, reemplazar(Old, New,1,Cu,L,H),R=[New|H].
+reemplazar(Old,New,1,1,[Old|L],R)           :-R=[New|L], !.   %INSERTO ULTIMO ELEM Y LO DEVUELVO CON EL RESTO Y CORTO.
+reemplazar(Old,New,D,Cuantos,[Old|L],R)     :- D > 1, De is D -1, reeemplazar(Old, New,De,Cuantos,L,H), R=[Old|H].
+
+
+%reemplazar(1, a, 1, -1, [1, 1, 2, 3, 2, 2, 1, 2], L).
+%reemplazar(1, a, 0, -1, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(1, a, 1, -2, [1, 1, 2, 2, 2, 2, 1, 1], L).
+%reemplazar(1, a, 1, -1, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(1, a, 1, 1, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(1, a, 2, 2, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(1, a, 2, -1, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(1, a, 5, -1, [1, 1, 2, 3, 2, 2, 1, 1], L).
+%reemplazar(4, a, 1, -1, [1, 1, 2, 2, 2, 2, 1, 1], L).

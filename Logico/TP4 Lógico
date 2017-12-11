@@ -1,0 +1,161 @@
+Tecnologías de programación 2013
+TP - Programacion Lógica.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+--------------------------------------------------------Ejercicio 1------------------------------------------------------
+
+validar(Lista):-forall(member(X=Y, Lista),X=:=Y).
+
+--------------------------------------------------------Ejercicio 2------------------------------------------------------
+:-dynamic(f).
+agregar(X):-integer(X),not(f(X)),asserta(f(X)).
+
+--------------------------------------------------------Ejercicio 3------------------------------------------------------
+
+comprobar(Lista):-forall(member(X,Lista),number(X)).
+comprobar(Lista):-forall(member(X,Lista),atom(X)).
+comprobar(Lista):-forall(member(X,Lista),not(number(X);atom(X))).
+
+--------------------------------------------------------Ejercicio 4------------------------------------------------------
+
+ins(X, L, [ X | L ]).
+ins(X, [ Y | L1 ], [ Y | L2 ]) :-ins(X, L1, L2).
+
+per([],[]).
+per([ X | L ], Lp) :- per(L, L1), ins(X, L1, Lp).
+
+numero([1,2,3,4,5,6,7,8,9]).
+
+sumas([A,B,C,D,E,F,G,H,I]):-  X is A+B+C, X is D+E+F, X is G+H+I,	
+					X is A+D+G, X is B+E+H, X is C+F+I,
+					X is A+E+I, X is C+E+G.
+matriz(L, LF):-per(L,LF),sumas(LF).
+
+
+--------------------------------------------------------Ejercicio 5------------------------------------------------------
+
+car([X|_],X).
+cdr([_|C],C).
+
+%valida que la lista contenga solo numeros
+list_num([]):-!.
+list_num([X|C]):-number(X),!,list_num(C).
+
+%opera con la lista y devuelve el resultado
+opera(Rp,[],Rp):- !.
+opera(Rp,['='|_],Rp):- !.
+opera(Rp,['*'|C],N):- car(C,N1),cdr(C,C2), N2 is Rp*N1, opera(N2,C2,N).
+opera(Rp,['-'|C],N):- car(C,N1),cdr(C,C2), N2 is Rp-N1, opera(N2,C2,N).
+opera(Rp,['+'|C],N):- car(C,N1),cdr(C,C2), N2 is Rp+N1, opera(N2,C2,N).
+opera(Rp,['/'|C],N):- car(C,N1),N1\=0,!,cdr(C,C2), N2 is Rp/N1, opera(N2,C2,N).
+
+%wrapper del opera
+operando([X|C],N):- opera(X,C,N),!.
+
+%busca igual y lo separa en 2 listas
+busca_igual(['='|C],[],C):- !.
+busca_igual([X|C],L1,L2):- busca_igual(C,L,L2),append([X],L,L1).
+
+%Crea la lista de numeros con los operadores intercalados, recibe lista con numeros, lista con operadores, lista resultante
+list_aritm([X],[],[X]):-!.
+list_aritm([X1|C1],[X2|C2],L):- append([X1],[X2],L1), list_aritm(C1,C2,L2), append(L1,L2,L).
+
+%hace permutaciones
+permutacion([],[]).
+permutacion(L,[X|C]):- select(X,L,L1),permutacion(L1,C).
+
+%crea subconjuntos
+subconjunto([],[]).
+subconjunto([X|L1],[X|L2]) :- subconjunto(L1,L2).
+subconjunto(L1,[_|L2]) :- subconjunto(L1,L2).
+
+%halla combinaciones
+combinacion(L1,N,L2) :- subconjunto(L2,L1),length(L2,N).
+combinaciones(L1,N,L2) :- findall(L,combinacion(L1,N,L),L2).
+
+%halla permutaciones tomadas de a N
+permutaciones-de-a-n(L1,N,L2) :- combinacion(L1,N,L3), permutacion(L3,L2).
+
+%comprueba que 2 listas sean iguales
+igualdades(L):- busca_igual(L,L1,L2),operando(L1,N1),operando(L2,N2),N1=N2.
+
+%predicado principal
+igualdad(L,R):- list_num(L), length(L,N), N<7, N1 is N-2, permutaciones-de-a-n(['+','*','/','-'],N1,Lv), append(Lv,['='],Lv1),permutacion(Lv1,Lv2), list_aritm(L,Lv2,R),igualdades(R).
+
+--------------------------------------------------------Ejercicio 6------------------------------------------------------
+
+pertenece(X,[X|_]):-!.
+pertenece(X,[_|L]):- pertenece(X,L).
+
+notpertenece(_,[]):-!,true.
+notpertenece(X,[_|L]):- notpertenece(X,L).
+
+valaux(_,[]):-!.
+valaux(X,[X|_]):- !,fail.
+valaux(X,[_|L]):- valaux(X,L).
+
+notvalaux(_,[]):-!,true.
+notvalaux(X,[_|L]):- notvalaux(X,L).
+
+valconjunto([]):-!.
+valconjunto([X|L]):- valaux(X,L),!,valconjunto(L).
+valconjunto([X|L]):- notvalaux(X,L),!,fail.
+
+union_aux([],[],[]):-!.
+union_aux([X|L],L1,U):- pertenece(X,L1),!,union_aux(L,L1,U).
+union_aux([X|L],L1,[X|U]):- notpertenece(X,L1),!,union_aux(L,L1,U).
+union_aux([],[X|L1],[X|U]):- union_aux([],L1,U).
+
+
+union(L,L1,U):- valconjunto(L),valconjunto(L1),union_aux(L,L1,U).
+
+
+interseccion_aux([],_,[]):-!.
+interseccion_aux([X|L],L1,[X|I]):- pertenece(X,L1),!,interseccion_aux(L,L1,I).
+interseccion_aux([X|L],L1,I):- notpertenece(X,L1),!,interseccion_aux(L,L1,I).
+
+interseccion(L,L1,I):- valconjunto(L),valconjunto(L1),interseccion_aux(L,L1,I).
+
+
+diferencia_aux([],_,[]):-!.
+diferencia_aux([X|C1],C2,D):- pertenece(X,C2),!,diferencia_aux(C1,C2,D).
+diferencia_aux([X|C1],C2,[X|D]):- notpertenece(X,C2),!,diferencia_aux(C1,C2,D).
+
+diferencia(C1,C2,D):- valconjunto(C1),valconjunto(C2),diferencia_aux(C1,C2,D).
+
+--------------------------------------------------------Ejercicio 7------------------------------------------------------
+
+p(Ã¡rbol).
+p(animal).
+p(base).
+p(caramelo).
+p(caracol).
+p(curso).
+p(dedo).
+p(dedal).
+p(diferencia).
+p(diferencial).
+p(diferente).
+p(elefante).
+p(electricidad).
+p(esfera).
+p(fenÃ³meno).
+p(fiera).
+p(guante).
+p(hormiga).
+p(hormigÃ³n).
+p(irlanda).
+
+comparar([],[]):-!.
+comparar([*],_):-!.
+comparar([*|L],[_|L1]):- comparar([*|L],L1);comparar(L,L1).
+comparar([V|L],[V|L1]):- !,comparar(L,L1).
+comparar([?|L],[_|L1]):- comparar(L,L1).
+
+buscar_aux(_,[],[]):-!.
+buscar_aux(X,[C|L],[C|L3]):- atom_chars(X,L1),atom_chars(C,L2),comparar(L1,L2),!,buscar_aux(X,L,L3).
+buscar_aux(X,[_|L],L3):- buscar_aux(X,L,L3).
+
+
+buscar(X,Li):- findall(A,p(A),L5),buscar_aux(X,L5,Li).

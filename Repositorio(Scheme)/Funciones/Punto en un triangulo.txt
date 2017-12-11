@@ -1,0 +1,17 @@
+
+(define ingresax(lambda()(let((a (display " ingrese x: ")))(read))))
+(define ingresay(lambda()(let((a (display " ingrese y: ")))(read))))
+
+(define adentro(lambda(x1 y1 x2 y2 x3 y3 x4 y4)( if(<= (* (- y3 y1) (- x2 x1)) (* (- y2 y1) (- x3 x1)))
+                                                   (if(<= (* (- y4 y1) (- x2 x1)) (* (- y2 y1) (- x4 x1)))
+                                                      #t
+                                                      #f)
+                                                   ()))) 
+
+(define coordenadas(lambda()( (display "Ingrese coordenadas del triangulo: ")
+                              (let* ((x1 (ingresax)) (y1 (ingresay)) (x2 (ingresax)) (y2 (ingresay)) (x3 (ingresax)) (y3 (ingresay)) (x4 (ingresax)) (y4 (ingresay)))
+                               (if (and (adentro x1 y1 x2 y2 x3 y3 x4 y4) (adentro x1 y1 x3 y3 x2 y2 x4 y4) (adentro x2 y2 x3 y3 x1 y1 x4 y4))
+                                   (display "Punto dentro del triagulo")
+                                   (display "Punto fuera del triagulo"))
+                              )))) 
+                                 

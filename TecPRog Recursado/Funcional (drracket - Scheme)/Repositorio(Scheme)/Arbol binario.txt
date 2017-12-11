@@ -1,0 +1,92 @@
+Ejercicios de arboles
+
+; Suma todos los nodos de un arbol BINARIO dada su profundidad (nivel)
+
+(define raiz 
+  (lambda (A)  
+    (if (null? A) 0
+        (car A))))
+
+(define izq (lambda (A)  (cadr A)))
+
+(define der (lambda (A)  (caddr A)))
+
+(define sumaniveltree 
+  (lambda (nivel t)
+    (if (null? (raiz t))
+        0
+        (if (= 0 nivel)
+            (raiz t)
+            (+ (sumaniveltree (- nivel 1) (izq t)) (sumaniveltree (- nivel 1) (der t)))
+            )
+        )
+    )
+  )
+
+
+(sumaniveltree 2 '(0 (6 () () ) (7 (3 () ()) () )))
+
+
+
+
+--------------------------------------------------------------------
+
+
+ ; Suma todos los nodos de un arbol
+
+(define sumanodo(lambda(lista)
+                  (if (null? lista)
+                      0
+                      (if (list? (car lista))
+                         (+ (sumanodo (car lista)) (sumanodo (cdr lista)))
+                         (+ (car lista) (sumanodo (cdr lista)))
+                         )
+                      )
+                  )
+  )
+
+
+--------------------------------------------------------------------
+Ejercicios del preparcial
+
+1)
+
+(define suma
+  (lambda (l)
+    (if (null? l) 0
+        (if (list? (car l)) (+ 0 (suma (cdr l)))
+            (+ (car l) (suma (cdr l)))))))
+
+(define eliminar
+  (lambda (l)
+    (if (null? l) '()
+        (if (list? (car l)) (append (cons (caar l) (cdar l)) (eliminar (cdr l)))
+            (eliminar (cdr l))))))
+
+
+(define tree
+  (lambda (t v)
+    (if (null? t) 0
+        (if (= v 0) (car t)
+            (if (= v 1)
+                (if (list? (car t)) (+ (suma (car t)) (tree (cdr t) v))
+                    (tree (cdr t) v))
+                (tree (eliminar t) (- v 1)))))))
+           
+
+(tree '(3 (4 (5 6)) (5) (2 (8 9))) 0)
+
+
+---------------------------------------------------------------------
+2)
+
+(define ListSust
+  (lambda (l1 l2)
+    (letrec ((reemplazar
+              (lambda (x l)
+                (if (null? l) '()
+                    (if (equal? (car x) (car l)) (cons (cdr x) (reemplazar x (cdr l)))
+                        (cons (car l) (reemplazar x (cdr l))))))))
+    (if (null? l1) l2
+        (reemplazar (car l1) l2)))))
+

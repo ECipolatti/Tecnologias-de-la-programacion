@@ -1,0 +1,21 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2)
+              )
+        )
+    )
+  )
+(define inverse
+  (lambda (x)
+       (if (null? x)
+             '()
+             (concat (inverse (cdr x)) (list(car x))))))
+
+(define concatinv 
+  (lambda (l1 l2)
+   (concat l1 (inverse l2))
+    )
+  )
+(concatinv '(1 2 3) '(4 5 6))

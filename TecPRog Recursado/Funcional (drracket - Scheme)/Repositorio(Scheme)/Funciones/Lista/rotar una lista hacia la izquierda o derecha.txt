@@ -1,0 +1,43 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2))
+        )
+    )
+  )
+(define priparte
+  (lambda (l1)
+    (if (null? l1)
+        '()
+        (if (null? (cdr l1))
+            '()
+            (concat (list (car l1)) (priparte (cdr l1)))
+            ))))
+(define segparte
+  (lambda (l1)
+    (if (null? l1)
+        '()
+        (if (null? (cdr l1))
+            l1
+            (segparte (cdr l1))))))
+(define derecha
+  (lambda (l1)
+    (concat (segparte l1)(priparte l1))
+        ))
+
+(define izquierda
+  (lambda (l2)
+    (if (null? l2)
+        '()
+        (concat (cdr l2) (list (car l2))))))
+
+(define rota
+  (lambda (x lista)
+    (if (null? lista)
+        '()
+        (if (eqv? x 'derecha)
+           (derecha lista)
+           (izquierda lista)))))
+
+(rota 'derecha '(1 2 3 4))

@@ -1,0 +1,20 @@
+(define even
+  (lambda (x)
+    (if (eqv? (remainder x 2) 0)
+        #t
+        #f
+        )
+    )
+  )
+(define cant-even
+  (lambda (lista)
+    (if(null? lista)
+       0
+       (if (even (car lista))
+           (+ 1 (cant-even (cdr lista)))
+           (cant-even (cdr lista))
+           )
+       )
+    )
+  )
+(cant-even '(1 3 4 8 5 2 88 4 3))

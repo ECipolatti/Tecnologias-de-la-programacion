@@ -1,0 +1,15 @@
+(define sintax
+  (lambda (x)
+    (let ((temp1 (read x))(temp2 (read x)))
+      (if (eof-object? temp2)
+           temp1
+          (if (eqv? temp2 '+)
+              (+ temp1 (sintax x))
+              (- temp1 (sintax x))
+          ))
+      )
+    )
+  )
+
+
+(sintax (open-input-file "prueba9.txt"))

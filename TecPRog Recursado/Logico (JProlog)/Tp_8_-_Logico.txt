@@ -1,0 +1,142 @@
+Tecnologías de programación
+Cipolatti Edgardo	
+DNI: 35215385					      
+TP-08 Logico
+
+
+-----------------------------------------------Ejercicio 1-----------------------------------
+ f(a, 2).
+ f(a, 3).
+ f(b, 2).
+ f(b, 4).
+ f(c, 1).
+ f(c, 2).
+
+a) f(X, 1). --> X = c
+b) f(a, X). --> X = 2; 
+		X = 3.
+c) f(c, 1). --> true.
+d) f(X, Y). --> X = a,
+		Y = 2;
+		X = a,
+		Y = 3;
+		X = b,
+		Y = 2;
+		X = b,
+		Y = 4;
+		X = c,
+		Y = 1;
+		X = c,
+		Y = 2.
+e) f(2, a). --> false.
+
+f) f(X, Y), f(X, 4). --> X = b,
+			 Y = 2;
+			 X = b,
+			 Y = 4.
+
+-----------------------------------------------Ejercicio 2-----------------------------------
+
+padre(leoncio, geronimo).
+padre(leoncio, alberto).
+padre(alberto, juan).
+padre(alberto, luis).
+padre(geronimo, luisa).
+hermano(A , B):- A\=B, padre(X , A), padre(X , B).
+nieto(A , B):- padre(X , A),padre(B , X).
+
+a) padre(alberto,luis).
+	true
+	
+b) padre(luis,alberto).
+	false
+	
+c) hermano(X,luis).
+	X = juan
+	
+d) nieto(luisa, X).
+	X = leoncio
+	
+e) nieto (A,B).
+	A = juan,
+	B = leoncio;
+	A = luis,
+	B = leoncio;
+	A = luisa,
+	B = leoncio;
+	
+-----------------------------------------------Ejercicio 3-----------------------------------
+
+menu('Bombones de jamón', 'Locro', 'Dulce de batata').
+menu('Bombones de jamón', 'Locro', 'Alfajor norteño').
+menu('Tarta de Atún', 'Atados de repollo', 'Dulce de batata').
+menu('Tarta de Atún', 'Pollo romano con hierbas y vino', 'Flan').
+menu('Volovanes de atún', 'Matambre con espinacas y parmesano', 'Torta moka').
+menu('Buñuelos de bacalao', 'Pollo romano con hierbas y vino', 'Alfajor norteño').
+
+a) menu(A,B,C).
+	A = 'Bombones de jamón', 
+	B = 'Locro',
+	C = 'Dulce de batata';
+	A = 'Bombones de jamón',
+	B = 'Locro',
+	C = 'Alfajor norteño';
+	A = 'Tarta de Atún', 
+	B = 'Atados de repollo', '
+	C = Dulce de batata';
+	A = 'Tarta de Atún',
+	B = 'Pollo romano con hierbas y vino'
+	C = 'Flan';
+	A = 'Volovanes de atún', '
+	B = 'Matambre con espinacas y parmesano', 
+	C = 'Torta moka';
+	A = 'Buñuelos de bacalao', 
+	B = 'Pollo romano con hierbas y vino', 
+	C = 'Alfajor norteño'.
+	
+b) menu( A, B, 'Dulce de batata').
+	A = 'bombones de jamón',
+	B = 'Locro';
+	A = 'Tarta de Atún',
+	B = 'Atados de repollo';
+	
+c) menu(A, 'Locro', C).
+	A = 'Bombones de jamón',
+	C = 'Dulce de batata';
+	A = 'Bombones de jamón',
+	C = 'Alfajor norteño';
+	
+d) menu(A, 'Pato a la naranja',C).
+	false.
+	
+e) menu('Locro', B,C).
+	false.
+	
+-----------------------------------------------Ejercicio 4-----------------------------------
+
+(?-menu(A,'Locro', C).
+	(?-menu('Bombones de jamon', 'Locro', C).
+		(?-menu('Bombones de jamon', 'Locro', 'Dulce de batata'). (true.))
+		(?-menu('Bombones de jamon', 'Locro', 'Alfajor norteño). (true.))
+	)
+	
+	(?- menu('Tarta de Atún', 'Locro', Z). (false.))
+	(?-menu('Volovanes de atún', 'Locro',Z). (false.))
+	(?-menu('Buñuelos de bacalao', 'Locro', Z). (false.)) 
+ )
+ 
+ -----------------------------------------------Ejercicio 5-----------------------------------
+ 
+a) ruta(X,cordoba).
+   X = santafe;
+   X = capital.
+  
+b) ruta(parana,X).
+   X = corrientes.
+
+c) ruta(cordoba,parana) ; ruta(parana,cordoba).
+   false.
+  
+d) ruta(santafe,X), ruta(X,corrientes).
+   X = parana.
+    

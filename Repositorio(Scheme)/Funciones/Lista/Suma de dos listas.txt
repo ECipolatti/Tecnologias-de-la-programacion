@@ -1,0 +1,27 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2))
+        )))
+
+(define si-encuentra
+  (lambda (elemento lista)
+    (if (null? lista)
+        #f
+        (if (eqv? elemento (car lista))
+            #t
+            (si-encuentra elemento (cdr lista)
+                          )))))
+
+(define suma-listas
+  (lambda (l1 l2)
+    (if (null? l2)
+        l1
+        (if (si-encuentra (car l2) l1)
+           (suma-listas l1 (cdr l2))
+           (suma-listas (concat l1 (list(car l2)))(cdr l2))
+            )
+        )))
+(suma-listas '(1 2 3 4 3 9 12 8 4) '(2 5 9 3))
+ (suma-listas '(1 2 3 4) '(2 3 5))

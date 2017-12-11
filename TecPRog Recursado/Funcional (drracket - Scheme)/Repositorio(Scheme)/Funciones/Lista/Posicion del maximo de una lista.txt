@@ -1,0 +1,21 @@
+(define max-list
+  (lambda (x)
+    (if (null? x)
+        0
+        (if (> (car x) (max-list (cdr x)))
+            (car x)
+            (max-list (cdr x))
+            )
+        )
+    )
+  )
+(define pos-max
+  (lambda (lista)
+    (if (null? lista)
+        0
+        (if (eqv? (max-list lista) (car lista))
+            (+ 1 (pos-max null))
+            (+ 1 (pos-max (cdr lista)))
+            )
+        )))
+(pos-max '( 1 4 2 8 6 31))

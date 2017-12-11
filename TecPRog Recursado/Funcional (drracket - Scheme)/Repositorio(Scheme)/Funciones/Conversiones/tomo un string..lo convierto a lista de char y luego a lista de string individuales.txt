@@ -1,0 +1,13 @@
+(define listChartoString
+  (lambda (lista)
+    (if (null? lista)
+        '()
+        (if (eqv? #\space (car lista))
+            (cons " " (listChartoString (cdr lista)))
+            (cons (list->string (list (car lista))) (listChartoString (cdr lista)))
+            ))))
+(define conver
+  (lambda (re)
+    (let ((tempo (read-line re)))
+    (string->list tempo)
+    )))

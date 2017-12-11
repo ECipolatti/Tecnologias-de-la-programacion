@@ -1,0 +1,182 @@
+Tecnologías de programación 2013
+TP - Programacion estructurada.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+---------------------------Ejercicio 1----------------------------------------------------
+10 print "ejercicio 1"
+20 input "ingrese el numero: " ;n
+30 if n=0 then goto 100
+35 if (int(n/2)*2) =n then print "Numero Par" else print "Numero Impar"
+50 goto 20
+100 print "hasta pronto!"
+
+---------------------------Ejercicio 2----------------------------------------------------
+10 input "ingrese el primer numero: ";a
+20 input "ingrese el segundo numero: ";b
+30 if a=b then print "son iguales"
+35 if a>b then print "El primer numero es mayor"
+40 if b>a then print "El segundo numero es mayor"
+
+
+---------------------------Ejercicio 3----------------------------------------------------
+10 input "ingrese el 1er número:"; a 
+20 input "ingrese el 2do número:"; b
+30 input "ingrese el 3er número:"; c
+40 if (a>b and a>=c) then print a
+50 if (b>a and b>=c) then print b
+60 if (c>a and c>b)then print c
+
+---------------------------Ejercicio 4----------------------------------------------------
+10 input "ingrese un número para mostrar su tabla de multiplicar: ";x
+15 print "la tabla de multiplicar del número ingresado es: "
+20 for f=1 to 10 step 1
+22 print f*x
+24 next
+
+
+---------------------------Ejercicio 5----------------------------------------------------
+10 suma =0
+11 multi=1
+15 for f =1 to 30 step 1
+20 input "ingrese un numero";a
+21 suma=suma+a
+22 multi=multi*a
+30 next
+40 print "suma total:";suma
+45 print "la multiplicacion total: ";multi
+
+---------------------------Ejercicio 6----------------------------------------------------
+10 suma=0
+15 num=0
+20 do while num>=0
+23 suma=suma+num
+25 input "ingrese un numero: ";num
+35 loop
+40 print "la suma total es :";suma
+
+---------------------------Ejercicio 7----------------------------------------------------
+10 max=-99999
+20 x = -99999
+30 do while x<>-100000
+40 if x>max then max=x
+50 input "Ingrese un numero: ";x
+60 loop
+70 print "el numero maximo es: "; max
+
+---------------------------Ejercicio 8----------------------------------------------------
+10 input "Ingrese un numero: ";numero
+11 numero =int(numero)
+12 b=1
+16 incremento=10
+20 do while (numero<>0)
+25 	resto = ((numero mod 2)*2)
+27 	numero = (numero*0,5)
+32 	b=(b+resto*incremento)
+34 	incremento = 10
+38 loop
+40 print "el numero pasado a binario es: ";b
+
+---------------------------Ejercicio 9----------------------------------------------------
+10 num =2
+20 input "Ingrese la cantidad de numeros Fibonacci que desea mostrar: ";num
+25 suma=0
+26 n1=1
+27 n2=1
+28 print n1
+29 if num=1 then goto 60
+30 print n2
+31 if (num = 2) then goto 60
+35 for i=0 to (num -3) step 1
+40 suma = (n1 + n2)
+45 print suma
+50 n1=n2
+51 n2=suma
+55 next
+60 print "Serie FIBONACCI hasta el numero solicitado"
+
+---------------------------Ejercicio 10----------------------------------------------------
+10 input "Ingrese un numero para calculoar su factorial";num
+11 factorial=1
+15 if (num = 1) then goto 40
+20 do
+25 factorial = (factorial * num)
+27 num =(num-1)
+30 loop until num=1
+40 print "el numero factorial es: ";factorial
+
+---------------------------Ejercicio 11----------------------------------------------------
+10 suma = 0
+15 input "ingrese un número: ";n
+20 for i=1 to n step 1
+22 	num = i
+25	 factorial=1
+27	 if (num = 1) then goto 45
+29	 do
+32		 factorial = (factorial * num)
+35		 num =(num-1)
+40	 loop until num=1
+45 suma= suma + (1/factorial)
+50 next
+55 print "la suma es igual a: ";suma
+
+---------------------------Ejercicio 12----------------------------------------------------
+10 print "Ingresará dos numero, el primero debe ser mayor que el segundo!"
+11 input "Ingrese el n: ";n
+12 input "Ingrese el i: ";i
+15 resultado=0
+25	 factorial1=1
+26	 num =n
+27	 if (num = 1) then goto 45
+29	 do
+32		 factorial1 = (factorial1 * num)
+35		 num =(num-1)
+40	 loop until num=1
+45	 factorial2=1
+50	num = i
+52	 if (num = 1) then goto 60
+53	 do
+54		 factorial2 = (factorial2 * num)
+55		 num =(num-1)
+56	 loop until num=1
+60	 factorial3=1
+62	 num = (n-i)
+64	 if (num = 1) then goto 80
+66	 do
+68		 factorial3 = (factorial3 * num)
+70		 num =(num-1)
+72	 loop until num=1
+80 resultado = (factorial1/(factorial2 * factorial3))
+85 print "El resultado es: ";resultado
+
+---------------------------Ejercicio 13----------------------------------------------------
+10 dim vector (20)
+20 for i=0 to 19
+30	input "ingrese un numero:";num
+39  for j=19 to 0 step -1
+40		if (num>=vector(j)) then 
+42			vector(j+1)=vector(j)
+43			vector(j)=num
+44		else	
+46			j=0
+48		end if
+50 	next
+60 next
+150 for i=0 to 19
+151 print vector(i)
+152 next
+
+
+---------------------------Ejercicio 14----------------------------------------------------
+10 dim vector (20)
+12 nummax = 0
+14 posicion = 0
+20 for i=0 to 19
+30	input "ingrese un numero:";num
+32	vector(i)=num
+35	if (num>nummax) then
+36		posicion = i
+39  		nummax=num
+40 	end if
+60 next
+70 print "la pocicion del mayor es: ";(posicion+1)

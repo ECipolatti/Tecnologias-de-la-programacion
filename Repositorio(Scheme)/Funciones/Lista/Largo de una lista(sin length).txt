@@ -1,0 +1,9 @@
+(define largo
+  (lambda (x)
+    (if (null? x)
+        0
+        (+ (largo (cdr x)) 1)
+     )
+   )
+ )
+(largo '( a d r w d))

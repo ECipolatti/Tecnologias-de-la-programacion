@@ -1,0 +1,109 @@
+; Las FUNCIONES DE ORDEN SUPERIOR superior son aquellas que tienen funciones como parámentro
+; o que retornan funciones
+
+; Dos funciones de orden superior muy conocidas por el mucho uso que se les puede dar son
+; map y filter.
+
+; MAP: aplica una función a todos los elementos de una lista y retorna una lista con todos los 
+; resultados. Puede escribirse de dos formas, como una función que recibe como parámentro la función
+; a aplicar y retorna una función aplica dicha función a todos los elemtos de una lista parámentro:
+
+(define map (lambda (F) (lambda (L)
+                          (if (null? L) '()
+                              (cons (F (car L)) ((map F) (cdr L)))))))
+;Ej
+;> ((map --) '(1 2 3 4 5))
+;(0 1 2 3 4)
+
+
+; o como una función con dos parámentros, uno es la función a aplicar y otro es la lista de elementos.
+; esta última versión es más facil de usar:
+
+(define map2 (lambda (F L)
+               (if (null? L) '()
+                   (cons (F (car L)) (map2 F (cdr L))))))
+
+;Ej
+;> (map2 -- '(1 2 3 4 5))
+;(0 1 2 3 4)
+
+
+; FILTER: al igual que el map anterior puede escribirse de las dos formas, y lo que hace es
+; aplicar una función de resultado booleano a todos los elementos de una lista, retornando
+; una lista con los elementos que retornan #t
+
+
+(define filterT (lambda (F) (lambda (L)
+                             (if (null? L) '()
+                                 (if (F (car L)) (cons (car L) ((filterT F) (cdr L)))
+                                                 ((filterT F) (cdr L)))))))
+;Ej
+;> ((filterT par?) '(1 2 3 4 5))
+;(2 4)
+
+(define filterT2 (lambda (F L)
+                  (if (null? L) '()
+                      (if (F (car L)) (cons (car L) (filterT2 F (cdr L)))
+                          (filterT2 F (cdr L))))))
+
+;Ej
+;> (filterT2 par? '(1 2 3 4 5))
+;(2 4)                 
+  
+; Fácilmente puede crearse un filtro por #f:
+ 
+(define filterF2 (lambda (F L) (filterT2 (lambda (X) (not (F X))) L)))
+
+;Ej
+;> (filterF2 par? '(1 2 3 4 5))
+;(1 3 5)
+
+; queda a cargo del lector implementar filterF con dos lambdas :)
+
+
+; FUNCIONES DE PRUEBA
+
+; Decrementa 1
+
+(define -- (lambda (N) (- N 1)))
+
+; Par
+
+(define parAux (lambda (N)
+                 (if (= N 0) #t
+                     (impar? (- N 1)))))
+
+(define par? (lambda (N)
+               (if (< N 0) 
+                   (parAux (* N -1))
+                   (parAux N))))
+
+; Impar
+
+(define imparAux (lambda (N)
+                   (if (= N 0) #f
+                       (par? (- N 1)))))
+
+(define impar? (lambda (N)
+                 (if (< N 0) 
+                     (imparAux (* N -1))
+                     (imparAux N))))
+
+; Se pueden utilizar FUNCIONES ANÓNIMAS para utilizar map o filter con funciones que tengan más
+; de un argumento en su definición:
+
+;Ej: El primer parámentro de map2 es una función (sin nombre) que duplica a su argumento.
+;> (map2 (lambda (X) (* X 2)) '(1 2 3 4 5))
+;(2 4 6 8 10)
+
+
+;Ej: Este ejemplo sirve para actualizar nuestra agenda telefónica :)
+;> (map2 (lambda (X) (append '(4) X)) '((6 0 0 1 7 8) (5 3 1 0 1 5)))
+;((4 6 0 0 1 7 8) (4 5 3 1 0 1 5))
+
+
+;Ej: deja en la lista solo los números mayores que dos.
+;> (filterT2 (lambda (X) (> X 2)) '(1 2 3 4 5))
+;(3 4 5)
+
+; Juanjo - 02/05/05

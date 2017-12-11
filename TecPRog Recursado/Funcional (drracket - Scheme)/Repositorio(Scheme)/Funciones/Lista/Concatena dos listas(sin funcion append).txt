@@ -1,0 +1,11 @@
+(define concatena
+  (lambda (x y)
+    (if (null? x)
+        (if (null? y)
+            '()
+            (cons (car y) (concatena x (cdr y))))
+        (cons (car x) (concatena (cdr x) y)))
+      )
+   )
+ 
+(concatena '(a c r) '(e ji (1)))

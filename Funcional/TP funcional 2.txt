@@ -1,0 +1,193 @@
+Tecnologías de programación 2013
+TP - Programacion Funcional.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+
+------------------------Ejercicio 1---------------------------
+
+● 7 + (2 * -1/3) + −10.7
+(+ 7 (+ (* 2 (- 0 (/ 1 3)))(- 0 10.7)))
+= -4.3666666
+
+● (7/3 * 5/9) ÷ (5/8 − 2/3)
+(/ (* 7/3 5/9) (- 5/8 2/3))
+= -31 1/9
+
+● 1 + 3 ÷ (2 + 1 ÷ (5 + 1/2))
+(/ (* 7/3 5/9) (- 5/8 2/3))
+=6 1/2
+● 1 × −2 × 3 × −4 × 5 × −6 × 7
+
+(* 1 (- 0 2) 3 (- 0 4) 5 (- 0 6) 7)
+= -5040
+
+------------------------Ejercicio 2---------------------------
+
+● (cons 'car '+) = (car . +)
+
+● (list 'esto '(es muy fácil)) = (esto (es muy fácil))
+
+● (cons 'pero '(se está complicando...)) = (pero se está complicando...)
+
+● (cons '(y ahora no se que ) 'hizo) = ((y ahora no se que) . hizo)
+
+● (quote (+ 7 2)) = (+ 7 2)
+
+● (cons '+ '(10 3)) = (+ 10 3)
+
+● (car '(+ 10 3)) = +
+
+● (cdr '(+ 10 3)) = (10 3)
+
+● cons = #<procedure:mcons>
+
+● (quote (cons (car (cdr (7 4)))) ) = (cons (car (cdr (7 4))))
+
+● (quote cons) = cons
+
+● (car (quote (quote cons))) = quote
+
+● (+ 2 3) = 5
+
+● (+ '2 '3) = 5
+
+● (+ (car '(2 3)) (car (cdr '(2 3)))) = 5
+
+● ((car (list + - * /)) 2 3) = 5
+
+------------------------Ejercicio 3---------------------------
+
+a. (+ (/ (* 7 a) b) (/ (* 3 a) b) (/ (* 7 a) b))
+	(let( (d(/ (* 7 a) b)) 
+		  (r(/ (* 3 a) b)) )
+	  	  (+ d r d) )
+
+b. (cons (car (list a b c)) (cdr (list a b c)))
+	(let( (l '(a b c)))
+		(cons (car l) (cdr l)) )
+
+------------------------Ejercicio 4---------------------------
+
+(let ((x 9))
+(* x
+(let ((x (/ x 3)))
+(+ x x)))) -->54
+
+------------------------Ejercicio 5---------------------------
+
+a. (let ((x 'a) (y 'b))
+	(list (let ((x 'c)) (cons x y))
+		(let ((y 'd)) (cons x y))))
+
+ (let ((t 'a) (y 'b))
+	(list (let ((x 'c)) (cons x y))
+		(let ((s 'd)) (cons t s))))
+
+b. (let ((x '((a b) c)))
+	(cons (let ((x (cdr x)))
+			(car x))
+		(let ((x (car x)))
+			(cons (let ((x (cdr x)))
+					(car x))
+				(cons (let ((x (car x)))
+						x)
+					(cdr x))))))
+
+  (let ((x '((a b) c)))
+   (cons (let ((y (cdr x)))
+   			(car y))
+   	(let ((z (car x)))
+   		(cons (let ((p (cdr z)))
+   				(car p))
+   			(cons (let ((w (car z)))
+   					w)
+   				(cdr z))))))
+
+------------------------Ejercicio 6---------------------------
+
+a- (let ((f (lambda (x) x)))
+    (f 'a)) 
+    El resultado es a
+    
+b- (let ((f (lambda x x)))
+    (f 'a))
+    El resultado es (a)
+    
+c- (let ((f (lambda (x . y) x)))
+    (f 'a))
+    El resultado es a
+    
+d- (let ((f (lambda (x . y) y)))
+    (f 'a))
+    El resultado es ()
+
+------------------------Ejercicio 7---------------------------
+
+(define (shorter cadena1 cadena2) 
+  (if (<= (length cadena1) (length cadena2) ) 
+       cadena1 
+       cadena2
+       )
+)
+
+------------------------Ejercicio 8---------------------------
+
+(define area (lambda (r)
+  (* 3.1415 r r))
+)
+
+------------------------Ejercicio 9---------------------------
+
+(define perimetro (lambda (r)
+  (* 3.1415 2 r))
+)
+
+(perimetro 1)
+
+------------------------Ejercicio 10---------------------------
+
+(define area (lambda (r)
+  (* 3.1415 r r))
+)
+
+(define perimetro (lambda (r)
+  (* 3.1415 2 r))
+)
+
+(define (circlestuff a)
+  (list (area a) (perimetro a))
+)
+
+------------------------Ejercicio 11---------------------------
+
+(define (distance2d a b)
+  (sqrt (+ 
+         (expt (- (car b) (car a) ) 2) 
+         (expt (- (cdr b) (cdr a) ) 2)
+         )
+   )
+ )
+
+------------------------Ejercicio 12---------------------------
+
+(define (distance2d a b)
+  (sqrt (+ 
+         (expt (- (car b) (car a) ) 2) 
+         (expt (- (cdr b) (cdr a) ) 2)
+         )
+   )
+ )
+ 
+(define proximo (lambda (pto l)
+		  (if (null? (cdr l))
+		      (distance2d pto (car l))
+		      (let ((m (distance2d pto (car l))))
+			   (if (< m (proximo pto (cdr l)))
+			       m
+			      (proximo pto (cdr l))
+			    )
+		      )
+		  )
+		 )
+)

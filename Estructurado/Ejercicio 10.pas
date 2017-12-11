@@ -1,0 +1,132 @@
+rogram numeros;
+	uses crt;
+	var numero:integer;
+	var n:array[1..10] of integer;
+	var largo:integer;
+	
+function valida(var rango:integer):boolean;
+begin
+	if ((rango>0) and (rango<100000000))then valida:=true else valida:=false;
+end;
+	
+function tamaniovector(val:integer):integer;
+var contado:integer=1;
+begin
+	while ((trunc(val/10))<>0) do
+	begin
+		contado:=(contado+1);
+	end;
+	tamaniovector:=contado;
+end;	
+	
+procedure numeroavector(var val:integer);
+var copia, i :integer;
+begin
+	largo:= tamaniovector(val);
+	copia:=val;
+	for i:=0 to largo do
+	begin
+		n[i]:=(copia mod 10);
+		copia:= trunc(copia/10);
+	end;
+	
+end;
+
+function cantidad(var val:integer; var bus:integer):integer;
+	var cant:integer=0;
+	var i,tam:integer;
+begin
+	tam:=largo-1;
+	for i:=0 to tam do
+	begin
+		if(n[i]=bus) then cant:=cant+1
+	end;
+	cantidad:=cant;
+end;
+
+function aparece(val:integer):integer;
+	var r:integer=0; (*numero que mas veces se repite*)
+	var	e:integer=0 ;(*cantidad de veces que se repite*)
+	var i,ca,tam :integer;
+begin
+	tam:=largo-1;
+	for i:=0 to tam do
+	begin
+		ca:=cantidad(val,n[i]);
+		if(ca>e)then
+		begin
+			r:=n[i];
+			e:=ca;
+		end;
+	end;
+	aparece:=r;
+end;
+
+function escapicua(val:integer):boolean;
+var mov:integer;
+var capi:boolean =true;
+begin
+	for mov:=0 to (round(sizeof(n)/2)) do
+	begin
+		if(n[mov]<>n[sizeof(n)-1-mov]) then capi:=false;
+	end;
+	escapicua:=capi;
+end;
+
+
+function mayor(val:integer):integer;
+	var max:integer=0;
+	var i,tam:integer;
+begin
+	tam:=largo-1;
+	for i:=0 to tam do
+	begin
+		if(n[i]>max) then max:=n[i];
+	end;
+	mayor:=max;
+end;
+
+function menor(val:integer):integer;
+	var min:integer=9;
+	var i,tam:integer;
+begin
+	tam:=largo-1;
+	for i:=0 to tam do
+	begin
+		if(n[i]<min) then min:=n[i];
+	end;
+	menor:=min;
+end;
+
+procedure salida(var num:integer);
+var aux:integer;
+var b:boolean;
+begin
+	if (valida(num)) then
+	begin
+		b:=escapicua(num);
+		if (b) then (Writeln('ES CAPICUA')) else (Writeln('NO ES CAPICUA'));
+		aux:=mayor(num);
+		Writeln('La mayor cifra es:',aux , ' y aparece', cantidad(num,aux));
+		aux:=menor(num);
+		Writeln('La menor cifra es:',aux , ' y aparece', cantidad(num,aux));
+		aux:=aparece(num);
+		Writeln('La cifra que mas aparece es:',aux , ' y aparece', cantidad(num,aux));
+	end
+	else
+		writeln('El numero ingresado no es valido');
+end;
+	
+procedure pedirvalor(var nume:integer);
+begin
+	clrscr;
+	write('Ingrese un numero: ');
+	read(nume);
+end;
+	
+BEGIN
+	pedirvalor(numero);
+	numeroavector(numero);
+	salida(numero);
+repeat until keypressed;
+END.

@@ -1,0 +1,31 @@
+(define sumh
+  (lambda (x y)
+    (let ((hh (+(car x)(car y))) 
+          (mm (+ (car(cdr x)) (car(cdr y)))) 
+          (ss (+ (car (cdr (cdr x))) (car (cdr (cdr y))))))
+      (if(> ss 59)
+         (if (> mm 58)
+             (list (+ hh 1) (- mm 59) (- ss 60))
+             (list hh (+ mm 1) (- ss 59)))
+         (if (> mm 59)
+             (list (+ hh 1)(- mm 60) ss)
+             (list hh mm ss))
+         )
+      )
+    )
+  )
+
+(define est '("FEDERICO LACROZE" "JOSE ARTIGAS" "PN ARATA" "DR FCO BEIRO" "EL LIBERTADOR" "ANTONIO DEVOTO" "CNEL FCO LYNCH" "FERNANDEZ MORENO" "LOURDES" "TROPEZON" "JOSE M BOSCH" "MARTIN CORONADO" "PABLO PODESTA" "JORGE NEWBERY" "RUBEN DARIO" "E DE LOS ANDES" "JUAN B DE LA SALLE" "SGTO BARRUFFALDI" "CAPITAN LOZANO" "TNTE AGNETA" "CAMPO DE MAYO" "SGTO CABRAL" "GENERAL LEMOS"))
+(define ret '((0 3 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 1 0)(0 4 0)(0 1 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)))
+
+(define horario
+  (lambda (e r h)
+    (if (null? e) '()
+    (cons 
+     (cons (car e)h) 
+     (horario (cdr e)(cdr r) (sumh h (car r))))
+      )
+    )
+  )
+
+(horario est ret '(2 10 25))

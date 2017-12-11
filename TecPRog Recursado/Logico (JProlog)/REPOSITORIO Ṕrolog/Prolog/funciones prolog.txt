@@ -1,0 +1,451 @@
+% Determina si la primer lista es prefijo de la segunda
+% Ejemplo: prefijo([1,2,3],[1,2,3,4,5]). Yes
+% prefijo([1,5,3],[1,2,3,4,5]). No
+prefijo([],_M):-!.
+prefijo([_X],[_X|_M]):-!.
+prefijo([_X|L],[_X|M]):-prefijo(L,M).
+
+
+% doy vuelta una lista
+
+doyvuelta([A],[A]):-!.
+doyvuelta([C|L],[K|[C]]):-doyvuelta(L,K).
+
+alrevez(K,L) :-doyvuelta(K,S),aplanar(S,L).
+
+%aplanar([],Xs,Ys):-aplanar(Xs,[],Ys). 
+concatenar([],L2,L2).
+concatenar([X1|L1],L2,[X1|LR]):- concatenar(L1,L2,LR).
+%concatenar([1,2,[3]], [4,[5],6],RES).
+
+aplanar([],[]).
+aplanar([X|L], [X|LR]):- X\=[_|_], aplanar(L, LR).
+aplanar([X|L], LR):- X=[_|_], aplanar(X,X1),concatenar(X1,L,L1), aplanar(L1,LR).
+
+
+%    burbuja
+
+burbu([],[]).
+burbu([L],[L]).
+burbu([A,B|L],[B|K]) :- A > B , burbu([A|L],K),!.
+burbu([A,B|L],[A|K]) :- A =< B, burbu([B|L],K).
+
+recorro([L]).
+recorro([A,B|L]) :- A < B, recorro([B|L]),!.
+recorro([A,B|_]) :- A > B, fail.
+
+burbuja(K,K) :- recorro(K),!.
+burbuja(K,S) :- burbu(K,L), burbuja(L,S).
+
+% extraer(Lista,Pos1,cuantos,Resultado) toma desde posicion cero, 
+% extrapos(lista,Pos1,Pos2,Resultado) desde posicion uno.  pos1 y pos2 es la posicion absoluta
+
+
+extraer([],_,_,[]):- !.
+extraer([_|L],P1,P2,R) :- P1 > 0, P11 is P1-1, extraer(L,P11,P2,R).
+extraer([C|L],0,P2,[C|R])  :- P2 >0, P22 is P2-1, extraer(L,0,P22,R).
+extraer(_,0,0,R) :- extraer([],0,0,R). 
+extrapos(L,P1,P2,R) :- P3 is P1-1 ,P4 is P2-P1+1,  extraer(L,P3,P4,R). 
+
+esta(X,[X|_]) :- !.
+esta(X,[_|L]) :- esta(X,L).
+
+cuento([],0).
+cuento([_|L],K):- cuento(L,K1), K is K1+1.
+
+donde([C|_],C,1).
+donde([_|L],C,K) :- donde(L,C,K1), K is K1+1.
+
+---------------------------------------
+---------------------------------------
+
+atom(a) --> yes.
+
+member(X,L) :- append(_,[X|_],L).
+prefix(Pre,L) :- append(Prefix,_,L).
+suffix(L,Suf) :- append(_,Suf,L)
+
+
+
+LISTAS
+
+is list(+Term): cierto si Term es una lista.
+length(?List, ?Int): Int es el n´umero de elementos de la lista List.
+sort(+List, -Sorted): Sorted es la lista ordenada de los elementos de List sin duplicados.
+append(?List1, ?List2, ?List3): List3 es la concatenaci´on de List1 y List2
+member(?Elem, ?List): Elem es elemento de List.
+nextto(?X, ?Y, ?List): Y est´a despu´es de X en la lista List.
+delete(+List1, ?Elem, ?List2): List2 es la eliminaci´on de todos los elementos que uni?can simult´aneamente con Elem de List1.
+nth0(?Index, ?List, ?Elem): Elem es el Index-´esimo elemento de List, comenzando por el 0.
+reverse(+List1, -List2): List2 es List1 pero con el orden de los elementos cambiado.
+
+CONJUNTOS
+
+is set(+Set): Set es un conjunto
+list to set(+List, -Set): Set es el conjunto de elementos de List pero sin duplicados.
+intersection(+Set1, +Set2, -Set3): Set3 es la intersecci´on de Set1 con Set2.
+subtract(+Set, +Delete, -Result): elimina de Set todos los elementos del conjunto Delete.
+union(+Set1, +Set2, -Set3): Set3 es la uni´on de Set1 y Set2.
+subset(+Subset, +Set): todos los elementos de Sebset est´an en Set.
+
+
+/* suma de los elementos de una lista */ 
+total([],0). 
+total([C|L],T):- 
+total(L,T1), 
+T is T1+C. 
+
+/* longitud de una lista */ 
+lenght([],0). 
+lenght([_|L],T):- 
+lenght(L,T1), 
+T is T1+1. 
+
+/* adicionar un elemento de la cabeza de una lista */ 
+addhead(X, L, [X|L]). 
+
+/* borrar la cabeza de una lista*/ 
+deletehead(L,L1):- 
+addhead(_,L1,L). 
+
+/* adicionar al final de una lista */ 
+addend(X, [], [X]). 
+addend(X, [C|R], [C|R1]):- 
+addend(X, R, R1). 
+
+/* borrar el ultimo elemento de una lista */ 
+deleteend(L,L1):- 
+addend(_,L1,L). 
+
+/* borrar un elemento de una lista dado el indice */ 
+delete(Indice,L,L1):- 
+insert(_,Indice,L1,L). 
+
+/* insertar un elemento en una lista dado el indice en que se quiere insertar*/ 
+insert(X,0,L1,[X|L1]). 
+insert(X,Pos,[C|R],[C|R2]):- 
+Pos1 is Pos-1, 
+insert(X,Pos1,R,R2). 
+
+/* devuelve las posiciones en que se encuentra un elemento X*/ 
+pos(X,[X|_],0). 
+pos(_,[],_):- 
+!,fail. 
+pos(X,[_|R],Pos):- 
+pos(X,R,Pos1), 
+Pos is Pos1+1. 
+
+/* clonar lista*/ 
+clonlist([], []). 
+clonlist([C|R], [C|R1]):- 
+clonlist(R, R1). 
+/* elemento X de una Lista*/ 
+getElem(0,[C|_],C):-!. 
+getElem(X,[_|R],Sol):- 
+X1 is X -1, 
+getElem(X1,R,Sol) 
+. 
+
+/* existencia de un elemento en una lista */ 
+existe(_,[]):-fail. 
+existe(X,[X|_]):-!. 
+existe(X,[_|R]):- 
+existe(X,R). 
+
+/* elminar un elemento de la lista */ 
+eliminar(_,[],[]):-fail. 
+eliminar(X,[X|R],R). 
+eliminar(X,[C|R],[C|R1]):- 
+eliminar(X,R,R1) 
+. 
+
+/* subconjuntos de una lista */ 
+subconjunto([],[]). 
+subconjunto([C|R],[C|R1]):- 
+subconjunto(R,R1). 
+subconjunto(L,[_|R1]):- 
+subconjunto(L,R1). 
+
+/* permutaciones de una lista*/ 
+permutaciones([],[]). 
+permutaciones([C1|R1],L):- 
+eliminar(C1,L,Rest), 
+permutaciones(R1,Rest). 
+
+/* laboratorio */ 
+vacia([]). 
+subcPerm(L,L1):- 
+subconjunto(T,L1), 
+permutaciones(L,T) 
+. 
+
+check([],[],A,A). 
+check([C|R],[+C|R1],SumaTemp,Suma):- 
+M is SumaTemp + C, 
+check(R,R1,M,Suma) 
+
+. 
+check([C|R],[-C|R1],SumaTemp,Suma):- 
+M is SumaTemp - C, 
+check(R,R1,M,Suma) 
+. 
+
+lab(ListaLarga,Suma,[C|R1]):- 
+subcPerm([C|R],ListaLarga), 
+check(R,R1,C,Suma) 
+. 
+
+/* invertir una lista*/ 
+invertir([],[]). 
+invertir([C|R],L):- 
+invertir(R,X), 
+addend(C,X,L). 
+
+/* mayor de una lista */ 
+mayor([C|[]],C):-!. 
+mayor([C|R],C1):- 
+mayor(R,C2), 
+C>C2 , 
+C1 is C,!. 
+mayor([_|R],C1):- 
+mayor(R,C1) 
+. 
+
+/* menor de una lista */ 
+menor([C|[]],C):-!. 
+menor([C|R],C1):- 
+menor(R,C2), 
+C<C2 , 
+C1 is C,!. 
+menor([_|R],C1):- 
+menor(R,C1) 
+. 
+
+/* sublistas de una lista*/ 
+prim([],_). 
+prim([C|R],[C|R1]):- 
+prim(R,R1) 
+. 
+sublista([],[]). 
+sublista([C|R],[C1|R1]):- 
+prim([C|R],[C1|R1]); 
+sublista([C|R],R1) 
+. 
+
+/* verifica si una lista es creciente*/ 
+creciente([_|[]]). 
+creciente([C|[C1|R1]]):- 
+C < C1, 
+creciente([C1|R1]) 
+. 
+
+/* calcula los intervalos crecientes de una lista */ 
+intervalosCrec(Inter,L):- 
+sublista(Inter,L), 
+creciente(Inter) 
+. 
+
+may(Inter,L, Long):- 
+( intervalosCrec(Inter,L),lenght(inter,Long) ); 
+( Long1 is Long -1,may(Inter,L,Long1) ) 
+. 
+
+l(Inter,L):- 
+lenght(L,M); 
+may(Inter,L,M) 
+. 
+/* producto de 2 vectores */ 
+prodEscalar([],[],0). 
+prodEscalar([C|R],[C1|R1],Result):- 
+prodEscalar(R,R1,Result1), 
+Result is C * C1 + Result1 
+. 
+/* cantidad columnas de una matriz */ 
+cantCol([C|_],CC):- 
+lenght(C,CC) 
+. 
+
+/* cantidad filas de ina matriz */ 
+cantFil(L,CF):- 
+lenght(L,CF) 
+. 
+
+/* columna Num de una matriz [C|R] */ 
+getCol([],_,[]). 
+getCol([C|R],Num,[C1|R1]):- 
+getElem(Num,C,C1), 
+getCol(R,Num,R1) 
+. 
+/* fila Num de una matriz [C|R] */ 
+getFil(L,Num,L1):- 
+getElem(Num,L,L1) 
+. 
+
+/* multiplicar matrices */ 
+crearFila(_,Col,[],_,M2):- 
+cantCol(M2,Cant), Cant= Col,! 
+. 
+
+crearFila(Fil,Col,[C|R],M1,M2):- 
+getFil(M1,Fil,Fila), 
+getCol(M2,Col,Columna), 
+prodEscalar(Fila,Columna,C), 
+ColTemp is Col +1, crearFila(Fil,ColTemp,R,M1,M2) 
+. 
+
+mult(Fil,[],M1,_):- 
+cantFil(M1,Cant),Cant= Fil, 
+!. 
+mult(Fil,[C|R],M1,M2):- 
+crearFila(Fil,0,C,M1,M2), 
+FilTemp is Fil +1, 
+mult(FilTemp,R,M1,M2) 
+. 
+
+multiplicar(M1,M2,M):- 
+mult(0,M,M1,M2) 
+. 
+/* cantidad que se repite X en una lista*/ 
+cantRep(_,[],0). 
+
+cantRep(X,[X|R],Cant):- 
+cantRep(X,R,Cant1), 
+Cant is Cant1+1,!. 
+cantRep(X,[_|R],Cant):- 
+cantRep(X,R,Cant) 
+. 
+
+/* jkkjhk no pincha */ 
+
+mayr([X],1,X). 
+
+mayr([C|R],Cant,Elem):- 
+cantRep(C,[C|R],Cant1), 
+mayr(R,Cant2,Elem1), 
+(((Cant1>= Cant2) ,(Cant is Cant1,Elem is C)) ;( Cant is Cant2 , Elem is Elem1)) 
+. 
+/* concatenar dos listas */ 
+
+concat([],L,L). 
+concat([C|R],L,[C|R1]):- 
+concat(R,L,R1) 
+. 
+
+/* obtener todos los elementos atomicos de una lista de listas de listas de... */ 
+flatten([],[]):-!. 
+flatten([C|R],L):- 
+flatten(C,L1), 
+flatten(R,L2), 
+concat(L1,L2,L),! 
+. 
+flatten(X,[X]). 
+
+/* suma de matrices */ 
+crearfila([],[],[]). 
+crearfila([C|R],[C1|R1],[C2|R2]):- 
+C2 is C + C1, 
+crearfila(R,R1,R2) 
+. 
+sumaMat([],[],[]). 
+sumaMat([C|R],[C1|R1],[C2|R2]):- 
+crearfila(C,C1,C2), 
+sumaMat(R,R1,R2) 
+. 
+/* elemento de una matriz */ 
+elemMat(Fila,Col,[C|R],X):- 
+getElem(Fila,[C|R],L), 
+getElem(Col,L,X) 
+. 
+
+/* sobreescribir un elemento en una lista */ 
+sobreescribirEn(_,_,[],[]). 
+sobreescribirEn(Elem,0,[_|R],[Elem|R1]):- 
+sobreescribirEn(Elem,-1,R,R1),! 
+. 
+sobreescribirEn(Elem,Pos,[C|R],[C|R1]):- 
+ColTemp is Pos -1, 
+sobreescribirEn(Elem,ColTemp,R,R1) 
+. 
+
+/* sobreescribir un elemnto en una matriz */ 
+
+sobreescribirMat(_,_,_,[],[]):-!. 
+sobreescribirMat(0,Col,Elem,[C|R],[C1|R1]):- 
+sobreescribirEn(Elem,Col,C,C1), FilTemp is -1, 
+sobreescribirMat(FilTemp,Col,Elem,R,R1),! 
+. 
+sobreescribirMat(Fil,Col,Elem,[C|R],[C|R1]):- 
+FilTemp is Fil - 1, 
+sobreescribirMat(FilTemp,Col,Elem,R,R1) 
+. 
+
+/* intercambiar elemntos de una matriz */ 
+exchange(pto(Fila1,Col1),pto(Fila2,Col2),[C|R],[C1|R1]):- 
+elemMat(Fila1,Col1,[C|R],Pos1), 
+elemMat(Fila2,Col2,[C|R],Pos2), 
+sobreescribirMat(Fila1,Col1,Pos2,[C|R],M), 
+sobreescribirMat(Fila2,Col2,Pos1,M,[C1|R1]) 
+. 
+
+
+
+/* sublistas de una lista*/ 
+prim3([C,C1,C2|[]],[C,C1,C2|_]). 
+
+sublista3([],[]). 
+sublista3([C|R],[C1|R1]):- 
+prim3([C|R],[C1|R1]); 
+sublista3([C|R],R1) 
+
+*********************************************************
+*********************************************************
+***********************************************************
+% GENERALIDADES
+% Determinar si lo que se recibe es una lista
+% Ejemplo: lista(1). No
+% lista([1,2]). Yes
+lista([]):-!.
+lista([_X|Y]):-lista(Y).
+% Devuelve la longitud de la lista que se le pasa por argumento.
+% Ejemplo: long([1,3,7,4],X). X=4
+long([],0):-!.
+long([_X|Y],S):-long(Y,T), S is T+1.
+% Maximo elemento de una lista
+% Ejemplo: maximo([1,5,3,-2],X). X=5
+maximo([X],X).
+maximo([X|Xs],X):- maximo(Xs,Y), X >=Y.
+maximo([X|Xs],N):- maximo(Xs,N), N > X.
+% Mínimo elemento de una lista
+% Ejemplo: minimo([1,5,3,-2],X). X=-2
+minimo([X],X).
+minimo([X|Xs],X):- minimo(Xs,Y), X =< Y.
+minimo([X|Xs],N):- minimo(Xs,N), N < X.
+% Determina si una lista es estrictamente creciente
+% Ejemplo: crece([1,2,3]). Yes
+% crece([2,2,3]). No
+crece([_X]).
+crece([X,Y|Z]):-X<Y,crece([Y|Z]).
+% Determina si una lista es estrictamente decreciente
+% Ejemplo: decrece([3,2,1]). Yes
+% decrece([3,2,2]). No
+decrece([_X]).
+decrece([X,Y|Z]):-X>Y,decrece([Y|Z]).
+% Determina si dos listas son iguales en todos los niveles
+% Ejemplo: listaIgual([1,2,[5,2],3],[[1,2,[5,2],3],9]). No
+% listaIgual([1,2,[5,2],3],[1,2,[5,2],3]). Yes
+listaIgual([],[]):-!.
+listaIgual([X|M],[X|R]):-listaIgual(M,R).
+listaIgual([X|M],[T|R]):-lista(X),lista(T),listaIgual(X,T),listaIgual(M,R).
+% Determina si una lista es capicua
+% Ejemplo: capicua([n,e,u,q,u,e,n]). Yes
+% capicua([n,e,u,q,[u,e],n]). No
+% capicua([n,e,[u,q,u],e,n]). Yes
+capicua([]):-!.
+capicua(L):-invertir(L,R),listaIgual(L,R).
+% Determina si la primer lista es prefijo de la segunda
+% Ejemplo: prefijo([1,2,3],[1,2,3,4,5]). Yes
+% prefijo([1,5,3],[1,2,3,4,5]). No
+prefijo([],_M):-!.
+prefijo([_X],[_X|_M]):-!.
+prefijo([_X|L],[_X|M]):-prefijo(L,M).
+

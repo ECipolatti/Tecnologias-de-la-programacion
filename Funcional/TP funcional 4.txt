@@ -1,0 +1,198 @@
+Tecnologías de programación 2013
+TP - Programacion Funcional.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+
+----------------------Ejercicio 1---------------------------------
+
+(define-struct point (x y))
+
+(define distancia(lambda (a b)
+                   (sqrt (+ 
+                          (expt (- (point-x b) (point-x a)) 2)
+                          (expt (- (point-y b) (point-y a)) 2)))
+                   ))
+(define punto1 (make-point 2 2))
+(define punto2 (make-point 2 1))
+
+(distancia punto1 punto2)
+
+----------------------Ejercicio 2---------------------------------
+
+(define suma(lambda (l) (if (null? l) 0 (+ (car l)(suma (cdr l))))))
+
+(define-struct point (x y z))
+
+(define centro(lambda (lista)
+                   (let( 
+                         (n (length lista))
+                         (a (map point-x lista)); pongo todos los x en un lista
+                         (b (map point-y lista))
+                         (c (map point-z lista))
+                         )
+                     (list (/ (suma a) n) (/ (suma b) n) (/ (suma c) n))
+                   )))
+(define punto1 (make-point 2 2 3))
+(define punto2 (make-point 2 1 2))
+(define punto3 (make-point 4 1 2))
+(define punto4 (make-point 4 1 2))
+
+(centro (list punto1 punto2 punto3 punto4))
+
+----------------------Ejercicio 3---------------------------------
+      MODIFICAR ESTA MALL#############################################################################
+(define-struct point (x y z))
+
+(define distancia(lambda (a b)
+                   (sqrt (+ 
+                          (expt (- (point-x b) (point-x a)) 2)
+                          (expt (- (point-y b) (point-y a)) 2)
+                          (expt (- (point-z b) (point-z a)) 2)))
+                   ))
+
+(define maxdis(lambda (lista)
+                   (let( 
+                         (a (map lista))
+                         (b (map lista))
+                         )
+                         
+                     
+                   )))
+
+(define punto1 (make-point 2 2 3))
+(define punto2 (make-point 2 1 2))
+(define punto3 (make-point 4 1 2))
+(define punto4 (make-point 4 1 2))
+
+(maxdis (list punto1 punto2 punto3 punto4))
+
+----------------------Ejercicio 4---------------------------------
+
+(define i(open-input-file "prueba.txt"))
+
+(define cuentapalabras (lambda (x) 
+                  (if (eof-object? (read x))
+                      0
+                      (+ 1 (cuentapalabras x))
+                    
+                    )))
+(define cuentacaracter (lambda (x) 
+                  (if (eof-object? (read-char x))
+                      0
+                      (+ 1 (cuentacaracter x))
+                    
+                    )))
+
+----------------------Ejercicio 5---------------------------------
+
+(define i(open-input-file "prueba.txt"))
+
+(define mostrar(lambda (x)
+                 (let(
+                      (temp (read-line x) )
+                      )
+                     (cond ((eof-object? temp) (display #\ ))
+                           (else (display temp) (newline) (mostrar x)))
+                     )))
+
+(mostrar i)
+
+----------------------Ejercicio 6---------------------------------
+
+(define pesopalabra (lambda (lista)
+                      (letrec(
+                              (peso-total
+                               (lambda (a)
+                                 (if (null? a)
+                                     0
+                                     (+ (char->integer  (car a)) (peso-total (cdr a)))
+                                     )))
+                              
+                              (peso-string (lambda (s) (string->list s)))
+                              (minl (lambda (lista)
+                                      (if (null? (cdr lista))
+                                          (cdr (car lista))
+                                          (if (< (cdr (car lista)) (minl (cdr lista)))
+                                              (cdr (car lista))
+                                              (minl (cdr lista))))))
+                              (concatenar (lambda (l1 l2)
+                                            (if (null? l1)
+                                                l2
+                                                (cons (car l1) (concatenar (cdr l1) l2)))
+                                            ))
+                              (ordenar<= (lambda (L)
+                                           (if (null? L) 
+                                               '()
+                                               (if (<= (cdr(car L)) (minl L))
+                                                   (concatenar (list (car L)) (ordenar<= (cdr L)))
+                                                   (ordenar<= (concatenar (cdr L) (list (car L))))))))
+                              
+                              (armar-l (lambda (lista)
+                                         (if (null? lista)
+                                             '()
+                                             (cons (car (car lista)) (armar-l(cdr lista)))
+                                             )))
+                              
+                              (general
+                               (lambda (lista)
+                                 (if (null? lista)
+                                     '()
+                                     
+                                     
+                                     (ordenar<= (cons (cons (car lista) (peso-total(peso-string (car lista)))) (general (cdr lista))))
+                                     )))
+                              )
+                        (armar-l (general lista))
+                        )
+                      ))
+
+----------------------Ejercicio 7---------------------------------
+
+(define inviertetodo(lambda (lista)
+                      (letrec(
+                              (invertir(lambda (x)
+                                         (if (null? x)
+                                             '()
+                                             (cons (ultimo x) (invertir (elimina x)) )
+                                             )))
+                              
+                              (elimina(lambda (x)
+                                        (if (null? (cdr x))
+                                            '()
+                                            (cons (car x) (elimina (cdr x))))))
+                              
+                              (ultimo(lambda (u)
+                                       (if(null? (cdr u))
+                                          (car u)
+                                          (ultimo (cdr u)))))
+                              )
+                        (if (or (null? lista) (real? lista))
+                            lista
+                            (map inviertetodo (invertir lista))
+                            )
+                        
+                        )))
+
+
+(inviertetodo '(1 2 (3 4) 5 6))
+
+----------------------Ejercicio 8---------------------------------
+
+(define concatenar(lambda (lista1 lista2)
+                    (if (null? lista1)
+                        lista2
+                        (cons (car lista1) (concatenar (cdr lista1) lista2))
+                        )
+                    ))
+
+
+(define app2list(lambda (a b)
+                  (cond
+                    ((and (list? a) (list? b)) (concatenar a b))
+                    ((and (list? a) (not (list? b)))(cons b a))
+                    ((and (not (list? a)) (list? b))(cons a b))
+                    (else (list a b)))))
+                    
+----------------------Ejercicio 9---------------------------------
+

@@ -1,0 +1,47 @@
+TecProg] Final 7-02-2013
+
+---------------------------
+PROLOG
+
+Se debe crear un predicado de aridad 2 (ordenar/2) que organice los elementos de una lista de la siguiente manera:
+
+1) Se puede asumir que los elementos de la lista original son átomos.
+2) Cada elemento de la lista resultado será una nueva lista, donde el primer elemento es la cantidad de repeticiones del elemento, y los siguiente elementos son cada uno de los elementos que se repiten dicha cantidad de veces.
+3) Los elementos de la lista resultado deben aparecer ordenados por cantidad decreciente de elementos repetidos.
+
+Ej: ordenar([a, b, a], L).
+L = [[2, a], [1, b]].
+
+Ej: ordenar([a, b, b], L).
+L = [[2, b], [1, a]].
+
+Ej: ordenar([a, b, b, a, c], L).
+L = [[2, a, b], [1, c]].
+
+Ej: ordenar([a, b, b, a, c, d, a, c], L).
+L = [[3, a], [2, b, c], [1, d]].
+
+
+FUNCIONAL
+
+;Cree las funciones to-base24 y from-base24 para convertir a,
+;y desde base24. Los números en base 24 estarán formados por
+;los caracteres: 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N.
+;Para realizar el programa utilice vectores para referenciar
+;los elementos correspondientes. Cada función deberá estar definida en un único define.
+
+;Ej:
+;(to-base24 555) --> N3
+;(to-base24 550) --> MM
+;(from-base24 'MM') --> 550
+
+Objetos
+
+Una sedería vende rollos de tela. Existen 3 tipos de telas (lino, seda y poliéster) cada una de ellas en diferentes colores (rojo, azul o verde). Para cada tipo de tela de un color determinado, la sedería guarda la información de cuantos rollos de tela hay disponibles y cuál es el precio unitario de cada rollo.
+Ejemplo: Para tela de lino, color rojo, hay 55 rollos disponibles y su precio unitario es de $ 10,50.-
+Las ventas se realizan a Clientes Mayoristas y Minoristas. A los mayoristas se les agrega un 5% sobre el precio unitario del rollo y al minorista un 7%.
+De los clientes Mayoristas se guardan los datos (razón social – domicilio – cuit). De los clientes Minoristas se guarda el nombre y el domicilio solamente.
+Tela telaConMayorExistencia(): Devuelve el nombre de la tela para la cual hay mas cantidad de rollos disponibles. No tiene en Cuenta el Color.
+Float informarPrecioVenta (Tela unaTela, Color unColor): determinar el valor de venta unitario del Rollo, aparte del recargo por tipo de cliente, se le hace un descuento del 1% si es de una telaConMayorExistencia.
+Realizar el Diagrama UML del dominio especificando todas las clases necesarias, sus relaciones detallando cardinalidad y navegabilidad. Cada clase debe contener atributos y métodos.
+Codificar los requerimientos solicitados en lenguaje JAVA.

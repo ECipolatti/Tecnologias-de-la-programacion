@@ -1,0 +1,23 @@
+(define-struct punto(x y z))
+
+(define centrograv
+  (letrec(( suma
+            (lambda (c)
+              (if (null? c)
+                  0
+                  (+ (car c) (suma(cdr c)))
+                  )
+              )
+            ))
+    (lambda (r)
+       (let((listx (map punto-x r))
+               (listy (map punto-y r))
+               (listz (map punto-z r))
+               (n (length r)))
+               (list (* (/ (suma listx) n)1.0)(*(/(suma listy) n) 1.0)(*(/(suma listz) n)1.0))
+            )
+          )
+      )
+    )
+  
+(centrograv (list (make-punto 1 1 1)(make-punto 1 5 9)(make-punto 2 1 0)(make-punto 7 1 5)))

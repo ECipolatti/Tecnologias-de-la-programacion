@@ -1,0 +1,22 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2))
+        )
+    )
+  )
+(define aplanar
+  (lambda (l1)
+    (if (null? l1)
+        '()
+        (if (real? (car l1))
+            (concat (list(car l1))(aplanar (cdr l1)))
+            (concat (aplanar (car l1))(aplanar (cdr l1)))
+            )
+        )
+    )
+  )
+            
+           
+(aplanar '((1 2 3)(9 (2 3 4))((((3 4 ( 7 ) ) ) ) ) ) )

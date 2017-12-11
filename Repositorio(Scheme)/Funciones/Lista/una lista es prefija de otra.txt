@@ -1,0 +1,12 @@
+(define esprefijo
+  (lambda (l1 l2)
+    (if (null? l1)
+        #t
+        (if (eqv? (car l1) (car l2))
+            (esprefijo (cdr l1) (cdr l2))
+            #f
+            )
+        )
+    )
+  )
+(esprefijo '(1 2) '(1 2 3 4 5))

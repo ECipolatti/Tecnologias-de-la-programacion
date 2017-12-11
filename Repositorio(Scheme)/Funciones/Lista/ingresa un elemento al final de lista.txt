@@ -1,0 +1,9 @@
+(define attach-at-end
+  (lambda (x y)
+    (if (null? y)
+        (cons x'())
+        (cons (car y)(attach-at-end x (cdr y)))
+        )
+    )
+  )
+(attach-at-end 'prueba '(esto es una))

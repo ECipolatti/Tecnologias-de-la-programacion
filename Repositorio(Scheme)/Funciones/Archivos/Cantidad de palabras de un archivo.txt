@@ -1,0 +1,8 @@
+(define cantpa
+  (lambda (archi)
+    (if (eof-object? (read archi))
+        0
+        (+ 1 (cantpa archi ))
+        )
+    )
+  )

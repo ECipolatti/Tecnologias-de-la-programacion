@@ -1,0 +1,12 @@
+(define cant-izq
+  (lambda (atom lista)
+    (if (null? lista)
+        0
+        (if (eqv? atom (car lista))
+            (+ (cant-izq atom null) 0)
+            (+ (cant-izq atom (cdr lista)) 1)
+            )
+        )
+    )
+  )
+(cant-izq 'f '(a b c d e f))

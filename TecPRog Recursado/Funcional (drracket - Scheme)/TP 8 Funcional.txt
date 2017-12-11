@@ -1,0 +1,142 @@
+ -----------------------------Ejercicio 1-------------------------------------------------------------
+ 
+ (define concat-inv (lambda (l1 l2)
+                     (letrec (
+                              (invertir (lambda (l1)
+                                          (if (null? l1)
+                                              '()
+                                              (if (null? (cdr l1))
+                                                  l1
+                                                  (concatenar (invertir(cdr l1))(list (car l1)))
+                                                  ))))
+                              (concatenar (lambda (l1 l2)
+                                            (if (null? l1)
+                                                (invertir l2)
+                                                (cons (car l1) (concatenar (cdr l1) l2))
+                                                )))
+                              )
+                       (concatenar l1 l2)
+                       )))
+
+(concat-inv '(1 2 3) '(4 5 6))
+
+-----------------------------Ejercicio 2-------------------------------------------------------------
+
+(define pertenece (lambda (x l1 l2)
+                    (letrec ((busca (lambda (ls)
+                                      (if (null? ls)
+                                          #f
+                                          (if (car ls)
+                                              #t
+                                              (busca (cdr ls))
+                                              ))))                                          
+                             )
+                      (let ((comp1 (map eqv? (vector->list (make-vector (length l1) x)) l1))
+                            (comp2 (map eqv? (vector->list (make-vector (length l2) x)) l2))
+                            )
+                        (if (eqv? #f (busca comp1))
+                            #f
+                            (if (eqv? #t (busca comp2))
+                               #t
+                               #f
+                               )
+                            ))
+                    )
+                    ))
+		    
+-----------------------------Ejercicio 3-------------------------------------------------------------
+
+(define cant-izq (lambda (x ls)
+                   (if (eqv? x (car ls))
+                       0
+                       (+ 1 (cant-izq x (cdr ls)))
+                       )))
+
+
+-----------------------------Ejercicio 4-------------------------------------------------------------
+
+(define addif (lambda (x l1)
+                    (letrec ((busca (lambda (ls)
+                                      (if (null? ls)
+                                          #f
+                                          (if (car ls)
+                                              #t
+                                              (busca (cdr ls))
+                                              ))))
+                             (concatenar (lambda (l1 l2)
+                                            (if (null? l1)
+                                                l2
+                                                (cons (car l1) (concatenar (cdr l1) l2))
+                                                )))
+                             )
+                      (let ((comp1 (map eqv? (vector->list (make-vector (length l1) x)) l1)))
+                        (if (eqv? #t (busca comp1))
+                            l1
+                            (concatenar l1 (list x))
+                            ))
+                      )))
+
+-----------------------------Ejercicio 5-------------------------------------------------------------
+
+(define fechap (lambda (d m a)
+                 (if (or (not (number? d)) (not (number? m)) (not (number? a)))
+                     #f
+                     (if (< a 0)
+                         #f
+                         (if (or (> m 12) (< m 0))
+                             #f
+                             (if (or (eqv? m 1) (eqv? m 3) (eqv? m 5) (eqv? m 7) (eqv? m 8) (eqv? m 10) (eqv? m 12))
+                                 (if (or (> d 31) (< d 0))
+                                     #f
+                                     #t)
+                                 (if (eqv? m 2)
+                                     (if (or (> d 28) (< d 0))
+                                         #f
+                                         #t)    
+                                     (if (or (> d 30) (< d 0))
+                                         #f
+                                         #t)
+                                     )))))
+                     ))
+
+-----------------------------Ejercicio 6-------------------------------------------------------------
+(define agrupar (lambda (x y)
+                  (letrec((agrega (lambda (x ls)
+                                    (if (null? ls)
+                                        (concatenar ls (list x))
+                                        (if (eqv? x (car ls))
+                                            (cons x ls)
+                                            (cons (car ls) (agrega x (cdr ls)))
+                                            ))))
+                          (concatenar (lambda (l1 l2)
+                                        (if (null? l1)
+                                            l2
+                                            (cons (car l1) (concatenar (cdr l1) l2))
+                                            )))
+                          )
+                    (if (list? y)
+                        (agrega x y)
+                        (agrega y x)
+                        
+                        )
+                    )))
+-----------------------------Ejercicio 7-------------------------------------------------------------
+(define get-profundidad (lambda (ls)
+                          (letrec ((max-list  (lambda (x)
+                                                (if (null? x)
+                                                    0
+                                                    (if (> (car x) (max-list (cdr x)))
+                                                        (car x)
+                                                        (max-list (cdr x))))
+                                                ))
+                                   (profundidad (lambda (ls)
+                                                  (if (not (list? ls))
+                                                      0
+                                                      (if (not (list? (car ls)))
+                                                          0
+                                                          (+ 1 (profundidad (car ls)))
+                                                          ))))
+                                   )
+                            (+ 1 (max-list (map profundidad ls)))
+                            )))
+			    

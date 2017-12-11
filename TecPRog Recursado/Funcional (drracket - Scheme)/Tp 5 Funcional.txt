@@ -1,0 +1,99 @@
+Tecnologías de la Programación
+Cipolatti Edgardo
+DNI: 35215385
+
+------------Ejercicio 1-----------------------
+ (let ((a 2) (b 3))
+    (let ((f (/ (* 7 a) b)) (r (/ (* 3 a) b)))
+	(let ((s (+ f r f)))
+          (display s))))
+
+ 
+(let ((a '(a b c)) (b '(a b c)))
+    (let ((c (cons (car a) (cdr b))))
+    (display c))
+  )
+  
+  ------------Ejercicio 2-----------------------
+  (let ((x 9))
+	(* x
+	 (let ((x (/ x 3)))
+	      (+ x x))))
+El valor de x es: 64
+primero asigna 9 a x, luego multiplica ese 9 por una exprecion que asigna 3
+a la x (porque hace 9 dividido 3) y despues suma 3 mas 3 = 6
+
+  ------------Ejercicio 3-----------------------
+
+a. (let ((x 'a) (y 'b))
+      (list (let ((s 'c)) (cons s y))
+	(let ((f 'd)) (cons x f))))
+	
+b. (let ((x '((a b) c)))
+      (cons (let ((a (cdr x)))
+		      (car a))
+	    (let ((b (car x)))
+		  (cons (let ((c (cdr b)))
+			  (car c))
+		  (cons (let ((d (car b)))
+				d)
+		  (cdr b))))))		  
+  
+  
+  ------------Ejercicio 4-----------------------
+    
+a. (let ((f (lambda (x) x)))
+	  (f 'a))
+Resultado a
+b. (let ((f (lambda x x)))
+	  (f 'a))
+Resultado (a)	  
+c. (let ((f (lambda (x . y) x)))
+	  (f 'a))
+Resultado a
+d. (let ((f (lambda (x . y) y)))
+	  (f 'a))
+Resultado ()
+
+  ------------Ejercicio 5-----------------------
+  
+  (define (shorter str1 str2)
+    (if (<= (length str1) (length str2))
+      str1
+      str2
+      )
+  )
+  
+  ------------Ejercicio 6-----------------------
+  
+(define (area_circulo rad)
+  (* 3.1415 rad rad))
+
+  ------------Ejercicio 7-----------------------
+  
+(define (perimetro_circulo rad)
+  (* 2 rad 3.1415))
+  
+  ------------Ejercicio 8-----------------------
+    
+    (define (circlestuff rad)
+  (list (area_circulo rad) (perimetro_circulo rad))
+  )
+  
+  ------------Ejercicio 9-----------------------
+  
+      (define (distancia a b)
+  (sqrt (+ (* (- (car b) (car a)) (- (car b) (car a))) 
+           (* (- (cdr b) (cdr a)) (- (cdr b) (cdr a)))
+           ))
+  )
+ ------------Ejercicio 10-----------------------
+	
+(define (cercano punto ls)
+  (if (null? (cdr ls))
+      (distancia punto (car ls))
+      (let ((dis (distancia punto (car ls))))
+        (if (< dis (cercano punto (cdr ls)))
+            dis
+            (cercano punto (cdr ls))
+            ))))

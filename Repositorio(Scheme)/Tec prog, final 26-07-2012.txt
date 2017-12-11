@@ -1,0 +1,185 @@
+﻿Prolog
+
+
+Escriba un predicado en prolog "reemplazar(+String, +String, +String, -String)" 
+que encuentre una subcadena dentro de un texto y la reemplace por otra.
+
+
+El primer argumento es el string en el que se debe reemplazar, el segundo el string a reemplazar, 
+el tercero el string de reemplazo y por último el string con los reemplazos efectuados.
+
+
+NOTA: El único predicados predefinido que se puede usar en caso de considerarse necesario es string_to_list(?String, ?List).
+
+
+NOTA: El cuarto argumento debe ser unificado con un String. 
+No es válido la unificación con otro tipo de dato.
+
+
+Ejemplo:
+
+?- reemplazar("esto es una prueba para ver si funciona el predicado", "ver", "verificar", R).
+
+R = "esto es una prueba para verificar si funciona el predicado"
+
+?- 
+reemplazar("esto es una prueba para ver si funciona el predicado", "cualquiera", "verificar", R).
+
+R = "esto es una prueba para ver si funciona el predicado"
+
+
+
+RESPUESTA:
+conca([],L,L):-!.
+
+conca([X|L],LL,[X|L2]):- conca(L,LL,L2).
+
+
+
+find([X|L],X,L):-!.
+
+find([_|L],X,LL):- find(L,X,LL),!.
+
+
+
+igual([],[]):-!.
+
+igual([X|L],[X|L]):-!.
+
+
+sigpal([X|L],[],L):- X is 32,!.
+
+sigpal([X|L],[X|LL],L2):- sigpal(L,LL,L2).
+
+
+
+reemplazar(String,Pal,Por,R):- reemplazar(String,Pal,Por,R,[]).
+
+reemplazar([],_,_,R,B):- string_to_list(R,B).
+
+reemplazar(String,Pal,Por,R,B):- sigpal(String,X,Y), igual(X,Pal), !, conca(B,Por,B3), conca(B3,[32],B4),conca(B4,Y,RR),string_to_list(R,RR).
+
+reemplazar(String,Pal,Por,R,B):- sigpal(String,X,Y), conca(X,[32],BB), conca(B,BB,B2), reemplazar(Y,Pal,Por,R,B2).
+
+
+
+
+OTRA RESPUESTA(NO ESTA DEL TODO BIEN):
+igual([_|L],[]):- !.
+igual([X|L],[Y|L2]):- false,!.
+igual([X|L],[X|L2]):- igual(L,L2).
+
+concatena([],L,L).
+concatena([X|L1],L2,[X|L3]):-concatena(L1,L2,L3).
+
+aux1([],[_|L2],L3,[]):-!.
+aux1([X|L],[X|L2],L3,L4):- igual(L,L2),!,aux1(L,[X|L2],L3,L5),concatena(L3,L5,L4).
+aux1([X|L],[Y|L2],L3,[X|L4]):- aux1(L,[Y|L2],L3,L4).
+
+substr([],[],[],[]):-!.
+substr(S,S1,S2,N):- string_to_list(S,L),string_to_list(S1,L1),string_to_list(S2,L2),aux1(L,L1,L2,N1),string_to_list(N,N1)
+
+
+
+
+
+Scheme 
+
+
+
+Cree una función llamda ListSustA, que reciba como parámetros una lista de pares impropios y una lista objetivo. 
+Cada valor izquierdo de cada par impropio debe ser reemplazado por su valor de la derecha en la lista objetivo. 
+Además, los valores aplicados no tienen incidencia sobre los restantes. 
+
+Como condicionantes solo se podrá utilizan una única cláusula DEFINE quedando todo el código embebido en el cuerpo de la misma y 
+deberá usarse la función MAP para resolver el problema. El resultado debe ser la lista con las sustituciones realizadas.
+
+Ej: (ListSustA '((a . b) (b . c) (c . d)) '(a b c d)) --> (b c d d)
+
+.
+
+(define ListSustA
+  (lambda (l x)
+
+    (letrec ((reemplazar
+               
+		(lambda (x)
+	
+                 (cond
+ ((null? l) x)
+
+                   ((eqv? (caar l) x) (cdar l))
+
+                   (else (reemplazar2 (cdr l) x)))))
+
+             
+             (reemplazar2
+ 
+				(lambda (l x)
+  
+			              (cond
+                   
+					((null? l) x)
+              
+					     ((eqv? (caar l) x) (cdar l))
+         
+					          (else (reemplazar2 (cdr l) x))))))
+         
+					    
+          (map reemplazar x))))
+
+
+
+-----------------------------------------------------------------
+
+
+
+Puntos: 100
+
+
+Objetos.
+La inmobiliaria administra propiedades en alquiler, las mismas pueden ser casas, departamentos o cocheras.
+
+Toda propiedad tiene un propietario del cual se registran datos mínimos (apellido y nombre, documento, domicilio) 
+Una propiedad puede estar en alquiler o en stock(Disponible).
+
+Cuando la propiedad está alquilada tiene un inquilino del que se registran los mismos datos que en él propietario. 
+Del contrato de alquiler se guarda la fecha de inicio y fin, el monto mensual. 
+(uno monto por cada mes que dura el contrato, no necesariamente tiene que ser el mismo). 
+Por ejemplo el 1º año de contrato el alquiler es de 1.000 pesos por mes y el 2º año 1.200.-
+
+Los datos que se registran de una propiedad son: dirección – tipo – cantidad de ambientes – cantidad de dormitorios.
+
+De acuerdo al tipo de propiedad es el costo de administración que se cobra. 
+El calculo de dicho costo es según la siguiente relación: 8% del valor del alquiler + un módulo en función de la propiedad.
+
+Para calcular el valor del módulo de una propiedad se tiene la siguiente información:
+
+CASAS: cantidad de ambientes x 10
+
+DPTOS: cantidad de dormitorios x 10
+
+COCHERAS: 10
+
+a)Realizar el diagrama de clases de UML especificando relaciones entre Clases, cardinalidad y navegabilidad para este dominio.
+
+b)Codificar los siguientes requerimientos en lenguaje JAVA especificando todas las Clases necesarias con el siguiente detalle: 
+accesibilidad de atributos y métodos, tipo de atributo, valor de devolución de los métodos y parámetros. 
+Desarrollar los algoritmos de los métodos que crea necesario para satisfacer los requerimientos en lenguaje JAVA.
+
+Mostrar por pantalla (consola) el recibo emitido a un propietario detallando todas sus propiedades que se encuentran en Alquiler 
+y por cada una el costo del alquiler y comisión.
+Argumentos a recibir (un periodo - una persona). 
+El periodo se especifica como mes y año (12 2010).
+
+Tener en cuenta que una propiedad perteneciente a la persona recibida como parámetro puede no estar alquilada en dicho periodo.
+
+
+
+
+
+
+
+
+
+ 

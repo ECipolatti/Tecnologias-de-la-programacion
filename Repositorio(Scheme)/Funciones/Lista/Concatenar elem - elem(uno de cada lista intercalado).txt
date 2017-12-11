@@ -1,0 +1,17 @@
+;Concatena dos listas
+(define concatenar (lambda (L1 L2) (if (null? L1) 
+                                        L2
+                                        (cons (car L1) (concatenar (cdr L1) L2)))))
+
+;Concatena dos listas elemento a elemento
+(define conc1-1 (lambda (L1 L2) (if (null? L1) 
+                                        L2
+                                        (if (null? L2) 
+                                            L1
+                                            (concatenar (concatenar (list(car L1)) (list(car L2))) (conc1-1 (cdr L1) (cdr L2)))))))
+
+
+;Prueva
+(define lista1 '(a b c d e f g h i j k l m n o))
+(define lista2 (list 1 2 3 4))
+(conc1-1 lista1 lista2)

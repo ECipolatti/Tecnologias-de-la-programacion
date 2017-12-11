@@ -1,0 +1,12 @@
+(define subst
+  (lambda (x y z)
+    (if (null? z)
+        '()
+        (if (eqv? x (car z))
+            (cons y (subst x y (cdr z)))
+            (cons (car z)(subst x y (cdr z)))
+         )
+      )
+   )
+ )
+(subst 'c 'k '( c o c o n u t))

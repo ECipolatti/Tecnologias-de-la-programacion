@@ -1,0 +1,39 @@
+(define mesval
+  (lambda (valor)
+    (if (>= valor 1)
+        (if (<= valor 12)
+            #t
+            #f)
+        #f)
+    )
+  )
+(define diaval
+  (lambda (valor)
+    (if (>= valor 1)
+        (if (<= valor 31)
+            #t
+            #f
+            )
+        #f)))
+(define valmesdia
+  (lambda (valor1 valor2)
+    (if (or (= valor1 4) (= valor1 6)(= valor1 9)(= valor1 11))
+        (if (> valor2 30)
+            #f
+            #t
+            )
+        (if(= valor1 2)
+           (if (> valor2 28)
+               #f
+               #t
+               )
+           #t))))
+ (define fechap
+   (lambda (d m a)
+     (if (and (diaval d)(mesval m)(valmesdia m d))
+         #t
+         #f
+         )
+     )
+   )
+ (fechap 31 11 1876)

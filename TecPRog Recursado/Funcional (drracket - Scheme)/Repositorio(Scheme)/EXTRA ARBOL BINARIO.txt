@@ -1,0 +1,190 @@
+;;;;;;DEFINIR RAIZ, SUB-ARBOL IZQ, SUB-ARBOL DER
+
+(define raiz
+  (lambda (A)
+    (car A)))
+
+(define h_izq
+  (lambda (A)
+    (car(cdr A))
+    )
+  )
+
+(define h_der
+  (lambda (A)
+    (car(cdr(cdr A))))
+    )
+  
+
+
+;;;;;;DEFINIR HOJA, Y NODO VALIDO (VALIDA EL TIPO DE DATO DENTRO DE CADA NODO)
+
+(define hoja?
+  (lambda (A)
+    (if(null? A)
+       #f
+       (if (and (null? (h_izq A)) (null? (h_der A)))
+           #t
+           #f
+           )
+       )
+    )
+  )
+
+(define nodo
+  (lambda (N)
+    (if (or (number? N) (symbol? N))
+        #t
+        #f
+        )
+    )
+  )
+
+
+
+;;;;;;;VALIDA SI UN ARBOL TIPO UN TIPO DE DATO NODO (DEFINIDO ARRIBA)
+
+(define arbol-num
+  (lambda (A)
+    (if (null? A)
+        #t
+        (if (and(nodo (raiz A)) 
+                (arbol-num(h_der A)) 
+                (arbol-num(h_izq A)))
+            #t
+            #f
+            )
+        )
+    )
+  )
+
+
+;;;;;;;;ENCUENTRA EL PESO TOTAL DE TODOS LOS NODOS DEL ARBOL
+
+(define pesototal
+  (lambda (A)
+    (if (null? A)
+        0
+        (+ (raiz A) (pesototal (h_der A)) (pesototal (h_izq A)))
+        )
+    )
+  )
+
+(pesototal '(3 (5 () ()) (7 (2 () ()) (4 () ()))))
+
+
+;;;;;;;;ENCUENTRA EL PESO TOTAL DE UN NIVEL DADO
+
+(define peso-nivel
+  (lambda (n A)
+    (if (null? A)
+        0
+        (if (eqv? 0 n)
+            (raiz A)
+            (+ (peso-nivel(- n 1) (h_der A)) (peso-nivel (- n 1)(h_izq A)))
+            )
+        )
+    )
+  )
+
+(peso-nivel 0 '(3 (5 () ()) (7 (2 () ()) (4 () ()))))
+
+
+
+;;;;;;;;;;NIVEL DE UN ARBOL BINARIO
+
+
+
+(define maxlvl
+  (lambda (A)
+    (if (null? A)
+        0
+        (+ 1 (max (maxlvl(h_der A)) (maxlvl(h_izq A))))
+        )
+    )
+  )
+
+(maxlvl '(a(b(d () ()) (e () ())) (c (f () ()) (g (s () (4 () ())) ()))))
+
+
+
+
+;;;;;;;VALIDA QUE SEA ARBOL
+
+
+(define arbol?
+  (lambda (A)
+    (if (null? A) #t
+        (if (and (nodo (raiz A)) (arbol? (h_izq A)) (arbol? (h_der A)))
+            #t
+            #f
+            )
+        )
+    )
+  )
+
+
+;;;;;;;VALIDA QUE SEA ARBOL COMPLETO
+
+
+(define completo
+  (lambda (A)
+    (if (and (not(null? (raiz A)))
+             (not(null? (h_der A)))
+             (not(null? (h_izq A)))
+             )
+        #t
+        #f
+        )
+    )
+  )
+
+(define acomp
+  (lambda (A)
+    (if (null? A)
+        #t
+        (if (hoja? A)
+            #t        
+            (if (and(completo A) (acomp (h_der A)) (acomp (h_izq A)))
+            #t
+            #f
+            )
+        )
+    )
+  )
+)
+
+
+;;;;;;;;;;;;A PARTIR DE UNA LISTA DE ARBOLES, DETERMINAR EL PESO DEL QUE MAS PESA
+
+
+
+(define pesomayor
+  (lambda (l1)
+    (if (null? l1)
+        0
+        (if (> (pesototal(car l1)) (pesomayor (cdr l1)))
+            (pesototal (car l1))
+            (pesomayor (cdr l1))
+            )
+        )
+    )
+  )
+
+
+;;;;;;;;;;;;; A PARTIR DE UNA LISTA DE ARBOLES BINARIOS, DETERMINA CUAL ES EL DE MAYOR PESO (EL ANTERIOR DETERMINABA EL PESO, ESTE DEVUELVE EL ARBOL)
+
+
+(define mayar
+  (lambda (l1)
+    (if (null? l1)
+        0
+        (if (>(pesototal (car l1))(pesomayor (cdr l1)))
+            (car l1)
+            (mayar (cdr l1))
+            )
+        )
+    )
+  )
+
+(mayar '((0 (6 () ())(7 () ())) (0 (0(2 ()())(7 () ())) (5 ()()))))

@@ -1,0 +1,7 @@
+(define mult-list
+  (lambda (escalar lista)
+     (map (lambda (f)
+            (* escalar f)) lista))
+    )
+  
+(mult-list 2 '(1 2 3 4 5 6))

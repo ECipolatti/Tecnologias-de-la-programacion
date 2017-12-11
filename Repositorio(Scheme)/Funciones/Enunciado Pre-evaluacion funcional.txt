@@ -1,0 +1,48 @@
+Puntos: 40
+Dada una lista de listas, cree una función que devuelva una lista con las longitudes de cada uno de los elementos. (No se puede utilizar la función length de Scheme)
+Ej: (longitudes '((1 2 3) (1 2) (1))) --> (3 2 1)
+
+
+Puntos: 30
+Dada una lista de pares x y devolverla ordenando los pares de menor a mayor.
+Ej:
+(order-pair '((1 . 2) (3 . 1) (4 . 5) (5 . 1))) --> ((1 . 2) (1 . 3) (4 . 5) (1 . 5))
+
+Puntos: 40
+Escribe el procedimiento (fullreverse-list ls) que tome una lista como argumento, y devuelva la lista de forma que quede completamente invertida invertida. No se pueden utilizan las primitivas del lenguaje que realizan estas funciones.
+EJ: (fullreverse-list (1 (2 3 4 (4 5) (3 (5 6)) 4))) --> (4 ((6 5) 3) (5 4) 4 3 2) 1)
+
+
+Puntos: 3
+La aplicación de funciones en el cálculo lamnda es asociativa a:
+Seleccione al menos una respuesta.
+	a. Izquierda 	
+	b. Derecha 	
+	c. Depende de la declaración de la función
+
+
+Puntos: 3
+Una lista propia se define como una lista en la cual:
+Seleccione una respuesta.
+	a. No posee una lista impropia entre sus elementos 	
+	b. Su cantidad de elementos es mayor a 2 	
+	c. Su cdr es una lista propia 	
+
+
+Puntos: 3
+En el cálculo lamnda, las funciones son de:
+Seleccione una respuesta.
+	a. Un argumento 	
+	b. Dos argumentos 	
+	c. n argumentos 	
+
+Puntos: 3
+Dada la siguiente expresión:
+
+?xy.z + x-y
+
+las variables ligadas son:
+Seleccione una respuesta.
+	a. x y 	
+	b. x y z 	
+	c. ninguna de las opciones 	

@@ -1,0 +1,7 @@
+(define buscar
+  (lambda (x lista)
+    (if (null? lista)
+        #f
+        (if (eqv? x (car lista))
+            #t
+            (buscar x (cdr lista))))))

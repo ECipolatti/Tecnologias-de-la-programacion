@@ -1,0 +1,15 @@
+(define distancia
+  (letrec(( distancia2d
+          (lambda (x y)
+            (sqrt(+ ( expt(- (car y)(car x))2) (expt (- (cdr y) (cdr x))2)))
+            )
+          ))
+    (lambda (z)
+      (if(null? (cdr z))
+         '()
+         (cons (distancia2d (car z) (cadr z))(distancia (cdr z)))
+         )
+      )
+    )
+  )
+(distancia '((1 . 1) (1 . 2) (2 . 2) (2 . 1) (1 . 1)))

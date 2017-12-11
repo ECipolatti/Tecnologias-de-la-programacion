@@ -1,0 +1,94 @@
+var(@Term): True if Term currently is a free variable.
+nonvar(@Term): True if Term currently is not a free variable.
+integer(@Term): True if Term is bound to an integer.
+float(@Term): True if Term is bound to a floating point number.
+rational(@Term): True if Term is bound to a rational number. Rational numbers include integers.
+rational(@Term, -Numerator, -Denominator): True if Term is a rational number with given Numerator and Denominator. The Numerator and Denominator are in canonical form, which means Denominator is a positive integer and there are no common divisors between Numerator and Denominator.
+number(@Term): True if Term is bound to an integer or floating point number.36
+atom(@Term)]: True if Term is bound to an atom.
+string(@Term)
+
+sort(+List, -Sorted).
+findall(+Template, :Goal, -Bag)
+forall(:Cond, :Action)
+call(:Goal)
+call(:Goal, +ExtraArg1, ...)
+between(+Low, +High, ?Value): Valida que Value se encuentre entre Low y High. Sus tres argumentos deben ser enteros.
+succ(?Int1, ?Int2): valida que Int2 = Int1 + 1.
+abs(+Exp): Evalúa Exp y retorna su valor absoluto.
+sign(+Exp): Retorna -1 si Exp < 0, 1 si Exp > 0 y 0 si Exp = 0.
+pluss(?Int1, ?Int2, ?Int3): Verdadero si Int3 = Int1 + Int2.
+max(+Exp1, +Exp2): retorna el mayor.
+min(+Exp1, +Exp2): retorna el menor.
+round(+Exp): Evalúa Exp y redondea el resultado al entero más próximo.
+length(?List, ?Int): Verdadero si Int es la cantidad de elementos de la lista List.
+sort(+List, -Sorted): Verdadero si Sorted es List con los elementos ordenados y sin repeticiones.
+msort(+List, -Sorted): igual que sort/2 pero sin eliminar los duplicados.
+append(?List1, ?List2, ?List3): Exitoso si List3 unifica con la concatenación de List1 y List2.
+member(?Elem, ?List): Exitoso cuando Elem puede ser unificado con alguno de los elementos de la lista List.
+delete(+List1, ?Elem, ?List2): elimina todos los miembros de List1 que unifiquen con Elem y unifica el resultado con List2.
+last(?List, ?Elem): Tiene éxito si Elem unifica con el último elemento de List.
+reverse(+List1, -List2): Revierte el orden de la lista List1 y unifica el resultado con los elementos de List2.
+ﬂatten(+List1, -List2): Transforma List1 en una lista plana.
+max_list(+List, -Max): Verdadero si Max es el mayor número en List.
+min_list(+List, -Min): Verdadero si Min es el menor número en List.
+
+permutar([X|L],X):- !.
+permutar([_|C],X):- permutar(C,X).
+%otra para permutar
+perm([],[]).
+perm(L1, [X|L2]):- select(X,L1,L3), perm(L3,L2).
+
+validate(L):- forall(member(X,L),funcion_para_validar(X)).
+
+%conjuntos
+miembro(_,[]):- !, fail.
+miembro(X,[X|_]):- !.
+miembro(X,[_|L]):- miembro(X,L).
+validar([]).
+validar([A|L]):- not(miembro(A,L)),validar(L).
+union([],L,L):- validar(L), !.
+union([A|B],L,[A|D]):- validar([A|B]),validar(L), not(miembro(A,L)), !, union(B,L,D).
+union([A|B],L,D):- validar([A|B]),validar(L), union(B,L,D).
+interseccion([X],L,[X]):- validar(L), miembro(X,L), !.
+interseccion([A|B],L,[A|D]):- validar([A|B]),validar(L), miembro(A,L), !, interseccion(B,L,D).
+interseccion([A|B],L,D):- validar([A|B]),validar(L), interseccion(B,L,D).
+diferencia([],L,[]):- validar(L), !.
+diferencia([A|B],L,[A|D]):- validar([A|B]),validar(L), not(miembro(A,L)), !, diferencia(B,L,D).
+diferencia([A|B],L,D):- validar([A|B]),validar(L),miembro(A,L),diferencia(B,L,D), !.
+
+%altura de un arbol
+altura([],0).
+altura([_],1).
+altura([I,_,D],H):- altura(I,A), altura(D,B), H is A+B.
+
+%separar con criterio F
+separar(L,L1,L2,F):- findall(X,(member(X,L),call(F,X)),L1), findall(X,(member(X,L),not(call(F,X))),L2).
+
+%todos del mismo tipo
+todo(L):- member(X,[integer,float,rational,string,compound,atom]), forall(member(Y,L),call(X,Y)), !.
+
+%bubble sort
+bubble_sort(List,Sorted):-b_sort(List,[],Sorted).
+b_sort([],Acc,Acc):- !.
+b_sort([H|T],Acc,Sorted):-bubble(H,T,NT,Max),b_sort(NT,[Max|Acc],Sorted).
+bubble(X,[],[],X):- !.
+bubble(X,[Y|T],[Y|NT],Max):-X>Y,bubble(X,T,NT,Max), !.
+bubble(X,[Y|T],[X|NT],Max):-X=<Y,bubble(Y,T,NT,Max).
+
+%insertion sort
+insercion([],[]).
+insercion(XS,YS):-
+        insercion_aux(XS,[],YS).
+ 
+insercion_aux([],YS,YS).
+insercion_aux([X|XS],AC,YS):-
+        inserta(X,AC,AC1),
+        insercion_aux(XS,AC1,YS).
+ 
+inserta(X,[],[X]).
+inserta(X,[Y|YS],[X,Y|YS]):-
+        X<Y.
+inserta(X,[Y|YS],[Y|XS]):-
+        X>=Y,
+        inserta(X,YS,XS).

@@ -1,0 +1,172 @@
+-------------------------------------------------------------------------------
+Tecnologías de programación 2012					      
+Alumno: Zaburlín Carlos							      
+DNI: 34116346								      
+TP-08-Programación lógica.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 1----------------------------------
+
+Conteste con sus palabras y en forma concisa las siguientes preguntas
+conceptuales:
+
+-------------------------------------------------------------------------------
+a) ¿Por que es necesario un lenguaje formal para expresar el cuerpo de
+   conocimientos?
+
+   Porque elimina ambiguedades y hace posible que sea entendido por una
+   computadora.
+-------------------------------------------------------------------------------
+b) ¿Cual es la idea subyacente en la resolución de problemas según el paradigma
+   lógico?
+   
+   La programación lógica permite formalizar hechos del mundo real, y también
+   reglas o restricciones. Además permite hacer cuantificación sobre los
+   objetos de un dominio y representar propiedades a través de relaciones y
+   funciones.
+-------------------------------------------------------------------------------
+c) ¿Cuales son los componente del alfabeto descripto para el lenguaje formal?
+
+   Elementos del alfabeto:
+    * Constantes.
+    * Variables.
+    * Predicados.
+    * Cuantificadores y conectores lógicos.
+    * Functores.
+    * Términos.
+-------------------------------------------------------------------------------
+d) ¿Qué conceptos análogos en el lenguaje natural encuentran los términos y las
+   fórmulas bien formadas (wff) del lenguaje formal de fórmulas?
+
+   En lenguaje natural conforman frases con significado.
+-------------------------------------------------------------------------------
+e) ¿Que representa una interpretación para un cuerpo de fórmulas dado?
+
+   Una interpretación de un alfabeto A es un dominio no vacío D.
+-------------------------------------------------------------------------------
+f) ¿Que implica valorar una determinada variable?
+   
+   Una Valoración es una función que asigna objetos de una interpretación a
+   variables del lenguaje.
+-------------------------------------------------------------------------------
+g) ¿Que es un modelo respecto de un conjunto de fórmulas?
+
+   Dado un conjunto de fórmulas P, se dice que una interpretación es un modelo
+   de P si y solo si cada fórmula de P es verdadera.
+-------------------------------------------------------------------------------
+h) ¿Que es una consecuencia lógica de un conjunto de fórmulas P?
+
+   Dado un conjunto de fórmulas P, una fórmula F es consecuencia lógica de P si
+   y solo si F es verdadero en cada modelo de P.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 2----------------------------------
+
+Escriba como programa en ProLog el siguiente cuerpo de conocimientos:
+ • leoncio es padre de alberto y de gerónimo.
+ • alberto es padre de juan y de luis.
+ • geronimo es padre de luisa.
+ • A es hermano de B si A y B tienen un padre en común y son distintas
+   personas.
+ • A es nieto de B si el padre de A es hijo de B.
+
+-------------------------------------------------------------------------------
+ * padre(leoncio, alberto),padre(leoncio, geronimo)
+ * padre(alberto, juan),padre(alberto, kuis)
+ * padre(geronimo, luisa)
+ * hermano(A,B):- A\=B, padre(X,A),padre(X,B)
+ * nieto(A,B):- padre(X,A),padre(B,X)
+-------------------------------------------------------------------------------
+a) ¿como consultaría si alberto es padre de luis?
+   
+   padre(alberto,luis)
+-------------------------------------------------------------------------------
+b) ¿como consultaría si luis es padre de alberto?
+
+   padre(luis,alberto)
+-------------------------------------------------------------------------------
+c) ¿como consultaría quien es hermano de luis?
+
+   hermano(luis,X)
+-------------------------------------------------------------------------------
+d) ¿como consultaría de quien es nieto luisa?
+
+   padre(X,luisa),padre(Y,X)
+-------------------------------------------------------------------------------
+e) ¿como consultaría quien es nieto de quien?
+    
+   padre(A,B),padre(C,A)
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 3----------------------------------
+
+Dado la lista de platos de un restaurante confeccionar los predicados
+necesarios para declarar los menues, y luego realizar las siguientes consultas:
+
+-------------------------------------------------------------------------------
+
+Menues existentes:
+- 'Bombones de jamón', 'Locro', 'Dulce de batata'
+- 'Bombones de jamón', 'Locro', 'Alfajor norteño'
+- 'Tarta de Atún', 'Atados de repollo', 'Dulce de batata'
+- 'Tarta de Atún', 'Pollo romano con hierbas y vino'
+- 'Volovanes de atún', 'Matambre con espinacas y parmesano', 'Torta moka'
+- 'Buñuelos de bacalao', 'Pollo romano con hierbas y vino', 'Alfajor norteño'
+
+------------------------------------------------------------------------------
+a) Listado completo de posibles menús que se ofrece.
+
+   Menu(bj,lo,db)
+   Menu(bj,lo,an)
+   Menu(ta,ar,db)
+   Menu(ta,prhv)
+   Menu(va,mep,tm)
+   Menu(bb,prhv,an)
+------------------------------------------------------------------------------
+b) ¿En que menú esta incluido el postre 'Dulce de batata'?
+
+   Menu(X,Y,db)
+------------------------------------------------------------------------------
+c) ¿En que menú esta incluido el plato principal 'Locro'?
+
+   Menu(X,lo,Y)
+------------------------------------------------------------------------------
+d) ¿Hay algún menú que contenga como plato principal 'Pato a la naranja'?
+   
+   Menu(X,pn,Y)
+------------------------------------------------------------------------------
+e) ¿Hay algún menú que contenga 'Locro' como entrada?
+
+   Menu(lo,X,Y)
+------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 4----------------------------------
+
+Construya el árbol de resolución para la consulta del punto “c” del ejercicio
+3.
+
+-------------------------------------------------------------------------------
+( ?- menu( X , 'Locro' , Z ). 
+      (?- menu('Bombones de jamón', 'Locro', Z). 
+          (?- menu('Bombones de jamón', 'Locro', 'Dulce de batata'). (true.))
+          (?- menu('Bombones de jamón', 'Locro', 'Alfajor norteño'). (true.)) 
+      )
+
+  
+      (?- menu('Tarta de Atún', 'Locro', Z). (false.))
+      (?-menu('Volovanes de atún', 'Locro',Z). (false.))
+      (?-menu('Buñuelos de bacalao', 'Locro', Z). (false.)) 
+ )
+-------------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+(define crea-listas
+  (lambda (numero lista)
+    (if (null? lista)
+        '()
+        (if (eqv? numero 1)
+            (cons lista '())
+            (cons lista (crea-listas (- numero 1)lista))
+            )
+        )
+    )
+  )
+
+(crea-listas 3 '(a b c))

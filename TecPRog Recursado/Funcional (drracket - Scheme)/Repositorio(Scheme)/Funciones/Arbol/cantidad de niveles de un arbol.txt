@@ -1,0 +1,10 @@
+(define nivel  ;me dice los niveles de una arbol
+  (lambda (arbol)
+    (if (null? arbol)
+        0
+        (let ((tempo (contarelem (cdr arbol))))
+          (if (not (eqv? tempo 0))
+              (+ 1 (max (nivel (car(cdr arbol)))(nivel (cdr(cdr arbol)))))
+              (max (nivel (cdr arbol))(nivel (cdr arbol)))
+          )
+        ))))

@@ -1,0 +1,59 @@
+1) 
+
+factorial(1,1).
+factorial(Y,X) :- Y>0, Prox is Y-1, factorial(Prox,Vari), X is Y*Vari.
+
+
+
+2) 
+contar([],0,0).
+contar([C|L],P,I) :- integer(C) , R is C mod 2, R = 0, contar(L,P2,I), P is P2+1. %cuento pares enteros
+contar([C|L],P,I) :- integer(C) , R is C mod 2, R \= 0, contar(L,P,I2), I is I2+1. %cuento impares enteros
+contar([C|L],P,I) :- contar(L,P,I).                                                %sino cuento lo que queda
+
+
+3) 
+sumar([],0).
+sumar([C|L],Tot) :- integer(C) , sumar(L,Tot1), Tot is Tot1+C.
+sumar([C|L],Tot) :- sumar(L,Tot).
+
+o 
+
+sumar([],0).
+sumar([A|L], N) :- sumar(L,N2), N is N2+A.
+
+
+4) 
+
+aplanar([],[]).
+aplanar([[A|B]|C],L) :- aplanar([A|B],L2), aplanar(C,L3), conca(L2,L3,L). %si es sublista aplano el car y el cdr y junto los datos
+aplanar([A|D],L) :- A|=[_,_], aplanar(D,L), L = [A|L].             %si el car es dato junto con la lista y proceso el cdr
+conca([],L,L).
+conca([X|A],L2,[X|B]) :- conca(A,L2,B). 
+
+
+% aplanar([1,2,3,[[4,5],6,7],8,9],K).
+
+5) 
+
+sumar([],[],[]).
+sumar([A|L], [B|L2], [C|R]) :- integer(A), integer(B), sumar(L,L2,R), C is A+B.
+ 
+% sumar([1,2],[3,4],K).
+
+
+
+6) 
+max(V1,V2,V3) :- V1 > V2,  V3 = V1.
+max(V1,V2,V3) :- V1 =< V2, V3 = V2.
+prof([],0).   % fin arbol
+prof([_],1).  % es hoja
+prof([I,_,D],R) :- prof(I,R2), prof(D,R3), max(R2,R3, K), R is K+1.
+
+
+7) a) asigna al segundo componente el contenido del primero.
+
+b) Utiliza la recursividad en per como una pila. Toma elementos de una lista por izquierda,
+ los almacena en memoria, cuando llega al último elemento lo agrega en otra lista
+ va insertando por derecha los elementos que estaban en la pila.
+

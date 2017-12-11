@@ -1,0 +1,151 @@
+Tecnologías de la programacion- Paradigma secuencial
+Cipolatti Edgardo
+DNI: 35215385
+
+-----Ejercicio 1-------------------------------
+
+10 print "Ejercicio 1"
+20 input "ingrese un numero: ";n
+30 if n=0 then goto 100
+35 if (int(n/2)*2) = n then
+40 print "numero par"
+50 else
+60 print "numero Impar"
+65 end if
+70 goto 20
+100 print "hasta pronto!" 
+
+-----Ejercicio 2-------------------------------
+10 input "ingrese el primer numero:";n1
+20 input "ingrese el segundo numero:";n2
+30 input "ingrese tercer numero:";n3
+40 if (((n2 > n1) and (n2 < n3)) or ((n2 > n3) and (n2 <n1))) then
+50 	print "el central es:"; n2
+52	goto 100
+55 end if
+60 if (((n1 > n2) and (n1 < n3)) or ((n1 > n3) and (n1 < n2))) then
+65	print "el central es:"; n1
+68 else
+70	print "el central es:"; n3
+90 end if
+100 print "FIN"
+
+-----Ejercicio 3-------------------------------
+
+2 max = 0
+4 cant = 0
+10 input "ingrese un numero";n
+20 if n=0 then goto 100
+25 if n>max then
+30 	max = n
+35 	cant = 1
+40 else
+50 	if n = max then
+55 		cant = cant + 1
+60 end if
+70 goto 10
+
+100 print "fin"
+
+-----Ejercicio 4-------------------------------
+10 bajo=0
+12 medio=0
+14 alto=0
+20 input "ingrese numero: ";n
+30 if n = 0 then goto 100
+35 if n<160 then
+40 	bajo = bajo + 1
+50 else
+60	if n>180 then
+65		alto = alto+ 1
+70	else
+75		medio = medio + 1
+80	end if
+85 end if
+90 goto 20
+100 print "bajos: ";bajo;" medios ";medio; " y altos ";alto
+150 print "fin"
+
+-----Ejercicio 5-------------------------------
+
+10 suma=0
+14 cant =1
+15 producto = 1
+20 if (cant<=5) then goto 25 else goto 100 
+25 input "ingrese el numero: ";n
+30 suma = suma + n
+40 producto = producto * n
+50 cant = cant + 1
+60 goto 20
+70 end if
+100 print "La suma es igual a "; suma; " y el producto es "; producto
+-----Ejercicio 6-------------------------------
+
+10 input "ingrese un numero";n
+20 if n>=0 then goto 30 else goto 100
+30 suma=suma+n
+40 goto 10
+50 end if
+100 print "la suma es: ";suma
+
+-----Ejercicio 7-------------------------------
+
+10 n = (int (rnd*49)+1)
+11 
+12 print n
+20 for cant=1 to 5 step 1
+30 input "ingrese un numero: ";numero
+40 if n=numero then goto 60 
+42 end if
+50 next
+55 goto 90
+60 print "el num coincide"
+
+70 goto 100
+
+90 print "erró mas de cinco veces"
+100 print "fin"
+
+-----Ejercicio 8-------------------------------
+
+10 input "ingrese un numero: ";n
+12 binario$ = ""
+15 do while n<>0
+20 	resto = n mod 2
+25 	n = (int (n / 2))
+30 	if resto=0 then goto 70 else goto 90 end if 
+40 loop
+55 goto 150
+
+70 binario$ = "0" + binario$
+80 goto 40
+90 binario$ = "1" + binario$
+100 goto 40
+
+150 print binario$
+
+-----Ejercicio 9-------------------------------
+
+-----Ejercicio 10-------------------------------
+
+-----Ejercicio 11-------------------------------
+
+10 dim vector(20)
+12 input "ingrese numero: ";n
+14 max=n
+16 posicion=1
+18 vector(0)=n
+20 for i=1 to 19 step 1
+30 	input "ingrese numero: ";n
+40 	vector(i)=n
+50 	if (n>max) then goto 70 end if
+55	
+60 next
+62 goto 80
+
+70 posicion=i+1
+71 max =n
+72 goto 55
+
+80 print "el maximo se encuentra en la posicion: ";posicion
+90 print max;"es el mayor"

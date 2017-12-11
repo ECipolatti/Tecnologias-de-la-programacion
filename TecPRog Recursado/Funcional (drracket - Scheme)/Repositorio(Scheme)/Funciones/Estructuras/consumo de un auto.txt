@@ -1,0 +1,11 @@
+(define-struct punto (x y))
+(define distancia
+  (lambda (p1 p2)
+    (sqrt (+ (expt (- (punto-x p2) (punto-x p1)) 2) (expt (- (punto-y p2) (punto-y p1)) 2)))
+    ))
+(define-struct auto(consumo velocidad))
+(define consumo
+  (lambda (dis auto)
+    (cons (/ dis (auto-consumo auto)) (/ dis (auto-velocidad auto)))
+    ))
+(consumo (distancia (make-punto 0 0) (make-punto 100 0)) (make-auto 10 100))

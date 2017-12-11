@@ -1,0 +1,55 @@
+Armar una lista a partir de hechos.
+
+findall(X,P(X),L):ver significado.
+
+----------------------------------------------------------------------------------------------
+
+VALIDACION DE UN DATO
+
+eval(X):-not(valido(X)),!,write("no valido"),fail.		// para mostrar ensaje.
+eval(X):-proceder(X).
+
+----------------------------------------------------------------------------------------------
+
+VALIDACION DE UNA LISTA DE ENTEROS
+
+validar([X]):-!,integer(X).			// si tiene un solo elemento,NO EVALUA LA LISTA VACIA
+validar([X|L]):-integer(X),validar(L).		// al menos mas de 1 elemento
+
+
+// otra opcion
+
+forall (member(X, [1,2,3,4]),integer(X)).		// chequea el integer(X) a cada elemento
+
+
+// otra opcion
+
+f(1).
+f(2).
+f(3).
+f(4).
+forall(f(X),integer(X)).
+
+----------------------------------------------------------------------------------------------
+
+USO INVERSO DE APPEND (DIVIDIR)
+
+append(X,Y,Z)
+
+	si X, Y, [1,2,3]
+
+	[], [1,2,3]
+	[1], [2,3]
+	[1,2],[3]
+	[1,2,3],[]
+
+
+----------------------------------------------------------------------------------------------
+
+CHEQUEAR SI UN NUMERO ES DIVISIBLE POR OTRO (MOD)
+
+0 =:= X mod 3		// por ejemplo X divisible por 3
+
+
+----------------------------------------------------------------------------------------------
+

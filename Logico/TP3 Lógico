@@ -1,0 +1,49 @@
+Tecnologías de programación 2013
+TP - Programacion Lógica.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+--------------------------------------------------------Ejercicio 1------------------------------------------------------
+
+eliminar_primero([],_,[]).
+eliminar_primero([X|L],X,L) :- !.
+eliminar_primero([C|R],VE,[C|LF]) :- eliminar_primero(R,VE,LF).
+
+--------------------------------------------------------Ejercicio 2------------------------------------------------------
+
+agregar_nuevo(Elem,[],[Elem]).
+agregar_nuevo(Elem,[Elem|Lista],[Elem|Lista]):-!.
+agregar_nuevo(Elem, [X|Lista], [X|LF]):- agregar_nuevo(Elem,Lista,LF).
+
+--------------------------------------------------------Ejercicio 3------------------------------------------------------
+dic([sanar,hola, sabana, sabalo, prueba, computadora, cartera, mate, termo, mesa, silla, sarna]).
+
+es_miembro( X, [ X | _ ] ) :- !.
+es_miembro( X, [ _ | L ] ) :- es_miembro( X, L ).
+
+
+semejanza([],[],0):-!.
+semejanza([Cab|Lista1],[Cab|Lista2],S):- 
+				semejanza(Lista1,Lista2,S2), S is S2+1,!.
+semejanza([_|Lista1],[_|Lista2],S):- 
+				semejanza(Lista1,Lista2,S2), S is S2-1,!.
+semejanza([], [_|Lista] ,S):- 
+				semejanza([],Lista,S1), S is S1-1.
+semejanza([_|Lista],[],S):-	semejanza(Lista,[],S1), S is S1-1.
+
+
+--------------------------------------------------------Ejercicio 4------------------------------------------------------
+
+reemplazar(_,_,_,_,[],[]):-!.
+reemplazar(X,Y,1,C,[X|L1],[Y|L]):-		
+						C > 0, C1 is C - 1, reemplazar(X,Y,1,C1,L1,L),!.
+reemplazar(X,Y,1,C,[X|L1],[Y|L]):-	
+						C = -1, reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,1,C,[Z|L1],[Z|L]):-
+						reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,1,C,[Z|L1],[Z|L]):-
+						C = -1, reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,N,C,[Z|L1],[Z|L]):-
+						N1 is N - 1, reemplazar(X,Y,N1,C,L1,L),!.
+reemplazar(X,Y,N,C,[Z|L1],[Z|L]):-
+						C = -1, N1 is N - 1, reemplazar(X,Y,N1,C,L1,L),!.

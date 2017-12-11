@@ -1,0 +1,100 @@
+Se desea hacer un programa para agilizar el cálculo de redes ip. El programa recibirá como parámetros una cadena con un nro de ip con su máscara y deberá devolver el número de la red a la que pertenece el mismo.
+Un nro ip es una dirección de 32bits que normalmente se representa como 4 números separados por punto. La máscara del número ip es la que permite diferenciar el número de la red del número de la máquina en esa red. Por ejemplo:
+
+10.10.10.10/255.255.255.0 ---> ip / máscara.
+
+Para calcular cual es el número de red a la que corresponde el número es necesario hacer el and binario entre la máscara y el ip:
+
+00001010.00001010.00001010.00001010 --> nro ip
+11111111.11111111.11111111.00000000 --> máscara
+-------------------------------------------------
+00001010.00001010.00001010.00000000 --> nro de la red
+10. 10. 10. 0
+
+Como los número en realidad se representan en binario nada impide que se cuente con ip/máscaras como por ejemplo:
+10.10.10.130/255.255.255.128
+
+para calcular la red procedemos de la misma manera:
+
+00001010.00001010.00001010.10000010 --> nro ip
+11111111.11111111.11111111.10000000 --> máscara
+-------------------------------------------------
+00001010.00001010.00001010.10000000 --> nro de la red
+10. 10. 10. 128
+
+Los número se pasarán a la función como un string con el formato conocido.
+La función deberá llamarse "ipnet".
+Ejemplo de llamado
+(ipnet "10.10.10.130/255.255.255.128") --> "10.10.10.128"
+
+RESOLUCION:
+(define strgalista(lambda(s)(string->list s)))
+
+(define separaip (lambda(l)( if (eqv? (car l) #\/)
+                                ()
+                                (cons (car l) (separaip (cdr l))))))
+
+(define separamasc(lambda (l)( if (eqv? (car l) #\/)
+                                  (cdr l)
+                                  (separamasc (cdr l)))))
+
+(define sacahpto(lambda(l)(if (null? l)
+                              l
+                              (if (eqv? (car l) #\.)
+                                  ()
+                                  (cons (car l) (sacahpto (cdr l)))))))
+
+(define dspspto(lambda(l)(if (null? l)
+                              l
+                              (if (eqv? (car l) #\.)
+                                  (cdr l)
+                                  (dspspto (cdr l))))))
+
+(define abinaux(lambda(x)(if (= 1 x)
+                             (list x)
+                             (let (( mod (modulo x 2)) (num (floor (/ x 2))))
+                               (cons mod (abinaux num)))))) 
+
+(define abinario1(lambda(x)(reverse (abinaux x))))
+
+
+(define abinario(lambda(l)(abinario1(string->number(list->string l)))))
+
+
+
+(define armarlista(lambda(l)(if(null? l)
+                               l
+                               (cons (abinario (sacahpto l)) (armarlista (dspspto l))))))
+
+(define andaux(lambda(l1 l2)(if (null? l1)
+                                ()
+                                (if (and (= 1 (car l1)) (= 1 (car l2)))
+                                    (cons 1 (andaux (cdr l1) (cdr l2)))
+                                    (cons 0 (andaux (cdr l1) (cdr l2)))))))
+
+(define func(lambda(l1 l2)( if (null? l1)
+                               l1
+                               (cons (andaux (car l1)(car l2)) (func (cdr l1) (cdr l2))))))
+
+  
+  
+(define ipnetaux(lambda(s)(let ((ip (armarlista (separaip (strgalista s)))) (masc (armarlista(separamasc (strgalista s))))) 
+                         (func ip masc)
+                         
+                         )))
+
+(define adecimal(lambda(n p)(if (null? n)   
+                              0
+                              (if (= (car n) 1)
+                                  (+ (expt 2 p) (adecimal (cdr n) (+ 1 p)))
+                                  (+ 0 (adecimal (cdr n) (+ 1 p)))
+                              ))))
+
+(define func1(lambda(l)(if (null? l)
+                           l
+                           (cons (adecimal (reverse (car l)) 0) (func1(cdr l))))))
+
+
+(define ipnet(lambda(s)(let(( res (ipnetaux s)))
+                         (func1 res))))
+(ipnet "10.10.10.130/255.255.255.128")

@@ -1,0 +1,11 @@
+(define i (open-input-file "prueba.txt"))
+(define j (open-output-file "pruebaaux.txt"))
+
+(define texto
+  (lambda (x y z k)
+    (let ((r (read x)))
+      (cond((eof-object? r)(close-output-port k)(close-input-port x)(display "FIN"))
+             ((equal? r y)(display z k)(display #\space k)(texto x y z k))
+              (else (display r k)(display #\space k)(texto x y z k))))))
+
+(texto i 'marcos "maxi" j)

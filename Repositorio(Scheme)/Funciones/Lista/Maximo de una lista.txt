@@ -1,0 +1,13 @@
+(define max-list
+  (lambda (x)
+    (if (null? x)
+        0
+        (if (> (car x) (max-list (cdr x)))
+            (car x)
+            (max-list (cdr x))
+            )
+        )
+    )
+  )
+
+(max-list '(1 2 9 5 6) )

@@ -1,0 +1,15 @@
+(define enc-punto
+  (lambda (punto lista)
+    (if (null? lista)
+        #f
+        (if (equal? punto (car lista))
+            #t
+            (enc-punto punto (cdr lista))
+            ))))
+(define intersection
+  (lambda (l1 l2)
+   (if (null? l1)
+        '()
+         (if (enc-punto (car l1) l2)
+             (cons (car l1) (intersection (cdr l1) l2))
+            (intersection (cdr l1) l2))))

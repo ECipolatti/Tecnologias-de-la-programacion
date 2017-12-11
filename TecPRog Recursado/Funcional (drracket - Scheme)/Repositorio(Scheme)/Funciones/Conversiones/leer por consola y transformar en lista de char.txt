@@ -1,0 +1,7 @@
+(define conver
+  (lambda (re)
+    (let ((tempo (read-line re)))
+    (string->list tempo)
+    )))
+
+(conver (open-input-string (read-line)))

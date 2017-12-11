@@ -1,0 +1,16 @@
+(define subst
+  (lambda (x y z)
+    (if (null? z)
+        '()
+        (if (eqv? x (car z))
+            (cons y (subst x y (cdr z)))
+            (if (list? (car z))
+                (cons (subst x y (car z))(subst x y (cdr z)))
+                (cons (car z)(subst x y (cdr z)))
+         )
+      )
+   )
+ )
+ )
+
+(subst 2 3 '( 2 1 ( 1 2 (2 2 6 2 2) 3 1 3) 2 5))

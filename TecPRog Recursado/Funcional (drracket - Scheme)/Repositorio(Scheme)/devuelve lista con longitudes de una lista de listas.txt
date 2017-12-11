@@ -1,0 +1,19 @@
+(define longitud
+  (lambda (s)
+    (if (null? s)
+        0
+        (+ (longitud (cdr s)) 1)
+           )
+        )
+    )
+ (define longitudes
+   (lambda (x)
+     (if (null? x)
+         '()
+         (cons (longitud (car x))(longitudes(cdr x)))
+         )
+     )
+   )
+
+  
+(longitudes '((1 2 3) (1 2) (1)))

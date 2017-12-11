@@ -1,0 +1,38 @@
+
+(define listaigual(lambda( x y)( if (and (null? x) (null? y))
+                                    #t
+                                    (if (eqv? (car x) (car y))
+                                        (listaigual (cdr x) (cdr y))
+                                        #f))))
+                                
+                                
+(define pertenece (lambda(x l)( if(null? l)
+                                 #f
+                                 (if (listaigual x (car l))
+                                    #t
+                                    (pertenece x (cdr l))))))
+                                    
+
+(define interseccion (lambda(l1 l2)(if (null? l1)
+                                         '()
+                                         (if (pertenece (car l1) l2)
+                                             (cons (car l1) (interseccion (cdr l1) l2))
+                                             (interseccion (cdr l1) l2)))))
+
+(define sumax(lambda(l)(if (null? l)
+                           0
+                           (+ (car (car l)) (sumax (cdr l)))))) 
+
+(define sumay(lambda (l)( if (null? l)
+                           0
+                           (+ (car (cdr(car l))) (sumay (cdr l))))))  
+
+(define sumaz(lambda (l)( if (null? l)
+                           0
+                           (+ (car (reverse (car l))) (sumaz (cdr l))))))  
+
+(define prom(lambda(l)( let((long (length l)))
+                         (/ (+ (sumax l) (sumay l) (sumaz l)) long))))
+
+
+(define intersec(lambda (l1 l2)( prom(interseccion l1 l2))))

@@ -1,0 +1,34 @@
+1)define un procedimiento sumaniveltree que tome un árbol genérico
+y un número que indique un nivel como argumentos,
+y devuelva la suma de los datos de ese nivel del árbol. 
+Consideramos que la raíz tiene nivel 0.
+
+árbol ejemplo
+(3 (2 (2)) (4) (1 (8) (1)))
+
+(sumaniveltree 0 tree)
+3
+(sumaniveltree 1 tree)
+7
+(sumaniveltree 2 tree)
+11
+
+
+
+2)
+
+Cree una función llamda ListSust,
+que reciba como parámetros una lista de pares impropios y una lista objetivo. 
+Cada valor izquierdo de cada par impropio debe ser reemplazado por su valor de la derecha en la lista objetivo.
+Además, los valores aplicados tienen incidencia sobre los restantes,
+así la primera sustitución puede ser luego modificada por otra que esté más adelante en la lista.
+
+Como condicionantes solo se podrá utilizan una única cláusula DEFINE quedando 
+todo el código embebido en el cuerpo de la misma. 
+El resultado debe ser la lista con las sustiticiones realizadas.
+
+
+Ej:
+(ListSust '((a . b) (b . c) (c . d)) '(a a a)) ---> (d d d)
+
+(ListSust '((a . b) (c . d)) '(a b c d)) ---> (b b d d)

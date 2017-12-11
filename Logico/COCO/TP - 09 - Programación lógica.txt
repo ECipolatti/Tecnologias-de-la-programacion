@@ -1,0 +1,238 @@
+-------------------------------------------------------------------------------
+Tecnologías de programación 2012					      
+Alumno: Zaburlín Carlos							      
+DNI: 34116346								      
+TP-09-Programación lógica.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 1----------------------------------
+
+Cree un programa en Prolog que permita calcular el factorial de un número con
+el predicado “factorial/2” en donde el primer argumento unifique con el número
+al que se le calculará el factorial, y el segundo con el factorial del mismo.
+Se debe verificar que el número pasado como primer parámetro sea mayor a cero,
+en caso contrario, el predicado debe fallar.
+
+Ej.: factorial(5, X). => X = 120.
+
+-------------------------------------------------------------------------------
+factorial(0,1) :- !.
+factorial(N,X) :- N1 is N-1, factorial(N1,X1), X is N*X1.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 2----------------------------------
+
+Escribir un programa en Prolog “contar/3” que reciba como primer parámetro una
+lista de números, y unifique el segundo argumento con la cantidad de elementos
+pares que encuentre (tomando el 0 como par) y el tercer argumento con la
+cantidad de elementos impares de la misma. Si algún elemento de la lista no
+fuera un número entero el predicado debería fallar, para esto se puede utilizar
+el predicado predefinido “integer/1” que unifica solo si su argumento es un
+número entero.
+
+Ejemplos:
+	   contar([1, 2, 3], P, I).
+           P = 1
+	   I = 2
+
+	   contar([1, 2, a], P, I).
+   	   false
+
+-------------------------------------------------------------------------------
+contar([],0,0).
+contar([X|Y],P,I) :- integer(X), 0 is X mod 2, contar(Y,P1,I), P is P1+1.
+contar([X|Y],P,I) :- integer(X), 1 is X mod 2, contar(Y,P,I1), I is I1+1.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 3----------------------------------
+
+Escribir un predicado en Prolog que sume los elementos de una lista de números
+enteros recibidos como primer argumento y unifique el resultado de dicha suma
+con el segundo argumento.
+
+Ejemplos:
+	   sumar([1, 2, 3], X).
+	   X = 6
+
+	   sumar([1, -2, 3], X).
+ 	   X = 2
+-------------------------------------------------------------------------------
+sumar([],0).
+sumar([X|Y],S) :- sumar(Y,S1), S is X + S1 .
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 4----------------------------------
+
+Escribir un programa en Prolog que aplane una lista. El predicado aplanar/2
+recibe una lista cuyos elementos pueden ser otras listas. No se deben utilizar
+predicados predefinidos si los hubiere.
+
+Ejemplos:
+
+	   aplanar([1, 3, 2], L).
+ 	   L = [1, 3, 2].
+
+	   aplanar([1, [3, 2]], L).
+ 	   L = [1, 3, 2].
+
+           aplanar([1, [3, 2], [1, 5, 4], 3, [5, 1]], L).
+	   L = [1, 3, 2, 1, 5, 4, 3, 5, 1].
+
+-------------------------------------------------------------------------------
+
+apl([], []).
+apl([X|L], L2) :- X = [_|_], !, apl(X, X1), apl(L, L1), append(X1, L1, L2).
+apl([X|L], [X|L1]) :- integer(X), apl(L, L1).
+menor([X], X) :- !.
+menor([X1, X2 | L], X) :- X1 =< X2 -> menor([X1|L], X); menor([X2|L], X).
+eliminar(_, [], []) :- !.
+eliminar(X, [X|L], L) :- !.
+eliminar(X, [Y|L], [Y|L1]) :- eliminar(X, L, L1).
+ordenar([], []):-!.
+ordenar(L, [X|L1]):- menor(L, X), eliminar(X, L, L2), ordenar(L2, L1).
+proc(L, Lf):- apl(L, L1), ordenar(L1, Lf).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 5----------------------------------
+
+Escribir un programa en Prolog que reciba dos listas de números, verifiquen que
+sean de la misma longitud, y luego retorne una lista con la suma elemento a
+elemento de ambas listas.
+
+Ejemplos:
+	   sumar([1, 2], [1], L). %falla porque son de distinto tamaño
+	   false
+
+	   sumar([1, 2], [5, 3], L).
+	   L = [6, 5]
+
+-------------------------------------------------------------------------------
+sumar([],[],[]).
+sumar([A1|A2],[B1|B2],[C1|C2]):- C1 is A1+B1, sumar(A2,B2,C2).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 6----------------------------------
+
+Escribir un programa en Prolog que recorra un árbol binario y determine la
+profundidad del mismo. La representación del árbol será una lista con el
+siguiente formato: [I, N, D] en donde:
+I es una lista que representa el subárbol de la rama izquierda
+N es el valor del nodo raíz
+D es una lista que representa el subárbol de la rama derecha
+
+Así el árbol:
+   a
+ b   e
+c d   f
+estaría representado por [[[c], b, [d]], a, [[], e, [f]]]
+prestar atención a que el las ramas vacías se representan con una lista vacía,
+y las hojas como un alista de un solo elemento.
+
+-------------------------------------------------------------------------------
+profundidad(tree(A,nil,nil),0):-!.
+profundidad(tree(A,Y,nil),N):-profundidad(Y,B),N is 1 + B.
+profundidad(tree(A,nil,X),N):-profundidad(X,B),N is 1 + B.
+profundidad(tree(A,Y,X),N):-profundidad(X,B),profundidad(Y,C), mayor(B,C,N).
+mayor(B,C,C):-C>=B,!.
+mayor(B,C,B).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 7----------------------------------
+
+Tomando en cuenta las consideraciones del ejercicio anterior, realizar un
+predicado que cuente por nivel del árbol la amplitud, y retorne la mayor
+amplitud encontrada en el mismo.
+
+-------------------------------------------------------------------------------
+amplitud([],0).
+amplitud([H],1) :- H \= [_|_].
+amplitud([I,R,D],A) :- amplitud(I,A1), amplitud(D,A2), A is A1+A2.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 8----------------------------------
+Desarrollar un programa en Prolog que permita calcular las permutaciones de una
+lista. 
+Ej.: permutaciones([a, b, c], P).
+   	P=[a,b,c];
+	P=[a,c,b];
+        P=[b,a,c];…
+-------------------------------------------------------------------------------
+permutacion([],[]):-!.
+permutacion(Xs,[Z|Zs]):-desarma(Z,Xs,Ys),permutacion(Ys,Zs).
+desarma(X,[X|Xs],Xs).
+desarma(X,[Y|Ys],[Y|Zs]):-desarma(X,Ys,Zs).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 9----------------------------------
+
+Crear un programa en Prolog que dado un tablero de ajedrez, permita colocar
+tantas reinas como se quiera en el mismo, para que luego dada una posición nos
+informe que reinas la acechan.
+El programa debe prever que la posición a analizar no debe estar ocupada por
+una reina, de ser así el programa debe fallar.
+Otro punto a tener en cuenta es que las posiciones de la reina y de la
+posición a verificar deben ser validadas para no permitir que se salgan del
+tablero (8x8). Las reinas que participarán deberán incorporarse como una lista,
+donde a su vez, cada elemento representando una reina, será una lista de dos
+elementos (X, Y).
+La declaración de las reinas se da mediante el predicado “reinas/1”, por
+ejemplo: 
+	reinas([[3, 4], [5, 4], [5, 3]]).
+	La posición a validar con el predicado “validar/3” por ejemplo:
+	validar(6, 7, X).
+El tercer parámetro deberá unificar con una lista que contendrá las posiciones
+de las reinas que acechen la casilla en cuestión, en caso de no haber reinas
+que la acechen se deberá unificar con una lista vacía.
+
+-------------------------------------------------------------------------------
+reinas([[3, 4], [5, 4], [5, 3]]).
+pertenece(X, [X|_]) :- !.
+pertenece(X, [_|L]) :- pertenece(X, L).
+reina(X, Y):- reinas(Reinas), pertenece([X, Y], Reinas).
+afuera(X, Y) :- X > 8; X < 1; Y > 8; Y < 1.
+validar(X, Y, _) :- reina(X, Y), !,  write('casilla ocupada'), fail.
+validar(X, Y, _) :- afuera(X, Y), !, write('celda fuera del rango'), fail.
+validar(X, Y, R) :-
+validarDir(X, Y, 0, 1, Rn),    append([], Rn, R1),
+validarDir(X, Y, 1, 1, Rne),   append(R1, Rne, R2),
+validarDir(X, Y, 1, 0, Re),    append(R2, Re, R3),
+validarDir(X, Y, 1, -1, Rse),  append(R3, Rse, R4),
+validarDir(X, Y, 0, -1, Rs),   append(R4, Rs, R5),
+validarDir(X, Y, -1, -1, Rso), append(R5, Rso, R6),
+validarDir(X, Y, -1, 0, Ro),   append(R6, Ro, R7),
+validarDir(X, Y, -1, 1, Rno),  append(R7, Rno, R).
+validarDir(X, Y, _, _, []) :-  afuera(X, Y), !.
+validarDir(X, Y, Dx, Dy, [[X, Y]|R1]) :-
+reina(X, Y), !,
+Y1 is Y + Dy,
+X1 is X + Dx,
+validarDir(X1, Y1, Dx, Dy, R1).
+validarDir(X, Y, Dx, Dy, R1) :- Y1 is Y + Dy, X1 is X + Dx, validarDir(X1, Y1, Dx, Dy, R1).
+-------------------------------------------------------------------------------

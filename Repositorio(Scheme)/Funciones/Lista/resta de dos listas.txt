@@ -1,0 +1,19 @@
+(define si-encuentra
+  (lambda (elemento lista)
+    (if (null? lista)
+        #f
+        (if (eqv? elemento (car lista))
+            #t
+            (si-encuentra elemento (cdr lista)
+                          )))))
+
+(define resta-listas
+  (lambda (l1 l2)
+    (if (null? l1)
+        '()
+        (if (si-encuentra (car l1) l2)
+            (resta-listas (cdr l1) l2)
+            (cons (car l1)(resta-listas (cdr l1) l2))
+            )
+        )))
+(resta-listas '(1 2 3 4 3 9 12 8 4) '(2 5 9 3))

@@ -1,0 +1,20 @@
+(define Sust
+  (lambda (l1 l2)
+    (letrec ((reemplazar1 
+              (lambda  (e)
+                (cond ((null? l1) e)
+                      ((eqv? (caar l1) e) (cdar l1))
+                      (else (reemplazar2 (cdr l1) e)))))
+             (reemplazar2
+              (lambda (l1 e)
+                (cond ((null? l1) e)
+                      ((eqv? (caar l1) e) (cdar l1))
+                      (else (reemplazar2 (cdr l1 ) e))))))
+    (if (null? l1)
+      (map reemplazar1 l2)
+      (Sust (cdr l1)(map reemplazar1 l2))))))
+
+
+;Ej:
+(Sust '((a . b) (b . c) (c . d)) '(a a a)) ;---> (d d d)
+(Sust '((a . b) (c . d)) '(a b c d)); ---> (b b d d)

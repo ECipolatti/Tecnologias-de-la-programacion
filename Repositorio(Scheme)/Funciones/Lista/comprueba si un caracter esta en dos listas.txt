@@ -1,0 +1,21 @@
+(define pertenecelist
+  (lambda (a l1)
+    (if (null? l1)
+        #f
+        (if (eqv? a (car l1))
+            #t
+            (pertenecelist a (cdr l1))
+            )
+        )
+    )
+  )
+(define pertenece
+  (lambda (a l1 l2)
+    (if (pertenecelist a l1)
+        (if (pertenecelist a l2)
+            #t
+            #f)
+        #f)
+    )
+  )
+(pertenece 'a '(a b c) '(r f g a))

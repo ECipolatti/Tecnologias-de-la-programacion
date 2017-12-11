@@ -1,0 +1,12 @@
+(define elimina1ERN
+  (lambda (elemento lista)
+    (if (null? lista)
+        '()
+        (if (eqv? elemento (car lista))
+            (elimina1ERN elemento (cdr lista))
+            (cons (car lista) (elimina1ERN elemento(cdr lista)))
+             )
+        )
+    )
+  )
+(elimina1ERN 3 '(3 4 5 (3 7) 3))

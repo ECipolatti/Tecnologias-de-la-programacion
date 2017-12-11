@@ -1,0 +1,12 @@
+(define crece
+  (lambda (l1)
+    (if (null? (cdr l1))
+        #t
+        (if(< (car l1) (car(cdr l1)))
+           (crece (cdr l1))
+           #f
+           )
+        )
+    )
+  )
+(crece '(8 5 4 2 1))

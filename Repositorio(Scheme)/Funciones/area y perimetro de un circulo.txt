@@ -1,0 +1,13 @@
+(define perimetro
+  (lambda (r)
+    (* 2 (* pi r))
+    ))
+(define area 
+      (lambda (r) 
+           (* pi (* r r))
+
+      ))
+(define circlestuff
+  (lambda (r)
+    (list (perimetro r) (area r))
+    ))

@@ -1,0 +1,20 @@
+(define odd
+  (lambda (x)
+    (if (eqv? (remainder x 2) 0)
+        #f
+        #t
+        )
+    )
+  )
+(define cant-odd
+  (lambda (lista)
+    (if(null? lista)
+       0
+       (if (odd (car lista))
+           (+ 1 (cant-odd (cdr lista)))
+           (cant-odd (cdr lista))
+           )
+       )
+    )
+  )
+(cant-odd '(1 3 4 8 5 2 88 4 3))

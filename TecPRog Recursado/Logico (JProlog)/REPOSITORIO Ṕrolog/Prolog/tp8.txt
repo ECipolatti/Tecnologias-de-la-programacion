@@ -1,0 +1,145 @@
+Guía de Trabajos Prácticos VIII – Programación Lógica I
+
+1. Conteste con sus palabras y en forma concisa las siguientes preguntas
+conceptuales:
+
+a) ¿Por que es necesario un lenguaje formal para expresar el cuerpo de
+conocimientos?
+
+Porque elimina ambiguedad y es factible que sea interpretado por un computador.
+
+
+b) ¿En forma conceptual, ¿como es que se resuelve un problema según el
+paradigma lógico?
+
+A tavez de la lógica de primer orden que es una generalización de la lógica propociocional, que
+introduce nuevos elementos que permiten especificar la estructura interna de los elementos y las
+relaciones entre los mismos.
+
+
+c) ¿Cuales son los componentes del alfabeto descriptos para el lenguaje formal?
+
+Constantes: representan objetos concretos del dominio .
+Variables:  Representan objetos no específicos del dominio.
+Predicados: todo predicado tiene asociado un nro n denominado aridad.
+Cuantificadores y conectores lógicos:
+Para todo, existe, y, o, si y solo si, solo si, no , etc.
+Functores: alguna relaciones son funcionales.
+
+
+
+d) ¿Qué conceptos análogos en el lenguaje natural encuentran los términos y las
+fórmulas bien formadas (wff)?
+
+Las dos contienen un alfabeto regulados por una sintaxis y determinados por una semántica.
+
+e) ¿Que representa una interpretación para un cuerpo de fórmulas dado?
+
+   Representa un dominio no vacio y un mapeo que asocia 
+ cada cosntante de un alfabeto con un elemento del dominio
+cada functor del dominio con una función en el dominio
+y cada predicado perteneciente al dominio con una relación en el dominio.
+
+  
+f) ¿Que implica valorar una determinada variable?
+
+  Una valoración es una función que asigna objetos de una interpretación 
+a variables del lenguaje. 
+
+
+g) ¿Que es un modelo respecto de un conjunto de fórmulas?
+
+Es una interpretación donde el resultado de todos y cada uno del conjunto
+de fórmulas es verdadero.
+
+
+h) ¿Que es una consecuencia lógica de un conjunto de fórmulas P?
+
+   se denomina que una formula f es consecuencia lógica de un conjunto de formulas p, cuando se da verdadero en cada modelo del conjunto de formulas p   
+
+
+2. escriba como programa en ProLog el siguiente cuerpo de conocimientos:
+• leoncio es padre de alberto y de gerónimo.
+
+        es_papa(leoncio, alberto).
+        es_papa(leoncio,geronimo).
+
+• alberto es padre de juan y de luis.
+      
+        es_papa(alberto,juan).
+        es_papa(alberto,luis).
+
+• geronimo es padre de luisa.
+
+       es_papa(geronimo,luisa).
+
+• A es hermano de B si A y B tienen un padre en común y son distintas
+personas.
+
+      son_hermanos(A,B) :- es_papa(P,A) , es_papa(P,B) , A \= B.
+
+• A es nieto de B si el padre de A es hijo de B.
+
+     es_nieto(A,B):-es_papa(B,P) , es_papa(P,A).
+
+a) ¿como consultaría si alberto es padre de luis?
+
+    es_papa(alberto,luis).
+
+b) ¿como consultaría si luis es padre de alberto?
+
+     es_papa(luis,alberto).
+
+c) ¿como consultaría quien es hermano de luis?
+    
+    es_papa(P,luis) , es_papa(P,B) , B \= 'luis'.
+
+d) ¿como consultaría de quien es nieto luisa?
+
+    es_papa('luisa',X) , es_papa(X,Y)
+
+e) ¿como consultaría quien es nieto de quien?
+
+      es_papa(X,Y) , es_papa(Y,Z).
+
+3. Dado la lista de platos de un restaurante confeccionar los predicados necesarios
+para declarar los menues, y luego realizar las siguientes consultas:
+a) Listado completo de posibles menús que se ofrece.
+    
+    menu( X, Y , Z).
+
+b) ¿En que menú esta incluido el postre 'Dulce de batata'?
+
+   menu(X,Y,'Dulce de batata').
+
+c) ¿En que menú esta incluido el plato principal 'Locro'?
+   
+     menu(X,'Locro',Z).
+
+d) ¿Hay algún menú que contenga como plato principal 'Pato a la naranja'?
+
+      menu(X, 'Pato a la naranja', Z).
+
+e) ¿Hay algún menú que contenga 'Locro' como entrada?
+
+   menu('Locro', Y, Z).
+
+
+Menues existentes:
+• 'Bombones de jamón', 'Locro', 'Dulce de batata'.
+• 'Bombones de jamón', 'Locro', 'Alfajor norteño'.
+• 'Tarta de Atún', 'Atados de repollo', 'Dulce de batata'.
+• 'Tarta de Atún', 'Pollo romano con hierbas y vino', 'Flan'.
+• 'Volovanes de atún', 'Matambre con espinacas y parmesano', 'Torta moka'.
+• 'Buñuelos de bacalao', 'Pollo romano con hierbas y vino', 'Alfajor norteño'.
+
+
+4. Construya el árbol de resolución para la consulta del punto “c” del ejercicio 3.
+
+menu(X, 'locro', Z).
+
+'Bombones de jamón'               'bombones de jamón'               todas las otras
+'Locro'                           'locro'
+'dulce de batata'                 'Alfajor norteño'                   opciones (4)
+
+      True                              True                            FALSE

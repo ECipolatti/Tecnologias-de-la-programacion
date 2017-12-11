@@ -1,0 +1,61 @@
+(define tartaglia(lambda(n)(if(= n 1)
+                              '(1)
+                              (if (= n 2)
+                                  '(1 1)
+                                  (append '(1) (append (sumaanterior( tartaglia (- n 1))) '(1)))))))
+
+(define sumaanterior(lambda(l)(if (null? (cdr l))
+                                     '()
+                                      (cons (+ (car l) (car(cdr l))) (sumaanterior (cdr l))))))
+                                       
+(define renglon(lambda(f c l)( if (null? l) 
+                                ()
+                                (if (= 0 (car l))
+                                    (renglon f (+ c 1) (cdr l))
+                                    (let ((lista (list f c (car l))))
+                                      (cons lista (renglon f (+ c 1) (cdr l))))))))
+
+                               
+(define armar(lambda(f c l)(if (null?  l)
+                          ()
+                          (append (renglon f c (car l)) (armar (+ f 1) c (cdr l))))))
+                           
+                          
+                          
+(define mrala(lambda(l)                       ;((filas (length l)) (columnas (length (car l))))
+                   (armar 1 1 l))) 
+
+
+
+(define peso(lambda(a)(if (null? a)
+                          0
+                          (if (list? (car a))
+                              (+ (peso (car a)) (peso(cdr a)))
+                              (if (not (null?(car a)))
+                                  (+ (car a) (peso(cdr a)))
+                                  (peso(cdr l)))))))
+                       
+                       
+                       
+(define mapeoarbol(lambda(l)(if (null? l)
+                                0
+                                (if (> (peso(car l)) (peso(cdr l))) 
+                                    (car l)
+                                    (mapeoarbol(cdr l))))))
+
+(define pertenece(lambda(p a) (if (null? p)
+                                     #t
+                                   (if (not(list? (car a)))
+                                     (if (eqv? (car p) (car a))
+                                         (pertenece (cdr p) (cdr a));; v
+                                         (pertenece p (cdr a)))
+                                     (pertenece p (car a))))
+                                    
+                                     )) 
+
+(define check(lambda(p a)(if (null? a)
+                             #f
+                             (if (not(pertenece p (car a)))
+                                 (check p (cdr a))
+                                 #t))))
+                               

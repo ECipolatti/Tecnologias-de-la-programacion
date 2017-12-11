@@ -1,0 +1,229 @@
+Tecnologías de programación 2013
+TP - Programacion Funcional.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+
+-------------------------Ejercicio 1-----------------------------------
+
+(define factorial(lambda (x)
+                   (if(eqv? x 1)
+                      1
+                      (* x (factorial (- x 1)))
+                      ))
+  )
+  
+-------------------------Ejercicio 2-----------------------------------
+
+(define largo(lambda (x)
+               (if(null? x)
+                  0
+                  (+ (largo(cdr x)) 1)
+                )
+               )
+  )
+
+-------------------------Ejercicio 3-----------------------------------
+
+(define count_elem (lambda (x lista)
+                     (if (null? lista)
+                         0
+                         (if (eq? x (car lista))
+                             (+ (count_elem x (cdr lista)) 1)
+                             (count_elem x (cdr lista))
+                             )
+                         )
+                     )
+)
+
+-------------------------Ejercicio 4-----------------------------------
+(define subst(lambda (p s lista)
+               (if (null? lista)
+                   '()
+                   (if (eqv? p (car lista))
+                       (cons s (subst p s (cdr lista)))
+                       (cons (car lista) (subst p s (cdr lista)))
+                       )
+                   )
+               )
+  )
+
+-------------------------Ejercicio 5-----------------------------------
+
+(define count_elem (lambda (x lista)
+                     (if (null? lista)
+                         0
+                         (if (eq? x (car lista))
+                             (+ (count_elem x (cdr lista)) 1)
+                             (count_elem x (cdr lista))
+                             )
+                         )
+                     ))
+(define crear(lambda (x cant)
+               (if (= 0 cant ) '() (cons x (crear x (- cant 1))) )    
+               ))
+(define eliminar(lambda (x lista)
+                  (if (null? lista) '() (if (eqv? x (car lista)) 
+                                            (eliminar x (cdr lista))
+                                            (cons (car lista) (eliminar x (cdr lista)))
+                                            ))
+                  ))
+(define agrupar(lambda (lista)
+                 (if (null? lista)
+                     '()
+                     (cons (crear (car lista) (count_elem (car lista) lista))
+                           (agrupar (eliminar (car lista) (cdr lista)))
+                           ))
+                 )
+  )
+
+(agrupar '(A A B C A B A D C))
+
+-------------------------Ejercicio 6-----------------------------------
+		 
+(define concatenar(lambda (lista1 lista2)
+                    (if (null? lista1)
+                        lista2
+                        (cons (car lista1) (concatenar (cdr lista1) lista2))
+                        )
+                    ))
+
+(concatenar '(a b c d e) '(f g h i))
+
+-------------------------Ejercicio 7-----------------------------------
+
+(define primer_num(lambda (lista)
+                    (if(null? lista)
+                       null
+                       (if (number? (car lista))
+                           (car lista)
+                           (primer_num (cdr lista))
+                           )
+                       )
+                    ))
+(primer_num '((1 . 2) 'a (b) (5) 4 r 'a 8))  
+
+-------------------------Ejercicio 8-----------------------------------
+
+(define attach-at-end(lambda (valor lista)
+              (if (null? lista)
+                  (cons valor lista)
+                  (if (eqv? (car lista) valor)
+                      (attach-at-end valor (cdr lista))
+                      (cons (car lista) (attach-at-end valor (cdr lista)))
+                      ))))
+
+-------------------------Ejercicio 9-----------------------------------
+
+(define conv-datos (lambda (lista)
+                     (if (null? lista)
+                         '()                    
+                         (letrec(
+                                 (decimal(lambda (ls) (if (null? ls) '() (if (< (car ls) 0)
+                                                                             (cons (- 0 (car ls)) (decimal (cdr ls))) 
+                                                                             (cons (car ls) (decimal (cdr ls)))))))
+                                 (caracter(lambda (ls) (if (null? ls) '() (cons (string->number (car ls)) (caracter (cdr ls))))))
+                                 (boolean(lambda (ls) (if (null? ls) '()  (if(eqv? (car ls) "V")
+                                                                             (cons 1 (boolean (cdr ls)))
+                                                                             (cons 0 (boolean (cdr ls)))))))
+                                 );De las funciones definidas en letrec
+                           
+                           (if (eqv? (car (car lista)) "D") 
+                               (cons (decimal (car (cdr (car lista)))) (conv-datos (cdr lista)))
+                               (if (eqv? (car (car lista)) "T")
+                                   (cons (caracter(car(cdr (car lista)))) (conv-datos (cdr lista)))
+                                   (if (eqv? (car (car lista)) "B")
+                                       (cons (boolean(car (cdr (car lista)))) (conv-datos (cdr lista)))
+                                       ))); if y la recursión 
+                           
+                           );Termina el letrec
+                         )))
+
+
+(conv-datos '(("D" (1 2 -3 4 -5))("T" ("6" "7" "8"))("B" ("V" "F"))))
+
+-------------------------Ejercicio 10-----------------------------------
+
+(define distancias(lambda (lista)
+                    (if (null? (cdr lista))
+                        '()
+                        (letrec(
+                                (distance2d (lambda (a b) (sqrt (+ (expt (- (car b) (car a) ) 2) (expt (- (cdr b) (cdr a) ) 2)))))
+                                )
+                          (cons (distance2d (car lista) (car (cdr lista))) (distancias (cdr lista)))
+                         )
+                        )))
+
+-------------------------Ejercicio 11-----------------------------------
+
+(define group(lambda (lista)
+               (if (null? lista)
+                   '()
+                   ( letrec(
+                            (eliminarnumber(lambda (lista) (if (null? lista) '() (if (number? (car lista)) 
+                                                                                     (eliminarnumber (cdr lista))
+                                                                                     (cons (car lista) (eliminarnumber (cdr lista)))
+                                                                                     ))))
+                            (eliminarbool(lambda (lista) (if (null? lista) '() (if (boolean? (car lista)) 
+                                                                                   (eliminarbool (cdr lista))
+                                                                                   (cons (car lista) (eliminarbool (cdr lista)))
+                                                                                   ))))
+                            (eliminarstr(lambda (lista) (if (null? lista) '() (if (string? (car lista)) 
+                                                                                  (eliminarstr (cdr lista))
+                                                                                  (cons (car lista) (eliminarstr (cdr lista)))
+                                                                                  ))))
+                            (eliminarsymbol(lambda (lista) (if (null? lista) '() (if (symbol? (car lista)) 
+                                                                                     (eliminarsymbol (cdr lista))
+                                                                                     (cons (car lista) (eliminarsymbol (cdr lista)))
+                                                                                     ))))
+                            (eliminarotros(lambda (lista) (if (null? lista) '() (if (not (or (symbol? (car lista)) (string? (car lista)) (boolean? (car lista))  (number? (car lista))))
+                                                                                    (eliminarotros (cdr lista))
+                                                                                    (cons (car lista) (eliminarotros (cdr lista)))
+                                                                                    ))))
+                            (agregarnumber(lambda (lista) (if (null? lista) '() (if (number? (car lista))
+                                                                                    (cons (car lista) (agregarnumber (cdr lista)))
+                                                                                    (agregarnumber (cdr lista))
+                                                                                    ))))
+                            (agregarstring(lambda (lista) (if (null? lista) '() (if (string? (car lista))
+                                                                                    (cons (car lista) (agregarstring (cdr lista)))
+                                                                                    (agregarstring (cdr lista))
+                                                                                    ))))
+                            (agregarboolean(lambda (lista) (if (null? lista) '() (if (boolean? (car lista))
+                                                                                    (cons (car lista) (agregarboolean (cdr lista)))
+                                                                                    (agregarboolean (cdr lista))
+                                                                                    ))))
+                            (agregarsymbol(lambda (lista) (if (null? lista) '() (if (symbol? (car lista))
+                                                                                    (cons (car lista) (agregarsymbol (cdr lista)))
+                                                                                    (agregarsymbol (cdr lista))
+                                                                                    ))))
+                            (agregarotro(lambda (lista) (if (null? lista) '() (if (not (or (symbol? (car lista)) (string? (car lista)) (boolean? (car lista))  (number? (car lista))))
+                                                                                    (cons (car lista) (agregarotro (cdr lista)))
+                                                                                    (agregarotro (cdr lista))
+                                                                                    ))))
+
+                            )
+                      (if (number? (car lista))
+                          (cons (agregarnumber lista) (group(eliminarnumber (cdr lista))))
+                          (if (string? (car lista))
+                              (cons (agregarstring lista) (group(eliminarstr (cdr lista))))
+                              (if (symbol? (car lista))
+                                  (cons (agregarsymbol lista) (group(eliminarsymbol (cdr lista))))
+                                  (if (boolean? (car lista))
+                                      (cons (agregarboolean lista) (group(eliminarbool (cdr lista))))
+                                      (cons (agregarotro lista) (eliminarotros lista))
+                                      ))))
+                      ))))
+
+(group '(A #t #f "de" 3 2 4.5 "texto" 8 "prueba" #(1 2 3) S (a b c))) 
+
+-------------------------Ejercicio 12-----------------------------------
+
+(define to-base(lambda (num)
+                 (let (x (list '(0 1 2 3 4 5 6 7 8 9 a b c d e f g h i j k l m n)))
+                 (list->vector x)
+                 (if (> 24 num)
+                     (% num 24)
+                     (cons (vector-ref '#(x) (/ num 24)) (to-base (/ num 24)))
+                     ))))
+
+(to-base 550)

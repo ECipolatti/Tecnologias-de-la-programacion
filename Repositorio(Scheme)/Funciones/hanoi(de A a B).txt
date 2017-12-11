@@ -1,0 +1,19 @@
+(define mover
+  (lambda (origen destino)
+(display "Mueve un anillo")
+(display " desde ")
+(display origen)
+(display " hacia la varilla ")
+(display destino)
+(display "\n")
+1
+))
+(define hanoi
+  (lambda(n a c b)
+  (if (> n 1)
+  (+ (hanoi (- n 1) a b c)(mover a c)(hanoi (- n 1) b c a))
+  (mover a c))))
+  
+(hanoi 3 1 2 3)
+
+;SOLOO FUNCA DE A HASTA B

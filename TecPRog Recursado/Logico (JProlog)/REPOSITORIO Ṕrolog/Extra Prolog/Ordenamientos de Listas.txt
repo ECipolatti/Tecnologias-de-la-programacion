@@ -1,0 +1,146 @@
+ORDENAMIENTOS
+
+Esta clase cubre los algoritmos de ordenamiento.  Noten que los algoritmos de ordenamiento se codifican en PROLOG en términos muy parecidos al lenguaje natural y, por demás, muy breves. Al mismo tiempo, es también posible codificar las estrategias más eficiente de ordenamiento.
+
+
+% ----------------------------------------------------------------------------------------------------
+ 
+
+ORDENAMIENTO INGENUO (naive sort)
+
+ 
+El ordenamiento ingenuo (Naive sort) no es un algoritmo muy eficiente. Genera todas las permutaciones y luego prueba si la permutación es una lista ordenada. Sin embargo, es muy fácil entender la idea de ordenamiento en este contexto.
+
+ 
+ordenamiento_ingenuo(Lista,Ordenado) :- perm(Lista,Ordenado),
+					esta_ordenado(Ordenado).
+esta_ordenado([]).
+esta_ordenado)[_]).
+esta_ordenado([X,Y|T]) :- X<=Y,esta_ordenado([Y|T]).
+      
+
+El ordenamiento ingenuo (Naive sort) usa el enfoque generar y probar para resolver problemas, el cual es usualmente utilizado en el caso que todas las demás cosas fallen. Sin embargo, en ordenamiento hay varias otras, muy eficientes, estrategias.
+
+
+% ----------------------------------------------------------------------------------------------------
+
+
+ORDENAMIENTO POR INSERCIÓN (insert sort)
+
+ 
+
+El ordenamiento por inserción (Insert sort) es un algoritmo de ordenamiento tradicional. La implementación de PROLOG del ordenamiento por inserción (Insert sort) está basada en la idea de acumulador.
+
+ 
+ordenamiento_insercion(Lista,Ordenado) :- ordenamiento_i(Lista,[],Ordenado).
+ordenamiento_i([],Acc,Acc).
+ 
+ordenamiento_i ([H|T],Acc,Ordenado) :-  insercion(H,Acc,NAcc), 
+					ordenamiento_i (T,NAcc,Ordenado).
+ 
+insercion(X,[Y|T],[Y|NT]) :- X>Y,insercion(X,T,NT).
+insercion(X,[Y|T],[X,Y|T] :- X<=Y.
+insercion(X,[],[X]).
+
+
+% ----------------------------------------------------------------------------------------------------
+ 
+
+ORDENAMIENTO BURBUJA (bubble sort)
+
+ 
+
+El ordenamiento burbuja (Bubble sort) es otro algoritmo de ordenamiento tradicional el cual no es muy efectivo. Otra vez, usamos acumulador para implementar el ordenamiento burbuja (Bubble sort).
+
+ 
+
+ordenamiento_burbuja(Lista,Ordenado) :- ordenamiento_b(Lista,[],Ordenado).
+ordenamiento_b([],Acc,Acc).
+ordenamiento_b([H|T],Acc,Ordenado) :- burbuja(H,T,NT,Max),ordenamiento_b(NT,[Max|Acc],Ordenado).
+ 
+burbuja(X,[],[],X).
+burbuja(X,[Y|T],[Y|NT],Max) :- X>Y,burbuja(X,T,NT,Max).
+burbuja(X,[Y|T],[X|NT],Max) :- X<=Y,burbuja(Y,T,NT,Max).
+ 
+
+% ----------------------------------------------------------------------------------------------------
+
+
+ORDENAMIENTO DE MEZCLA (merge sort)
+
+        
+El ordenamiento de mezcla (Merge sort) es usualmente usado para ordenar grandes archivos pero su idea puede ser utilizada con listas. Si es apropiadamente implementado podría ser un algoritmo muy eficiente.
+
+ 
+
+ordenamiento_mezcla([],[]).
+ordenamiento_mezcla(Lista,Ordenado) :-  divide(Lista,L1,L2),
+					ordenamiento_mezcla(L1,Ordenado1),
+					ordenamiento_mezcla(L2,Ordenado2),
+					mezcla(Ordenado1,Ordenado2,Ordenado).
+mezcla([],L,L).
+mezcla(L,[],L) :- L\=[].
+mezcla([X|T1],[Y|T2],[X|T]) :- X<=Y,mezcla(T1,[Y|T2],T).
+mezcla([X|T1],[Y|T2],[Y|T]) :- X>Y,mezcla([X|T1],T2,T).
+ 
+
+Podemos usar distribución hacia elementos pares e impares de una lista (otras distribuciones son también posible).
+
+ 
+
+divide(L,L1,L2) :- par_impar(L,L1,L2).
+ 
+
+% ----------------------------------------------------------------------------------------------------
+
+
+
+ORDENAMIENTO RÁPIDO (quick sort)
+
+ 
+El ordenamiento rápido (Quick sort) es uno de los algoritmos de ordenamiento más rápido. Sin embargo, su poder es frecuentemente sobrevaluado. La eficiencia del ordenamiento rápido (Quick sort) es muy sensible a la escogencia del pivote, el cual es usado para dividir la lista en dos.
+
+ 
+
+quick_sort([],[]).
+quick_sort([H|T],Ordenado) :-   pivote(H,T,L1,L2),
+				quick_sort(L1,Ordenado1),
+				quick_sort(L1,Ordenado2),
+				agregar(Ordenado1,[H|Ordenado2]).
+ 
+pivote(H,[],[],[]).
+pivote(H,[X|T],[X|L],G) :- X<=H,pivote(H,T,L,G).
+pivote(H,[X|T],L,[X|G]) :- X>H,pivote(H,T,L,G).
+ 
+
+
+Similarmente a merge sort, quick sort explota el método divide y vencerás para resolver problemas.
+
+La implementación de arriba de quick sort usa agregar no es muy efectiva. Podemos escribir un mejor programa usando acumulador.
+
+ 
+quick_sort2(Lista,Ordenado) :- q_sort(Lista,[],Ordenado).
+ 
+q_sort([],Acc,Acc).
+q_sort([H|T],Acc,Ordenado) :-   pivote(H,T,L1,L2),
+				quick_sort(L1,Acc,Ordenado1),
+				quick_sort(L1,[H|Ordenado1],Ordenado)
+ 
+
+Algún tipo de ordenamiento puede ser encontrado en casi todo los programas actuales.
+
+ 
+
+ 
+
+ANTERIOR
+
+PRINCIPAL
+
+SIGUIENTE
+
+                           
+
+                        
+
+

@@ -1,0 +1,336 @@
+EJERCICIOS EXTRA
+
+;;;;; CREA LAS COMBINATORIAS 2 A PARTIR DE UNA LISTA.
+
+
+(define pares
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (cons (append (list x) (list(car l1))) (pares x (cdr l1)))
+        )
+    )
+  )
+
+(define comb
+  (lambda (l1)
+    (if (null? l1)
+        l1
+        (append (pares (car l1) l1) (comb (cdr l1)))
+        )
+    )
+  )
+
+(comb '(1 2 3 4 5))
+
+
+;;;;;;; MOD X Y
+
+(define mod
+  (lambda (x y)
+    (if (< x y)
+        0
+        (- x (* y (truncate (/ x y))))
+        )
+    )
+)
+(mod 3 4)
+
+
+;;;;;;; MULTIPLICA UNA LISTA POR UN ESCALAR
+
+
+(define mult-list
+  (lambda (x l1)
+    (map (lambda (f)
+           (* x f)) l1)
+    )
+  )
+
+(mult-list 2 '(1 2 3 4 5 6))
+
+
+;;;;;;; PRODUCTO CARTESIANO ENTRE 2 LISTAS (NO NECESITAN TENER LA MISMA LONG)
+
+(define cartesiano
+  (lambda (l1 l2)
+    (if (or(null? l1) (null? l2))
+        '()
+        (cons (cons (car l1) (car l2)) (cartesiano (cdr l1) (cdr l2)))
+        )
+    )
+  )
+
+(cartesiano '(1 2 3 5 6) '(3 4 5 6))
+
+;;;;;;CUANTAS VECES OCURRE UN NUMERO/CARACTER EN UNA LISTA
+
+
+(define ocurre
+  (lambda (x l1)
+    (if (null? l1)
+        0
+        (if (eqv? x (car l1))
+            (+ 1 (ocurre x (cdr l1)))
+            (ocurre x (cdr l1))
+            )
+        )
+    )
+  )
+
+(ocurre 3 '(2 3 4 5 4 3 2 3 3))
+
+;;;;;;CANTIDAD DE ELEMENTOS IGUALES EN LA MISMA POSICION
+
+(define calcu
+  (lambda (l1 l2)
+    (if (or (null? l1) (null? l2))
+        0
+        (if (eqv? (car l1) (car l2))
+            (+ 1 (calcu (cdr l1) (cdr l2)))
+            (calcu (cdr l1) (cdr l2)))
+        )
+    )
+  )
+
+(calcu '(1 2 3 4 5) '(3 2 3 5 6))
+
+
+;;;;;;;;;MAXIMO DE UNA LISTA
+
+(define max-list
+  (lambda (l1)
+    (if (null? l1)
+        0
+        (if (> (car l1) (max-list (cdr l1)))
+            (car l1)
+            (max-list (cdr l1)))
+        )
+    )
+  )
+
+;;;;;;;;;BORRAR UN ELEM DE UNA LISTA
+
+(define borrar
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (if (eqv? x (car l1))
+            (cdr l1)
+            (cons (car l1) (borrar x (cdr l1))))
+        )
+    )
+  )
+
+
+
+;;;;;;;;;ORDENAR UNA LISTA DE MAY A MEN
+
+(define ordenmay
+  (lambda (l1)
+    (if (null? l1)
+        l1
+        (cons (max-list l1) (ordenmay (borrar (max-list l1) l1)))
+        )
+    )
+  )
+
+;;;;;;;;;ORDENAR UNA LISTA DE MEN A MAY
+
+(define ordenmin
+  (lambda (l1)
+    (if (null? l1)
+        l1
+        (invert( ordenmay l1)))
+    )
+  )
+
+
+;;;;;;;;;;;;;;; PREFIJO Y POSFIJO
+
+
+(define prefijo
+  (lambda (l1 l2)
+    (if (and(null? l2) (not(null? l1)))
+        #f
+        (if (null? l1)
+            #t
+            (if (eqv? (car l1) (car l2))
+                (prefijo (cdr l1) (cdr l2))
+                #f
+                )
+            )
+        )
+    )
+  )
+
+(prefijo '() '(1))
+
+(define posfijo
+  (lambda (l1 l2)
+    (prefijo (invert l1) (invert l2))
+    )
+  )
+
+(posfijo '(6 8) '(3 4 5 6 7))
+
+
+;;;;;;;;; SUBLISTA
+
+
+(define sublista
+  (lambda (l1 l2)
+    (if (null? l2)
+        #f
+        (if (and(eqv? (car l1) (car l2)) (prefijo l1 l2))
+            (prefijo l1 l2)
+            (sublista l1 (cdr l2))
+            )
+        )
+    )
+  )
+
+
+
+;;;;;;;;; SUBLISTA MULTIPLE
+
+(define sublistaM
+  (lambda (l1 l2)
+    (if (null? l2) 
+        #f
+        (if (not(list? l2))
+            #f
+            (if( equal? l1 l2)
+               #t
+               (or (sublistaM l1 (cdr l2))
+                   (sublistaM l1 (car l2))
+                   )))))
+)
+
+
+
+
+;;;;;;;;;;;;;;INVERT-ALL
+
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2))
+        )
+    )
+  )
+(define invert
+  (lambda (l1)
+    (if (or (null? l1) (real? l1))
+        l1
+        (concat (invert (cdr l1)) (list(car l1)))
+        )
+    )
+  )
+
+(define invert-all
+  (lambda (x)
+    (if (or (null? x) (real? x))
+        x
+        (let ((list1 (invert x)))
+          (map invert-all list1)
+          )
+        )
+    )
+  )
+
+(invert-all '(1 (2 3 4 (4 5) (3 (5 6)) 4)))
+
+
+;;;;;;;;;;;;;;BORRAR-ALL
+
+(define borrar
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (if (eqv? (car l1) x)
+            (borrar x (cdr l1))
+            (cons (car l1) (borrar x (cdr l1)))
+            )
+        )
+    )
+  )
+
+(define borrar-all
+  (lambda (x l1)
+    (if (or(null? l1) (eqv? x l1))
+        '()
+        (if (not(list? l1))
+            l1
+            (let ((list1 (borrar x l1)))
+              (map (lambda (h)
+                     (borrar-all x h)) list1)
+              )
+            )
+        )
+    )
+  )
+
+(borrar-all 3 '(1 2 3 (4 5 3 6) 4 3 2))
+
+
+;;;;;;;;;;;;;;;; LISTAR TODAS LAS SUBLISTAS
+
+
+
+(define sublista1
+  (lambda (l1 l2)
+    (if (null? l2)
+        l2
+        (let ((list1 (append l1 (list(car l2)))))
+        (cons list1 (sublista1 list1 (cdr l2)))
+          )
+        )
+    )
+  )
+
+
+
+(define sublista-all
+  (lambda (l1)
+    (if (null? l1)
+        '()
+        (append (sublista1 '() l1) (sublista-all (cdr l1)))
+        )
+    )
+  )
+
+
+;;;;;;;;;;;;;;;; DIVIDIR MI LISTA EN UNA LISTA CON LOS N-PRIMEROS NUMEROS Y OTRA LISTA CON LOS N-ULTIMOS NUMEROS
+
+
+(define primeros
+  (lambda (x l1)
+    (if (null? l1)
+        '()
+        (if (eqv? x (car l1))
+            '()
+            (cons (car l1) (primeros x (cdr l1)))
+            )
+        )
+    )
+  )
+
+(define ultimos
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (if (eqv? (car l1) x)
+            (cdr l1)
+            (ultimos x (cdr l1)))
+        )
+    )
+  )
+
+(define dividir-list
+  (lambda (x l1)
+    (cons (primeros x l1) (list(ultimos x l1))
+          )
+    )
+  )

@@ -1,0 +1,21 @@
+(define maximo
+  (lambda (x)
+    (if (null? x)
+        0
+        (if(>(car x)(maximo (cdr x)))
+           (car x)
+           (maximo (cdr x))
+           )
+        )
+    )
+  )
+(define get-profundidad
+  (lambda (g)
+    (if (null? g)
+        0
+        (if (list? (car g))
+            (max (+ (get-profundidad (car g)) 1)(get-profundidad (cdr g)))
+            (get-profundidad (cdr g))
+            ))))
+
+(get-profundidad '((1 (2)) (((5 7))) 4))

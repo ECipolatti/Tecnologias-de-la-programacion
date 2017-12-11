@@ -1,0 +1,159 @@
+VIDEO CLUB
+
+La cadena de Video-Clubs Glob-Gusters ha decidido, para mejorar su servicio, emplear modelo de objetos para almacenar la información referente a las películas que ofrece en alquiler.
+
+Esta información es la siguiente:
+
+    Una película se caracteriza por su título, nacionalidad, productora y fecha (p.e., “Quo Vadis”, “Estados Unidos”, “M.G.M.”, 1955).
+
+    En una película pueden participar varios actores (nombre, nacionalidad, sexo) algunos de ellos como actores principales.
+
+    Una película está dirigida por un director (nombre, nacionalidad).
+
+    De cada película se dispone de uno o varios ejemplares diferenciados por un número de ejemplar y caracterizados por su estado de conservación.
+
+    Un ejemplar se puede encontrar alquilado a algún cliente (DNI, nombre, dirección, teléfono).
+    Se desea almacenar la fecha de comienzo del alquiler y la de devolución.
+
+    Cada socio puede tener alquilados, en un momento dado, 4 ejemplares como máximo.
+
+    Un socio tiene que ser avalado por otro socio que responda de él en caso de tener problemas en el alquiler.
+
+a) Hacer el diagrama UML especificando asociación entre Clases, cardinalidad y navegabilidad para este dominio.
+
+b) Implemente el siguiente mensaje en lenguaje JAVA respetando el diagrama del ejercicio anterior.
+
+listarSocios4Alquileres(): Lista los socios del video club que tengan 4 ejemplares alquilados a la fecha. Mostrar los siguientes datos en consola:
+
+     1  Pablo Garello (Garante Marcelo Re)
+                   1.1 Quo Vadis 10/02/2012
+                   1.2 Rey León 10/02/2012
+                   1.3 Gigantes de Acero 14/02/2012
+                   1.4 Efecto Mariposa 15/02/2012
+
+    2  ...........
+
+Respuesta:
+Comentario: UML
+- ¿Un Socio no es también una Persona?.
+- Un actor puede ser director en una misma película por lo que no se puede resolver esta relación entre clases con herencia. Había que utilizar el patrón de diseño "Delegación".
+- La clase Alquiler es una clase de asociación.
+- Todas las relaciones son bidireccionales! Tener en cuenta que siempre vamos de lo mas restrictivo (unidireccionales) a lo menor restrictivo.
+
+CODIGO
+- Había que evaluar la cantidad de películas en alquiler de un Socio parándonos en el día de hoy.
+- Cuando se muestra el dato del Socio hay que incluir el del socio garante.
+- Solo había que mostrar las películas alquiladas y no devueltas por el socio. (cuatro en todos los casos).
+
+
+Parcialmente correcto
+Puntos para este envío: 58/100.
+______________________________________________________________________________________________--
+
+
+Cree un predicado calc/2 en prolog que unifique el primer argumento con un cadena de texto que contenga una expresión aritmética válida y el segundo con una lista con los distintos elementos de la expresión.
+
+La expresión puede contener solamente números, signos (+, -, *, /).
+
+Los elementos en la lista resultado deben ser números u operadores, NO ÁTOMOS, es decir por ejemplo para la cadena "3+2", el resultado debe ser [3, +, 2] y no ['3', '+', '2'].
+
+Ejemplos:
+
+?- calc("23+3*3", X).
+X = [23, +, 3, *, 3]
+
+?- calc("2*3+3*3", X).
+X = [2, *, 3, +, 3, *, 3]
+
+
+
+AYUDA
+predicados predefinidos que pueden ayudar:
+
+atom_number(?Atom, ?Number)
+atomic_list_concat(+List, -Atom)
+atomic_list_concat(+List, +Separator, ?Atom)
+char_code(?Atom, ?Code)
+is_list(+Term)
+string_to_list(?String, ?List)
+Respuesta:
+achar([],[]):-!.
+achar([A|L], [X|D]):- char_code(X,A), achar(L,D).
+
+armarqux([],[]):-!.
+armaraux([A|L],[Aa|Ll]):- A\= '+' , A\= '-', A\= '*', A\= '/' -> atom_number(Aa,A), armaraux(L,Ll); armaraux(L,Ll).
+
+%% esta funcion juntaria los numeros!:
+%
+armar([],[]):-!.
+armar([A|C],[A|L]):- not(number(A)), armar(C,L).
+armar([A|C],[A|L]):- juntar(A,C,Num),
+
+calc(St,Lfinal):-string_to_list(St,LSt), achar(LSt,Laux), armaraux(Laux,L) , armar(L, Lfinal).
+
+Comentario: - En el predicado armaraux/2 falta pasar el operador cuando se encuentra uno, es decir, luego del ";", en vez de "armaraux(L, Ll)" debería ser "Aa = A, armaraux(L, Ll)". Quedaría:
+
+armaraux([A|L],[Aa|Ll]):- A\= '+' , A\= '-', A\= '*', A\= '/' ->
+atom_number(A, Aa), armaraux(L, Ll);
+Aa = A, armaraux(L, Ll).
+
+
+- En el corte del predicado "armaraux/2" se ha dado un error de tipeo, por lo que nunca corta, en vez de "armaraux([],[]):-!." dice "armarqux([],[]):-!.". A esto no lo tomo como error, pero seguramente si seguías el programa y no funcionaba como esperabas, encuentres aquí la causa del problema.
+
+- Falta implementar la función para unificar los números.
+Parcialmente correcto
+Puntos para este envío: 50/100.
+_______________________________________________________________________________________________________-
+
+
+Se poseen dos conjuntos de puntos en el espacio y se desea encontrar el punto central de la intersección de los dos conjuntos. El conjunto de puntos será una lista propia mientras que los puntos estan representados por una lista impropia.
+Ej:
+
+(intersec '((1 . 2 . 3) (2 . 3 . 4) (3 . 4 . 5) (4 . 5 . 6)) '((2 . 3 . 4) (3 . 4 . 5) (6 . 7 . 8)))
+
+---->>> (2.5 3.5 4.5)
+
+Respuesta:
+(define listaigual(lambda( x y)( if (and (null? x) (null? y))
+#t
+(if (eqv? (car x) (car y))
+(listaigual (cdr x) (cdr y))
+#f))))
+
+
+(define pertenece (lambda(x l)( if(null? l)
+#f
+(if (listaigual x (car l))
+#t
+(pertenece x (cdr l))))))
+
+
+(define interseccion (lambda(l1 l2)(if (null? l1)
+'()
+(if (pertenece (car l1) l2)
+(cons (car l1) (interseccion (cdr l1) l2))
+(interseccion (cdr l1) l2)))))
+
+(define sumax(lambda(l)(if (null? l)
+0
+(+ (car (car l)) (sumax (cdr l))))))
+
+(define sumay(lambda (l)( if (null? l)
+0
+(+ (car (cdr(car l))) (sumay (cdr l))))))
+
+(define sumaz(lambda (l)( if (null? l)
+0
+(+ (car (reverse (car l))) (sumaz (cdr l))))))
+
+(define prom(lambda(l)( let((long (length l)))
+(/ (+ (sumax l) (sumay l) (sumaz l)) long))))
+
+
+(define intersec(lambda (l1 l2)( prom(interseccion l1 l2))))
+Comentario: - En listaigual, el último cdr produce un número, no una lista. Esto es así porque la listas impropias finalizan en elementos, no en listas vacías.
+
+- El cálculo del promedio es incorrecto.
+Parcialmente correcto
+Puntos para este envío: 72/100.
+

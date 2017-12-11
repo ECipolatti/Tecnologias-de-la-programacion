@@ -1,0 +1,38 @@
+program vocales;
+uses scr;
+var cant : integer;
+var frase : integer;
+
+
+function contar(Var fr:string):integer;
+begin
+	var tam : integer
+	tam:=sizeof(fr)
+	
+
+end;
+
+function vocal(var x:char):boolean;
+begin
+	var b:boolean;
+	if ((x='a') or (x='e') or (x='i') or (x='o') or(x='u')) then b:=true else b:=false;
+
+	vocal:=b;		
+end;
+
+
+procedure ingresar(fr:string);
+begin
+	clrscr;
+	write('Ingrese una frase: ');
+	readln(fr);
+end;
+
+
+
+BEGIN
+	ingresar(frase);
+	contar(frase);
+END.
+
+

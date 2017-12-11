@@ -1,0 +1,84 @@
+-------------------------------------------------------------------------------
+Tecnologías de programación 2012					      
+Alumno: Zaburlín Carlos							      
+DNI: 34116346								      
+TP-10-Programación lógica.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 1----------------------------------
+
+Implementar un predicado “eliminar_primero/3” que quite de una lista la primera
+aparición de un determinado elemento.
+
+Ej:
+eliminar_primero([1, 2, 3, 1, 2, 3], 2, X).
+X = [1, 3, 1, 2, 3].
+eliminar_primero([1, 2, 3, 1, 2, 3], a, X).
+X = [1, 2, 3, 1, 2, 3].
+
+-------------------------------------------------------------------------------
+eliminar_primero([],_,[]).
+eliminar_primero([X|L],X,L) :- !.
+eliminar_primero([C|R],VE,[C|LF]) :- eliminar_primero(R,VE,LF).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 2----------------------------------
+
+Implementar un predicado “agregar_nuevo/3” que agregue a una lista un elemento,
+solo si la misma no lo contiene. Utilizar corte para no proceder en caso de
+detectar que el elemento ya existe.
+
+Ej:
+	agregar_nuevo(a, [1, 2, 3], X).
+	X = [1, 2, 3, a].
+
+	agregar_nuevo(1, [1, 2, 3], X).
+	X = [1, 2, 3].
+
+
+-------------------------------------------------------------------------------
+agregaElemento(X,[],[X]) :- !.
+agregaElemento(X,[X|R],[X|R]):- !.
+agregaElemento(X,[C|R],[C|LF]) :- agregaElemento(X,R,LF).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 3----------------------------------
+
+Dadas dos palabras, representadas como listas de caracteres, evaluar la
+semejanza entre las mismas. Para esto se verificarán, por posición, las letras
+de las dos palabras, cada coincidencia sumará un punto y cada vez que las
+letras no coincidan se restará un punto.
+
+ejemplo:
+	semejanza([h,o,l,a], [h,o,l,o], S). --> S = 2.
+	semejanza([m,e,s,a], [m,e,s,a,d,a], S). --> S = 2.
+	semejanza([s,o,l,a], [m,o,n,a], S). --> S = 0.
+	semejanza([s,o,l], [c,a,s,a], S). --> S = -4.
+
+-------------------------------------------------------------------------------
+semejanza([],[],0) :- !.
+semejanza([C|R1],[C|R2],Cont) :- semejanza(R1,R2,Cont2),!, Cont is Cont2 + 1.
+semejanza([_|R1],[_|R2],Cont) :- semejanza(R1,R2,Cont2),!, Cont is Cont2 - 1.
+semejanza([],[_|R],Cont) :- semejanza([],R,Cont2), Cont is Cont2 - 1.
+semejanza([_|R],[],Cont) :- semejanza(R,[],Cont2), Cont is Cont2 - 1.
+-------------------------------------------------------------------------------
+
+
+
+----------------------------------Ejercicio 4----------------------------------
+reemplazar(_,_,_,_,[],[]):-!.
+reemplazar(X,Y,1,C,[X|L1],[Y|L]):-C > 0,C1 is C - 1,reemplazar(X,Y,1,C1,L1,L),!.
+reemplazar(X,Y,1,C,[X|L1],[Y|L]):-C = -1,reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,1,C,[Z|L1],[Z|L]):-reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,1,C,[Z|L1],[Z|L]):-C = -1,reemplazar(X,Y,1,C,L1,L),!.
+reemplazar(X,Y,N,C,[Z|L1],[Z|L]):-N1 is N - 1,reemplazar(X,Y,N1,C,L1,L),!.
+reemplazar(X,Y,N,C,[Z|L1],[Z|L]):-C = -1,N1 is N - 1,reemplazar(X,Y,N1,C,L1,L),!.

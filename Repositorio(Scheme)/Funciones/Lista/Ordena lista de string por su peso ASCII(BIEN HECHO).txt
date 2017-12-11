@@ -1,0 +1,22 @@
+(define pesopalabra(lambda (x)( if (null? x)
+                                   0
+                                   (+ (char->integer (car x)) (pesopalabra(cdr x))))))
+
+(define armar(lambda(x) (if (null? x)
+                             x
+                             (cons (pesopalabra (string->list(car x))) (armar (cdr x))))))  
+
+(define buscar(lambda (l p)( if (= (pesopalabra (string->list(car l))) p)
+                                (car l)
+                                (buscar (cdr l) p))))
+
+
+(define ordaux(lambda (x l1)( if (null? l1)
+                         l1
+                         (cons (buscar x (car l1)) (ordaux x (cdr l1))))))
+                            
+                                  
+(define ordenar(lambda (x) (let ((l1 (sort (armar x) <))) (ordaux x l1))))       
+
+
+(ordena '("moto" "auto" "casa" "juego" "aire"));--> ("casa" "aire" "auto" "moto" "juego")

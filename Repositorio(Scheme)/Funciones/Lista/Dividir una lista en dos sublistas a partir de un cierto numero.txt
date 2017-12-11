@@ -1,0 +1,30 @@
+(define primeros
+  (lambda (x l1)
+    (if (null? l1)
+        '()
+        (if (eqv? x (car l1))
+            '()
+            (cons (car l1) (primeros x (cdr l1)))
+            )
+        )
+    )
+  )
+
+(define ultimos
+  (lambda (x l1)
+    (if (null? l1)
+        l1
+        (if (eqv? (car l1) x)
+            (cdr l1)
+            (ultimos x (cdr l1)))
+        )
+    )
+  )
+
+(define dividir-list
+  (lambda (x l1)
+    (cons (primeros x l1) (list(ultimos x l1))
+          )
+    )
+  )
+(dividir-list  7 '(1 4 3 5 7 4 2 4 6))

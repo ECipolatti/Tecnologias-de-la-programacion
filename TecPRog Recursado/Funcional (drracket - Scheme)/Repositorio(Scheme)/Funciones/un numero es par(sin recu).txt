@@ -1,0 +1,9 @@
+(define even
+  (lambda (x)
+    (if (eqv? (remainder x 2) 0)
+        #t
+        #f
+        )
+    )
+  )
+(even 0)

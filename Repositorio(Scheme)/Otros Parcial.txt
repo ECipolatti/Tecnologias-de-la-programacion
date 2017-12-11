@@ -1,0 +1,71 @@
+Se poseen dos conjuntos de puntos en el espacio y se desea encontrar el punto central de la intersección
+de los dos conjuntos. El conjunto de puntos será una lista propia mientras que los puntos estan representados
+por una lista impropia.
+Ej:
+
+(intersec '((1 . 2 . 3) (2 . 3 . 4) (3 . 4 . 5) (4 . 5 . 6)) '((2 . 3 . 4) (3 . 4 . 5) (6 . 7 . 8)))
+
+---->>> (2.5 3.5 4.5)
+
+Parece facil pero no se entiende que es lo que quiere...
+
+
+Cree una función que lea del teclado tres números positivos de n dígitos separados por un espacio
+y devolverá una lista donde cada elemento de la misma estará formado por una lista de tres elementos
+donde el primer elemento será el n-ecimo dígito del primer número, 
+la suma de los tres n-ecimos dígitos en el segundo lugar y el valor del n-ecimo del tercer número como tercer valor.
+;Ej: 1234 5678 1234 --> '((1 7 1) (2 10 2) (3 13 3) (4 16 4))
+
+;Utilice un único define.
+
+
+RESOLUCION DEL 2
+(define magia
+  (lambda (S)
+    (letrec ((num->list
+              (lambda (num)
+                (if (< num 10)
+                    (list num)
+                    (append (num->list (floor (/ num 10)))
+                            (list (- num (* 10 (floor (/ num 10))))))
+                    )
+                )
+              )
+             (toli
+              (lambda (S)
+                (list (num->list (read S)) (num->list (read S)) (num->list (read S)))
+                )
+              )
+             (make-list
+              (lambda (L)
+                (if (null? (car L))
+                    '()
+                    (cons (list (caar L) (+ (caar L) (caadr L) (caaddr L)) (caaddr L)) 
+                          (make-list (list (cdar L) (cdadr L) (cdaddr L)))
+                          )
+                    )
+                )
+              ))
+      (make-list (toli S))
+      )
+    )
+  )
+
+(magia (open-input-string (read-line)))
+
+
+
+OTRO FINAAL
+Ordenar por Peso ASCII
+
+Se desea crear una función que reciba como parámetro una lista de strings y devuelva una lista con las cadenas ordenadas por su peso ASCII. Ej: 
+
+> (ordenar '("moto" "auto" "casa" "juego" "aire")) --> ("casa" "aire" "auto" "moto" "juego")
+
+El peso ascii de una palabra se calculará como la suma de los valores de cada uno de los caracteres que la componen. Ejemplo:
+
+(pesopalabra "casa") --> 408
+a = 97
+c = 99
+s = 115 ==> 99 + 97 + 115 + 97 = 408
+es un final que tengo por ahí

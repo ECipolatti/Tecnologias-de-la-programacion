@@ -1,0 +1,95 @@
+Tecnologías de programación
+Cipolatti Edgardo	
+DNI: 35215385					      
+TP-10 Logico
+
+-----------------------------------------------Ejercicio 1-----------------------------------
+
+factorial(0, 1):-!.
+factorial(Numero, Factorial) :- Numero > 0, NumeroAnt is Numero - 1,
+						factorial(NumeroAnt, FactorialAnt),
+						Factorial is Numero * FactorialAnt.
+ 
+ -----------------------------------------------Ejercicio 2-----------------------------------
+ p(X).
+ X= 1;
+ X=2.
+ 
+ p(X),p(Y).
+ X = Y, Y = 1;
+ X = 1, Y = 2;
+ X = 2, Y = 1;
+ X = Y, Y = 2.
+ 
+ p(X), !, p(Y).
+ X = Y, Y = 1;
+ X = 1, Y = 2.
+  
+ -----------------------------------------------Ejercicio 3-----------------------------------
+ 
+eliminar_primero(L,0,L):-!.
+eliminar_primero([_|L1],X,LF):- X2 is X-1, eliminar_primero(L1,X2,LF).
+
+ -----------------------------------------------Ejercicio 4-----------------------------------
+ 
+agregar_nuevo(E,[],[E]):-!.
+agregar_nuevo(E,[E|L],[E|L]):-!.
+agregar_nuevo(E,[C|L],[C|LF]):-agregar_nuevo(E,L,LF).
+ 
+ -----------------------------------------------Ejercicio 4.1-----------------------------------
+ 
+semejanza([],[],0):-!.
+semejanza([],[_|L],S):- semejanza([],L,R),S is R-1,!.
+semejanza([_|L],[],S):- semejanza(L,[],R), S is R-1,!.
+semejanza([C1|L1],[C1|L2],S):- semejanza(L1,L2,R), S is R+1,!.
+semejanza([C1|L1],[C2|L2],S):- C1\==C2, semejanza(L1,L2,R), S is R-1.
+
+-----------------------------------------------Ejercicio 4.2-----------------------------------
+
+dic([sanar, hola, sabana, sabalo, prueba, computadora, cartera, mate, termo, mesa, silla, sarna]).
+
+semejanza([],[],0):-!.
+semejanza([],[_|L],S):- semejanza([],L,R),S is R-1,!.
+semejanza([_|L],[],S):- semejanza(L,[],R), S is R-1,!.
+semejanza([C1|L1],[C1|L2],S):- semejanza(L1,L2,R), S is R+1,!.
+semejanza([C1|L1],[C2|L2],S):- C1\==C2, semejanza(L1,L2,R), S is R-1.
+
+procesar(_,[],[]):-!.
+procesar(P,L,P):-  existe(P,L),!.
+procesar(P,[X|L],[[X,S]|L1]):-  atom_chars(P,PC), atom_chars(X,XC), semejanza(PC,XC,S), S>0,!,procesar(P,L,L1).
+procesar(P,[_|L],L1):- procesar(P,L,L1).
+
+buscar(P,R):- dic(D), procesar(P,D,R).
+
+largo([],0).
+largo([_|L],N):- largo(L,N2), N is N2+1.
+
+existe(_,[]):-fail.
+existe(P,[P|_]):-!.
+existe(P,[_|L]):-existe(P,L).
+ 
+-----------------------------------------------Ejercicio 5-----------------------------------
+
+reemplazar(_,_,_,_,[],[]):-!.
+reemplazar(_,_,_,0,L,L):-!.
+reemplazar(X,Y,0,-1,[X|L],[Y|L2]):- reemplazar(X,Y,0,-1,L,L2),!.
+reemplazar(X,Y,0,Cant,[X|L],[Y|L2]):- C is Cant -1, reemplazar(X,Y,0,C,L,L2),!.
+reemplazar(X,Y,Desde,Cant,[X|L],[X|L2]):- Desde>0, D is Desde-1, reemplazar(X,Y,D,Cant,L,L2),!.
+reemplazar(X,Y,Desde,Cant,[R|L],[R|L2]):-X\==R,reemplazar(X,Y,Desde,Cant,L,L2).
+ 
+-----------------------------------------------Ejercicio 6-----------------------------------
+puerta(a,b).
+puerta(a,d).
+puerta(d,f).
+puerta(e,f).
+puerta(b,c).
+puerta(f,g).
+puerta(c,g).
+puerta(g,salida).
+pasa(X,Y):-puerta(X,Y);puerta(Y,X).
+
+salir(X,C):-camino([X],C1),reverse(C1,C).
+camino([salida|R],[salida|R]).
+camino([X|R],C):- pasa(X,Y), not(member(Y,R)), camino([Y,X|R],C).
+
+ 

@@ -1,0 +1,45 @@
+1
+Puntos: 3
+El operador de corte se evalúa siempre como:
+Seleccione al menos una respuesta.
+	 a. falso	
+	 b. verdadero	
+	 c. según el caso	
+	 d. no se evalúa
+	 
+	 
+2
+Puntos: 3
+Una variable anónima no representa una referencia concreta, su valor no puede ser luego recuperado y se utiliza para unificar cuando no nos interesa el valor con el que se vincula. En Prolog la variable anónima se define como:
+Seleccione al menos una respuesta.
+	 a. cualquier variable que comience con el símbolo "_"	
+	 b. siempre con el símbolo "_"	
+	 c. cualquier variable que no es declarada previemente	
+	 d. declarándola: anonimous X.
+
+
+
+3
+Puntos: 3
+Prolog reconoce un término con aridad cero como variable cuando:
+Seleccione al menos una respuesta.
+	 a. se definen como tales: int Var.	
+	 b. el término comienza con un número	
+	 c. el término comienza con el símbolo "_": _var	
+	 d. el nombre del término contiene una sola letra	
+	 e. el término comienza con una letra mayúscula: Var	
+
+Puntos: 91
+Dada una lista, validar que todos los elementos sean números enteros, en caso de alguno no serlo, el predicado no debe fallar sino que informará "Lista incorrecta" por consola y finalizará (Sin mostrar "false.").
+
+En caso de ser numérica la lista, lo que se pide es implementar un algoritmo de ordenado en burbuja, en donde para cada iteración se procese la lista comparando un elemento con su siguiente, y en caso de ser mayor se intercambien dichos elementos. Esto se repetiría hasta que la lista quede ordenada (no haya más intercambios).
+
+NOTA: No se puede usar ningún predicados predefinido que ordene de alguna forma una lista.
+
+Ej.
+ordenar([4, 1, 3, 2, a], L).
+Lista incorrecta
+true.
+
+ordenar([4, 1, 3, 2], L).
+L = [1, 2, 3, 4].

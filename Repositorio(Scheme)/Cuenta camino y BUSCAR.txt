@@ -1,0 +1,21 @@
+ 
+(define buscar(lambda (x lista)
+                (if (null? lista)
+                    #f
+                    (if (eqv? x (car lista) )
+                        #t
+                        (buscar x (cdr lista))
+                        )
+                    )
+                ))
+                
+                
+(define CaminosPosibles
+  (lambda (n)
+    (cond ((= n 1) (list '(0 1)))
+          ((= n 2) (list '(0 1 2) '(0 2)))
+          (else (append (map (lambda (l) (append l (if (list? n) n (list n)))) (CaminosPosibles (- n 1)))
+                        (map (lambda (l) (append l (if (list? n) n (list n)))) (CaminosPosibles (- n 2)))
+                        )))))
+
+(CaminosPosibles 4)           

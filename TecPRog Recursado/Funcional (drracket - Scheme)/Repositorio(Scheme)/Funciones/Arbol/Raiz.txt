@@ -1,0 +1,4 @@
+(define raiz
+  (lambda (arbol)
+    (car arbol)
+    ))

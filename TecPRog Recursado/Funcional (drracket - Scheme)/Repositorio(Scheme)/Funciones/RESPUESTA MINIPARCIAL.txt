@@ -1,0 +1,76 @@
+////////////////////////////
+
+
+
+
+(define largo
+  (lambda (x)
+    (if (null? x)
+        0
+        (+ 1 (largo (cdr x)))
+        )
+    )
+  )
+
+(define longitudes
+  (lambda (x)
+    (map largo x)))
+
+(longitudes '((1 2 3) (1 2) (1)))
+
+
+;;;;;;EJERCICIO 2:
+
+
+(define ordenar
+  (lambda (x)
+    (if (< (car x) (cdr x))
+        x
+        (cons (cdr x) (car x)))))
+
+
+
+(define order-pair
+  (lambda (x)
+    (map ordenar x)))
+
+;(order-pair '((1 . 2) (3 . 1) (4 . 5) (5 . 1)))
+
+EJERCICIO 3::Escribe el procedimiento (fullreverse-list ls) que tome una lista como argumento, y devuelva la lista de forma que quede completamente invertida invertida. No se pueden utilizan las primitivas del lenguaje que realizan estas funciones.
+      		EJ: (fullreverse-list (1 (2 3 4 (4 5) (3 (5 6)) 4))) --> (4 ((6 5) 3) (5 4) 4 3 2) 1)
+
+
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1) (concat (cdr l1) l2))
+        )
+    )
+  )
+(define invert
+  (lambda (l1)
+    (if (or (null? l1) (real? l1))
+        l1
+        (concat (invert (cdr l1)) (list(car l1)))
+        )
+    )
+  )
+
+(define invert-all
+  (lambda (x)
+    (if (or (null? x) (real? x))
+        x
+        (let ((list1 (invert x)))
+          (map invert-all list1)
+          )
+        )
+    )
+  )
+
+(invert-all '(1 (2 3 4 (4 5) (3 (5 6)) 4)))
+          
+
+
+
+

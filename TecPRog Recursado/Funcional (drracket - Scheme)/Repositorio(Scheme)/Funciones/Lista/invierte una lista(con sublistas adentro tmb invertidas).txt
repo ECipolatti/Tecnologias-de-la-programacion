@@ -1,0 +1,28 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1)(concat (cdr l1) l2))
+         )
+  )
+)
+
+(define invertir
+  (lambda (lista)
+    (if (or (null? lista)(real? lista))
+        lista
+        (concat (invertir (cdr lista))(list(car lista)))
+        )
+    )
+  )
+(define fullreverse-list
+  (lambda (list)
+    (if (or (null? list) (real? list))
+        list
+        (let ((tempo (invertir list)))
+          (map fullreverse-list tempo)
+        )
+    )
+  )
+  )
+(fullreverse-list '(1 (2 3 4 (4 5) (3 (5 6)) 4)))

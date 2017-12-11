@@ -1,0 +1,12 @@
+(define esnumber
+  (lambda (x)
+    (if (null? x)
+        '()
+        (if (number? (car x))
+            (car x)
+            (esnumber( cdr x))
+         )
+     )
+   )
+ )
+(esnumber '((1 . 2) 'a (b) (5) (6) 8 'a 9))

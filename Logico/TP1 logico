@@ -1,0 +1,94 @@
+Tecnologías de programación 2013
+TP - Programacion Lógica.
+Alumno: Cipolatti Edgardo
+DNI: 35215385
+
+
+--------------------------------------------------------Ejercicio 1------------------------------------------------------
+
+a) ¿Por que es necesario un lenguaje formal para expresar el cuerpo de
+   conocimientos?
+Porque elimina todo tipo de ambigüedad y puede ser interpretado por la computadora
+
+b) ¿Cual es la idea subyacente en la resolución de problemas según el paradigma
+   lógico?
+   La programación lógica permite formalizar hechos del mundo real, y también reglas o restricciones. 
+   Además permite hacer cuantificación sobre los objetos de un dominio y representar propiedades a 
+   través de relaciones y  funciones.   
+  
+c) ¿Cuales son los componente del alfabeto descripto para el lenguaje formal?
+   Elementos del alfabeto:
+    * Constantes.
+    * Variables.
+    * Predicados.
+    * Cuantificadores y conectores lógicos.
+    * Functores.
+    * Términos.
+
+d) ¿Qué conceptos análogos en el lenguaje natural encuentran los términos y las
+   fórmulas bien formadas (wff) del lenguaje formal de fórmulas?
+En lenguaje natural solo cierta combinación de palabras conforman frases con significado. 
+
+e) ¿Que representa una interpretación para un cuerpo de fórmulas dado?
+Una interpretación T de un alfabeto A es un dominio no vacío D.
+
+f) ¿Que implica valorar una determinada variable?
+   Una Valoración es una función que asigna objetos de una interpretación a variables del lenguaje.
+
+g) ¿Que es un modelo respecto de un conjunto de fórmulas?
+   Dado un conjunto de fórmulas P, se dice que una interpretación es un modelo de P 
+   si y solo si cada fórmula de P es verdadera.
+
+
+h) ¿Que es una consecuencia lógica de un conjunto de fórmulas P?
+   Dado un conjunto de fórmulas P, una fórmula F es consecuencia lógica de P 
+   si y solo si F es verdadero en cada modelo de P.
+
+
+--------------------------------------------------------Ejercicio 2------------------------------------------------------
+
+padre(leoncio,alberto).
+padre(leoncio,geronimo).
+padre(alberto,juan).
+padre(alberto,luis).
+padre(geronimo,luisa).
+
+hermano(A,B):-padre(X,A),padre(X,B),A\=B.
+
+hijo(A,B):-padre(B,A).
+
+nieto(A,B):-padre(X,A),hijo(X,B).
+
+a- padre(alberto,luis).
+b- padre(luis,alberto).
+c- hermano(luis,X). (punto y coma hasta false)
+d- nieto(luisa,X).
+e- nieto(A,B).
+
+ 
+--------------------------------------------------------Ejercicio 3------------------------------------------------------
+
+menu('Bombones de jamón', 'Locro', 'Dulce de batata').
+menu('Bombones de jamón', 'Locro', 'Alfajor norteño').
+menu('Tarta de Atún', 'Atados de repollo', 'Dulce de batata').
+menu('Tarta de Atún', 'Pollo romano con hierbas y vino', 'Flan').
+menu('Volovanes de atún', 'Matambre con espinacas y parmesano', 'Torta moka').
+menu('Buñuelos de bacalao', 'Pollo romano con hierbas y vino', 'Alfajor norteño').
+
+a- menu(A,B,C).
+b- menu(A,B,'Dulce de batata').
+c- menu(A,'Locro',C).
+d- menu(A,'Pato a la naranja',C).
+e- menu('Locro,B,C).
+
+--------------------------------------------------------Ejercicio 4------------------------------------------------------
+
+ ?- menu( X , 'Locro' , Z ).
+	(?- menu('Bombones de jamón', 'Locro', Z).
+		(?- menu('Bombones de jamón', 'Locro', 'Dulce de batata'). (true.))
+		(?- menu('Bombones de jamón', 'Locro', 'Alfajor norteño'). (true.))
+	)
+	(?- menu('Tarta de Atún', 'Locro', Z). (false.))
+	(?-menu('Volovanes de atún', 'Locro',Z). (false.))
+	(?-menu('Buñuelos de bacalao', 'Locro', Z). (false.))
+)

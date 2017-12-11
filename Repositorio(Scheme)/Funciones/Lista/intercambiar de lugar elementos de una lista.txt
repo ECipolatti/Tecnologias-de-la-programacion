@@ -1,0 +1,3 @@
+(define volteo
+  (lambda (lista)
+    (cons (cadr lista)(cons (car lista) (cddr lista)))))

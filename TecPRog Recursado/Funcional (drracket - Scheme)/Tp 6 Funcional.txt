@@ -1,0 +1,150 @@
+ Tecnologías de la Programación
+ Cipolatti Edgardo
+ DNI: 35215385
+  
+ -------------------------------Ejercicio 1----------------------------------
+ 
+ (define (factorial x)
+  (if (eqv? 1 x)
+      1
+      (* x (factorial (- x 1)))
+      ))
+
+ -------------------------------Ejercicio 2----------------------------------
+ 
+ (define (largo ls)
+  (if (null? (cdr ls))
+      1
+      (+ 1 (largo (cdr ls)))
+      ))
+ 
+ -------------------------------Ejercicio 3----------------------------------
+ 
+ (define (count-elem x ls)
+  (if (null? ls)
+      0
+      (if (eqv? (car ls) x) 
+          (+ 1 (count-elem x (cdr ls)))     
+          (+ 0 (count-elem x (cdr ls)))
+          )
+      
+      ))
+      
+ -------------------------------Ejercicio 4----------------------------------
+ 
+ (define (subst a b ls)
+  (if (null? ls)
+      '()
+      (if (eqv? (car ls) a)
+          (cons b (subst a b (cdr ls)))
+          (cons (car ls) (subst a b (cdr ls)))
+          )
+      ))
+      
+ -------------------------------Ejercicio 5----------------------------------
+ 
+(define (eliminar x ls)
+  (if (null? ls)
+      '()
+      (if (eqv? x (car ls))
+          (eliminar x (cdr ls))
+          (cons (car ls) (eliminar x (cdr ls)))
+          )))
+  
+(define (contar x ls)
+  (if (null? ls)
+      0
+      (if (eqv? x (car ls))
+          (+ 1 (contar x (cdr ls)))
+          (+ 0 (contar x (cdr ls)))
+          )))
+
+(define (crear x cant)
+  (if (eqv? cant 0)
+      '()
+      (cons x (crear x (- cant 1)))))
+  
+  
+(define (agrupa ls)
+  (if (null? ls)
+      '()
+      (cons (crear (car ls) (contar (car ls) ls)) (agrupa (eliminar (car ls) ls)))
+      ))
+ 
+ -------------------------------Ejercicio 6----------------------------------
+ 
+ (define (concatenar l1 l2)
+  (if (null? l1)
+      l2
+      (cons (car l1) (concatenar (cdr l1) l2))
+      ))
+      
+ -------------------------------Ejercicio 7----------------------------------
+ 
+ (define (primer-num ls)
+  (if (null? ls)
+      null
+      (if (number? (car ls))
+          (car ls)
+          (primer-num (cdr ls))
+          )
+      ))
+ -------------------------------Ejercicio 8----------------------------------
+ 
+ (define (attach-at-end x ls)              
+  (if (null? ls)
+      x
+      (cons (car ls) (attach-at-end x (cdr ls)))
+      ))
+ 
+ -------------------------------Ejercicio 9----------------------------------
+ 
+ (define (positivos ls)
+  (if (null? ls)
+      '()
+      (if (< (car ls) 0)
+          (cons (- 0 (car ls)) (positivos (cdr ls)))
+          (cons (car ls) (positivos (cdr ls)))
+          )))
+
+(define (bool-to-number ls)
+  (if (null? ls)
+      '()
+      (if (eqv? (car ls) "V")
+          (cons 1 (bool-to-number (cdr ls)))
+          (cons 0 (bool-to-number (cdr ls)))
+          )))
+	  
+(define (string-to-number ls)
+  (if (null? ls)
+      '()
+      (cons (string->number (car ls)) (string-to-number (cdr ls)))
+      ))
+
+(define (conv-datos ls)
+  (if (null? ls)
+      '()
+      (if (eqv? (car (car ls)) "D")
+          (cons (positivos (car (cdr (car ls)))) (conv-datos (cdr ls)))
+          (if (eqv? (car (car ls)) "B")
+              (cons (bool-to-number (car (cdr (car ls)))) (conv-datos (cdr ls)))
+              (cons (string-to-number (car (cdr (car ls)))) (conv-datos (cdr ls)))
+              ))))
+	  
+	  
+ -------------------------------Ejercicio 10----------------------------------
+ 
+(define (dist p1 p2)
+  (sqrt (+ (expt (- (car p2) (car p1)) 2) (expt (- (cdr p2) (cdr p1)) 2)))
+  )
+
+(define (distancia ls)
+  (if (null? ls)
+      '()
+      (if (null? (cdr ls))
+          '()
+          (cons (dist (car ls) (car (cdr ls))) (distancia (cdr ls)))
+          )
+      )
+  )
+ 

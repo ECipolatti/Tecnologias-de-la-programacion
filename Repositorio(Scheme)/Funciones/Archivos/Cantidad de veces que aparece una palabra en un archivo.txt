@@ -1,0 +1,12 @@
+(define cant-veces
+  (lambda (palabra archi)
+    (let ((tempo (read archi)))
+            (if (eof-object? tempo)
+                0
+                (if (eqv? palabra tempo)
+                   (+ 1 (cant-veces palabra archi))
+                   (cant-veces palabra archi)
+                   )
+            )
+          )))
+(cant-veces 'los(open-input-file "prueba2.txt"))

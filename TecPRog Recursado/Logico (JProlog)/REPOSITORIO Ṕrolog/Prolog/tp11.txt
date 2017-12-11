@@ -1,0 +1,146 @@
+1
+
+
+evaluar(T) :- forall(member(A = B, T ),A =:= B).
+
+%evaluar([1=1, 2=2, 3=3, 4=4, 5=5,6=6]).
+
+
+2 -------------
+
+
+:- dynamic f/1.
+f(1).
+f(2).
+
+agregarf(X) :- integer(X), not(f(X)), assert(f(X)).
+
+% agregarf(3).
+% listing.
+
+3-------
+ verif(L)      :- forall(member(X,L), number(X)).
+verif(L)      :- forall(member(X,L), atom(X)).
+verif(L) :- forall(member(X,L), (not(number(X)), not(atom(X)))).
+
+4---------
+
+ins(X, L, [ X | L ]).
+ins(X, [ Y | L1 ], [ Y | L2 ]) :- ins(X, L1, L2).
+per([],[]).
+per([ X | L ],Lp) :- per(L, L1), ins(X, L1, Lp).
+
+s(A,B,C) :- 15 =:= A+B+C.
+
+veocual(A,B,C,D,E,F,G,H,I):- 
+             s(A,B,C),s(D,E,F),s(G,H,I),s(A,D,G),s(B,E,H),s(C,F,I),s(A,E,I),s(G,E,C).
+test :- per([1,2,3,4,5,6,7,8,9],[A,B,C,D,E,F,G,H,I|[]]),
+             veocual(A,B,C,D,E,F,G,H,I),write([A,B,C,D,E,F,G,H,I|[]]).
+         
+
+5---
+
+p r o y e c t o 
+
+%permR([], _).
+%permR([I|N], L):-   member(I, L),  permR(N, L).
+
+
+ins(X, L, [ X | L ]).
+ins(X, [ Y | L1 ], [ Y | L2 ]) :- ins(X, L1, L2).
+per([],[]).
+per([ X | L ],Lp) :- per(L, L1), ins(X, L1, Lp).
+
+%ins(X, L, [ X | L ]).
+%ins(X, [ Y | L1 ], [ Y | L2 ]) :- ins(X, L1, L2).
+
+%per(_,0,[]).
+%per(([L,N,Lp) :-  Ni is N -1, per(L,Ni,L1), ins(*,L1,Lp).%,ins(-,L1,Lp),ins(+,L1,Lp).
+
+%per([],[],N).
+%per([ X | L ],Lp, N) :- per(L, L1), ins(X, L1, Lp).
+
+6------
+
+esta(X,[X|_]) :- !.
+esta(X,[_|L]) :- esta(X,L).
+
+limpiou([],[]).
+limpiou([C|L1],R) :-        esta(C,L1),   limpiou(L1,R). 
+limpiou([C|L1],[C|R]) :- not(esta(C,L1)), limpiou(L1,R).
+
+
+union([],L2,L2).
+union([C|L1],L2,RR) :- union(L1,L2,L), R =[C|L],limpiou(R,RR),!.
+
+interseccion([],_,[]).
+interseccion(_,[],[]).
+interseccion([X|L],L2,[X|K]) :- esta(X,L2)     , interseccion(L,L2,K).
+interseccion([X|L],L2,K) :- not(esta(X,L2)), interseccion(L,L2,K).
+
+diferencia([],_,[]).
+diferencia([C|L],L2,K) :- esta(C,L2), diferencia(L,L2,K).
+diferencia([C|L],L2,[C|K]) :- not(esta(C,L2)), diferencia(L,L2,K).
+
+
+7-----------------
+
+p(árbol).
+p(animal).
+p(base).
+p(caramelo).
+p(caracol).
+p(curso).
+p(dedo).
+p(dedal).
+p(diferencia).
+p(diferencial).
+p(diferente).
+p(elefante).
+p(electricidad).
+p(esfera).
+p(fenómeno).
+p(fiera).
+p(guante).
+p(hormiga).
+p(hormigón).
+p(irlanda).
+
+% extraer(Lista,Pos1,cuantos,Resultado) toma desde posicion cero, 
+% extrapos(lista,Pos1,Pos2,Resultado) desde posicion uno.  pos1 y pos2 es la posicion absoluta
+
+
+extraer([],_,_,[]):- !.
+extraer([_|L],P1,P2,R) :- P1 > 0, P11 is P1-1, extraer(L,P11,P2,R).
+extraer([C|L],0,P2,[C|R])  :- P2 >0, P22 is P2-1, extraer(L,0,P22,R).
+extraer(_,0,0,R) :- extraer([],0,0,R). 
+extrapos(L,P1,P2,R) :- P3 is P1-1 ,P4 is P2-P1+1,  extraer(L,P3,P4,R). 
+
+esta(X,[X|_]) :- !.
+esta(X,[_|L]) :- esta(X,L).
+
+cuento([],0).
+cuento([_|L],K):- cuento(L,K1), K is K1+1.
+
+donde([C|_],C,1).
+donde([_|L],C,K) :- donde(L,C,K1), K is K1+1.
+
+enlis(_,[],[]).
+enlis(P,[X|L],[X|T]) :- atom_chars(X,D), prefix(P,D), enlis(P,L,T).
+enlis(P,[X|L],T) :- atom_chars(X,D), not(prefix(P,D)), enlis(P,L,T).
+ 
+izq(P,K) :- findall(X,p(X),D1), enlis(P,D1,K).
+
+checkast(P,K):- cuento(P,T), T=1, findall(X,p(X),K),!.
+checkast(P,K) :- donde(P,*,T), T1 is T-1, cuento(P,T2), T1=T2, delete(P,*,P1), izq(P1,K),!. 
+
+buscar(X,K) :- atom_chars(X,P),esta(*,P), checkast(P,K),!.
+buscar(X,K) :- atom_chars(X,P),esta(?,P), checkq(P,K),!.
+buscar(X,p(X)) :-  p(X).
+buscar(X,[]) :- not( p(X)).
+
+insertar(E,L,[E|L]). 
+insertar(E,[X|Y],[X|Z]) :- insertar(E,Y,Z). 
+
+%check(P,X) :- atom_chars(X,T), prefix(P,T).
+%izq(P,K) :- findall(X,check(P,X),K).

@@ -1,0 +1,27 @@
+(define encontrar
+  (lambda (x l1)
+    (if (null? l1)
+        #f
+        (if (eqv? x (car l1))
+            #t
+            (encontrar x (cdr l1))
+            )
+        )))
+(define añadir
+  (lambda (a l1)
+    (if (null? l1)
+        (cons a '())
+        (cons (car l1) (añadir a (cdr l1)))
+        )
+    )
+  )
+(define addif
+  (lambda (valor lista)
+      (if (encontrar valor lista)
+           lista
+           (añadir valor lista)
+            )
+        )
+    )
+  
+(addif 'a '(b c d))

@@ -1,0 +1,92 @@
+% Representación:
+
+% todo eso es la fila 0, las h y V representan las paredes (horizontal y vertical)
+% habria que hacer todas las filas
+
+h(0,0). % fila 0
+h(1,0).
+h(2,0).
+h(3,0).
+h(4,0).
+h(5,0).
+h(6,0).
+v(0,0).
+v(3,0).
+v(5,0).
+Y v(7,0). 
+
+visitado(posicion(X,Y), [posicion(X,Y)|_]).
+
+visitado(posicion(X,Y), [_|Cola]):- visitado(posicion(X,Y), Cola).
+
+no_visitado(posicion(X,Y), Lista) :- not(visitado(posicion(X,Y), Lista)).
+
+posicion_valida(posicion(X,Y)):- 	
+				  Y >= 0, X >= 0,
+				  tamanio_laberinto(Filas, Columnas),
+				  X < Columnas, Y < Filas. 
+
+
+pared_arriba(posicion(X,Y)) :- h(X,Y).				% pared arriba
+
+pared_abajo(posicion(X,Y)) :- Y1 is Y + 1, h(X, Y1).		% pared abajo
+
+pared_derecha(posicion(X,Y)) :- X1 is X + 1, v(X1, Y).		% pared derecha
+
+pared_izquierda(posicion(X,Y)) :- v(X, Y).			% pared izquierda
+
+
+%mover arriba	
+
+mover(posicion(X,Y), posicion(X, Y1), Visitados):-					
+							Y1 is Y - 1, 
+							posicion_valida(posicion(X, Y1)),
+							not(pared_arriba(posicion(X,Y))),
+							no_visitado(posicion(X, Y1), Visitados).
+% mover abajo
+
+mover(posicion(X,Y), posicion(X, Y1), Visitados) :-
+							Y1 is Y + 1, 
+							posicion_valida(posicion(X, Y1)),
+							not(pared_abajo(posicion(X,Y))),
+							no_visitado(posicion(X, Y1), Visitados).
+
+% mover derecha
+
+mover(posicion(X,Y), posicion(X1, Y), Visitados) :-
+							X1 is X + 1,
+							posicion_valida(posicion(X1, Y)), 
+							not(pared_derecha(posicion(X,Y))),
+							no_visitado(posicion(X1, Y), Visitados).
+% mover izquierda
+
+mover(posicion(X,Y), posicion(X1, Y), Visitados) :-
+							X1 is X - 1, 
+							posicion_valida(posicion(X1, Y)),
+							not(pared_izquierda(posicion(X,Y))), 
+							no_visitado(posicion(X1, Y), Visitados).
+
+
+% camino(posicion(X_inicial, Y_inicial), posicion(X_final, Y_final), Visitados, Camino)
+
+camino(posicion(X, Y), posicion(X1, Y1), Visitados, [posicion(X,Y), posicion(X1, Y1)]):-
+
+							mover(posicion(X, Y), posicion(X1, Y1), Visitados).
+
+camino(posicion(X, Y), posicion(Z, T), Visitados, [posicion(X,Y)|Camino]):-
+							
+							mover(posicion(X, Y), posicion(X1, Y1), Visitados),
+
+camino(posicion(X1, Y1), posicion(Z, T), [posicion(X1, Y1)|Visitados], Camino).
+
+
+--------------------------------------------------------------------------------------------
+
+Ejemplo
+
+2 ?- camino(posicion(4,2), posicion(6, 3), [posicion(4,2)], Camino).
+
+Camino = [posicion(4, 2), posicion(5, 2), posicion(5, 1), posicion(5, 0), 
+posicion(6, 0), posicion(6, 1), posicion(6, 2), posicion(6, 3)] ;
+
+No

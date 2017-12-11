@@ -1,0 +1,717 @@
+Tecnología de la programacion
+Cipolatti Edgardo
+DNI:35215385
+
+---------------------------EJERCICIO 2------------------------------------
+PROGRAM Diccio;
+USES Crt;
+VAR
+        lista:array[1..5] of string;
+        palabra:string;
+        frase:string;
+
+PROCEDURE ingresarPalabras(VAR m:string);
+VAR i:integer;
+BEGIN
+        CLRSCR;
+        FOR i:=1 to 5 do
+        BEGIN
+                WRITELN ('Ingresar palabra ',i);
+                READLN(m);
+                lista[i]:=m;
+        END;
+END;
+
+PROCEDURE ingresarFrase(VAR frase:string);
+BEGIN
+        WRITELN ('Ingresar frase: ');
+        READLN (frase);
+END;
+
+PROCEDURE palabrasnoencontradas(VAR f:string; l:array of string);
+VAR i,j,verifica,tempo,posicion:integer;
+    palabra:string;
+BEGIN
+        WRITELN ('palabras que no estan en el diccionario: ');
+        INSERT(' ',frase,length(f)+1);
+        tempo:=length(frase);
+        FOR i:=1 to tempo do
+        begin
+        verifica:=0;
+        palabra:=frase;
+
+        posicion:=pos(' ',frase);
+        delete(palabra,posicion,LENGTH(frase));
+        delete(frase,1,LENGTH(palabra)+1);
+
+        FOR j:=1 to 5 do
+        BEGIN
+               if (lista[j]=palabra) THEN verifica:=1;
+        END;
+        IF (verifica=0) THEN WRITELN(palabra);
+        END;
+END;
+
+
+BEGIN
+
+        ingresarPalabras(palabra);
+        ingresarFrase(frase);
+        palabrasnoencontradas(frase,lista);
+        REPEAT UNTIL KEYPRESSED;
+END.
+
+
+
+---------------------------EJERCICIO 3------------------------------------
+program ejer3;
+uses Crt;
+
+var frase:string;
+procedure vocales(var frase:string);
+var i,cuenta:integer;
+    v:string;
+begin
+        cuenta:=0;
+        for i:=1 to length(frase) do
+        begin
+                if ((frase[i]='a') or (frase[i]='e') or (frase[i]='i') or (frase[i]='o') or (frase[i]='u')) then
+                begin
+                cuenta:=cuenta+1;
+                end;
+        end;
+        writeln('LA CANTIDAD DE VOCALES ES: ',cuenta);
+end;
+
+procedure ing_frase(var frase:string);
+begin
+        clrscr;
+        write('INGRESE UNA FRASE: ');
+        readln(frase);
+end;
+
+begin
+ing_frase(frase);
+vocales(frase);
+REPEAT Until Keypressed;
+end.
+
+
+---------------------------EJERCICIO 4------------------------------------
+program anio;
+uses crt;
+
+var d,m,a:integer;
+
+function esbi(var z:integer):string;
+begin
+   if(((z mod 400)=0)) then
+      esbi:='es bisiesto'
+   else
+      begin
+      if((z mod 4)=0) then
+        esbi:='es bisiesto'
+      else
+        esbi:='no es bisiesto'
+end;
+end;
+procedure disgte(var x,y,t:integer);
+var s:string;
+begin
+  if(esbi(t)='es bisiesto') then
+      if((y=1) or (y=3) or (y=5) or (y=7) or (y=8) or (y=10) or (y=12)) then
+      begin
+       if((x=31)and (y<>12)) then
+         begin
+          x:=1;
+          y:=y+1;
+         end
+       else
+          if((x=31) and(y=12)) then
+            begin
+            x:=1;
+            y:=y+1;
+            t:=t+1;
+            end
+          else
+            x:=x+1;
+       end
+      else
+      begin
+       if((x=30)) then
+         begin
+         x:=1;
+         y:=y+1;
+         end
+       else
+       begin
+        if((x=29) and (y=2)) then
+          begin
+           x:=1;
+           y:=y+1;
+          end
+        else
+         x:=x+1;
+        end;
+      end
+  else
+       if((y=1) or (y=3) or (y=5) or (y=7) or (y=8) or (y=10) or (y=12)) then
+      begin
+       if((x=31)and (y<>12)) then
+         begin
+          x:=1;
+          y:=y+1;
+         end
+       else
+          if((x=31) and(y=12)) then
+            begin
+            x:=1;
+            y:=y+1;
+            t:=t+1;
+            end
+          else
+            x:=x+1;
+       end
+      else
+      begin
+       if((x=30)) then
+         begin
+         x:=1;
+         y:=y+1;
+         end
+       else
+       begin
+        if((x>=28) and (y=2)) then
+          begin
+           x:=1;
+           y:=y+1;
+          end
+        else
+         x:=x+1;
+        end;
+      end;
+end;
+
+procedure ingresa(var dd,mm,aaaa:integer);
+begin
+  clrscr;
+  write('ingresa dia: ');
+  readln(dd);
+  write('ingresa mes: ');
+  readln(mm);
+  write('ingresa anio:');
+  readln(aaaa);
+end;
+procedure ver(var di,me,an);
+begin
+ clrscr;
+  writeln('ingresa dia: ',d:5);
+  writeln('ingresa mes: ',m:5);
+  writeln('ingresa anio:',a:5);
+end;
+BEGIN
+   ingresa(d,m,a);
+   disgte(d,m,a);
+   ver(d,m,a);
+   repeat until keypressed;
+END.
+
+---------------------------EJERCICIO 5------------------------------------
+program pi;
+uses crt;
+var a:integer;
+
+procedure ingresar(var i:integer);
+begin
+clrscr;
+   writeln('ingrese cantidad de numeros: ');
+   readln(i);
+end;
+
+function pot(base:real;exp:integer):real;
+var i:integer;
+begin
+   if(exp<>0) then
+   begin
+   pot:=base;
+   for i:=1 to (exp-1) do
+   begin
+     pot:=pot*base;
+     end;
+   end
+   else
+    pot:=1;
+end;
+
+function val(var j:integer):real;
+var i:integer;
+begin
+   val:=0;
+   if((j>=20) and (j<=1000)) then
+      begin
+        for i:=0 to (j) do
+         begin
+           val:=val+( (pot(-1,i))*(1/((2*i)+1)));
+         end;
+       end
+   else
+     writeln('el valor ingresado esta fuera de rango');
+end;
+
+procedure ver();
+begin
+    writeln('el valor obtenido es: ',4*val(a):2:6);
+   end;
+
+BEGIN
+   ingresar(a);
+   ver();
+   repeat until keypressed;
+END.
+
+
+---------------------------EJERCICIO 6------------------------------------
+program primo; 
+uses crt;
+
+var a:integer;
+
+procedure ingresar(var y:integer);
+begin
+   clrscr;
+   writeln('ingresa un numero mayor o igual a 1:');
+   readln(y);
+end;
+
+function esprimo(var x:integer):string;
+var i,t:integer;
+begin
+  if((x=2) or (x=1)) then
+  begin
+    esprimo:='es primo';
+  end;
+  if((x<>2) and ((x mod 2)=0))  then
+  begin
+    esprimo:='no es primo';
+  end;
+  if((x<>2) and ((x mod 2)<>0)) then
+  begin
+   t:=round(sqrt(x));
+    for i:=t to (x-1) do
+     begin
+      if(((x mod i)=0) and (x<>2)) then
+       begin
+         esprimo:='no es primo';
+       end;
+       if(esprimo<>'no es primo') then
+          esprimo:='es primo';
+     end;
+
+  end;
+
+end;
+
+
+procedure ver();
+ begin
+   writeln('el numero ingresado ',esprimo(a));
+ end;
+
+BEGIN
+   ingresar(a);
+   ver();
+   repeat until keypressed;
+END.
+
+
+---------------------------EJERCICIO 7------------------------------------
+PROGRAM Ejercicio7;
+USES Crt;
+VAR
+  numero : string;
+  p : integer;
+  
+PROCEDURE verificar_numero ( VAR num:string);
+BEGIN
+  If ( length(num) > 10 ) then
+  WRITELN('Numero fuera de rango');
+END;
+
+PROCEDURE capicua (VAR n:string);
+VAR i,cont : integer;
+BEGIN
+  p:=length(n);
+  i:=1;
+  cont:=0;
+  While ( i<=p) do
+  begin
+    if (n[i]=n[p]) then cont:=cont+1;
+    i:=i+1;
+    p:=p-1;
+  end;
+  if (cont-1 = p div 2) then WRITELN ('El numero es capicua')
+  else
+  WRITELN ('El numero no es capicua');
+END;
+
+PROCEDURE mayor_cifra ( VAR nu:string);
+VAR j,long,cantidad : integer;
+VAR mayor : string;
+BEGIN
+  long:=length(nu);
+  cantidad:=0;
+  mayor:='0';
+  for j:=1 to long do
+  begin
+    if( (nu[j] > nu[j+1]) and (nu[j] >mayor) ) then
+    mayor:=nu[j];
+  end;
+  for j:=1 to long do
+  begin
+    if (nu[j]=mayor) then cantidad:=cantidad+1;
+  end;
+  WRITELN ('La mayor cifra es: ',mayor);
+  WRITELN ('Las veces que aparece es: ',cantidad);
+END;
+
+PROCEDURE menor_cifra ( VAR nume:string);
+VAR j,long,cantidad : integer;
+VAR menor : string;
+
+BEGIN
+  long:=length(nume);
+  cantidad := 0;
+  menor:='0';
+  for j:=1 to long do
+  begin
+  if( (nume[j] < nume[j+1]) and (nume[j] < menor)) then menor:=nume[j];
+  end;
+  for j:=1 to long do
+  begin
+    if (nume[j]=menor) then  cantidad:=cantidad+1;
+  end;
+  WRITELN ('La menor cifra es: ',menor);
+  WRITELN ('Las veces que aparece es: ',cantidad);
+END;
+
+PROCEDURE mas_cifra(VAR numero:string);
+VAR k,longi,canti,cantiaux : integer;
+VAR mas,masaux : string;
+BEGIN
+  longi:=length(numero);
+  canti:=0;
+  for k := 1 to longi do
+  begin
+    if (numero[k]=numero[k+1]) then
+    begin
+      masaux:=numero[k];
+      cantiaux := cantiaux + 1;
+    end;
+  end;
+  if (masaux > mas) then
+  begin
+    mas:=masaux;
+    canti:=cantiaux;
+  end;
+  WRITELN('La cifra que mas aparece es: ',mas);
+  WRITELN('La cantidad de apariciones es:',canti);
+END;
+
+BEGIN
+CLRSCR;
+WRITE ('Ingrese un numero: ');
+READLN (numero);
+verificar_numero(numero);
+capicua(numero);
+mayor_cifra(numero);
+menor_cifra(numero);
+mas_cifra(numero);
+REPEAT Until Keypressed;
+END.
+
+
+
+---------------------------EJERCICIO 8------------------------------------
+PROGRAM Ejercicio8;
+USES Crt;
+VAR  b1, b2 : string;
+
+PROCEDURE cargarDatos( var b1: string; b2 : string);
+BEGIN
+  CLRSCR;
+  writeln ('Ingrese los numeros binarios');
+  readln(b1);
+  readln(b1);
+END;
+
+FUNCTION sumar (b1 : string; b2 : string): string;
+VAR suma, carry : string;
+VAR l1, l2, aux,i : integer;
+BEGIN
+  l1 := length(b1);
+  l2 := length(b2);
+  carry := '0';
+ 
+  if(l1>l2) then
+  begin
+   for i :=0 to (l1-l2) do  
+    begin
+    b2 := '0' + b2 //le agrego ceros adelante
+    end;
+  end
+  else 
+    begin 
+     if(l1<l2) then
+      begin
+      for i :=0 to (l1-l2) do  
+      begin
+      b1 := '0' + b1; //le agrego ceros adelante
+      end;
+      end;
+      end;
+  l1 := length(b1); //o con b2, deberia ser lo mismo aca
+ i := l1;
+ while(i >= 1)  do
+  begin 
+    if(b1[i] = '1') and (b2[i] = '1') and (carry = '0') then
+    begin
+      carry := '1';
+      suma := suma + '0';
+    end
+    else 
+    begin //del else1
+     if(b1[i] = '1') and (b2[i] = '1') and (carry = '1') then
+      begin//del if2
+	carry := '1';
+	suma := suma + '1';
+      end
+      else //del else2
+      begin 
+	if(b1[i]<>b2[i]) and (carry = '0') then
+	begin 
+	  carry := '0';
+	  suma := suma + '1';
+      end
+	else
+	 begin 
+	   if(b1[i]<>b2[i]) and (carry = '1') then
+	   begin 
+	      carry := '1';
+	      suma := suma + '0';
+	 end
+	 else
+	 begin	   
+	   if (b1[i] = '0') and (b2[i] = '0') and (carry = '0') then
+	    begin
+	      carry := '0';
+	      suma := suma + '0';
+	 end
+	    else
+	    begin
+	       if (b1[i] = '0') and (b2[i] = '0') and (carry = '1') then
+		begin
+		  carry := '0';
+		  suma := suma + '1';
+		end;
+	    end;
+	    end;
+	    end;
+	    end;
+	    end;
+	    i := i-1;
+	    end; //for
+sumar := suma;    
+END;
+
+
+
+BEGIN 
+cargarDatos(b1,b2);
+write('La suma es :', sumar(b1,b2));
+END.
+
+
+
+---------------------------EJERCICIO 9------------------------------------
+program ejer9;
+uses crt;
+var c:integer;
+    p:real;
+
+procedure calcular(var ca:integer;pr:real);
+var t:real;
+begin
+ if ca>5 then
+ begin
+  t:=(ca*pr)-(ca*pr*0.05);
+ end
+ else
+ begin
+   t:=ca*pr;
+ end;
+ writeln('El total es: ',t);
+end;
+
+procedure ingresar(var cant:integer;precio:real);
+begin
+ writeln('Ingrese la cantidad: ');
+ readln(cant);
+ while cant>0 do
+ begin
+  writeln('Ingrese el precio: ');
+  readln(precio);
+  calcular(cant,precio);
+  writeln('Ingrese la cantidad: ');
+  readln(cant); 
+ end;
+end;
+
+begin
+ingresar(c,p);
+repeat until keypressed;
+end.
+
+
+
+---------------------------EJERCICIO 10------------------------------------
+program ejer10;
+uses crt;
+var a:char;
+
+procedure ingresar(var x:char);
+begin
+ clrscr;
+ writeln('Ingrese un caracter: ');
+ readln(x);
+end;
+
+function esnum(x:char):string;
+begin
+   if((x>='0') and (x<='9')) then
+     begin
+     esnum:='es un numero';
+     end
+   else
+     if((x>'a') and (x<'z')) then
+       begin
+       esnum:='es una letra';
+       end
+     else
+       esnum:='otro caracter';
+end;
+
+
+procedure ver(var x:char);
+begin
+ writeln('el caracter ingresado ',esnum(x));
+end;
+
+begin
+ingresar(a);
+ver(a);
+repeat until keypressed;
+end.
+
+
+
+
+
+---------------------------EJERCICIO 11------------------------------------
+program ejer11;
+uses crt;
+var d:integer; 
+function validar(n:integer):boolean;
+begin
+ if (n>=1)and(n<=12) then
+ begin
+ validar:=TRUE;
+ end
+ else
+ begin
+ validar:=FALSE;
+ end;
+end;
+procedure mes(var n:integer);
+begin
+        clrscr;
+        writeln('Ingrese el mes(nro del 1 al 12): ');
+        readln(n);
+        while not(validar(n)) do
+        begin
+        clrscr;
+        writeln('EL NUMERO INGRESADO NO ES VALIDO.');
+        writeln('Ingrese el mes(nro del 1 al 12): ');
+        readln(n);
+
+        end;
+
+
+end;
+function dias(n:integer):integer;
+begin
+        if ((n=1)or(n=3)or(n=5)or(n=7)or(n=8)or(n=10)or(n=12)) then
+        begin
+        dias:=31;
+        end
+        else if((n=4)or(n=6)or(n=9)or(n=11)) then
+        begin
+        dias:=30;
+        end
+        else
+        begin
+        dias:=28;
+        end;
+end;
+procedure ver(var n:integer);
+begin
+mes(n);
+writeln('la cantidad de dias es: ',dias(n));
+end;
+begin
+ver(d);
+repeat until keypressed;
+end.
+
+
+
+
+---------------------------EJERCICIO 12------------------------------------
+program ejer12;
+uses Crt;
+var  a,b,c,d: integer;
+     dis:real;
+procedure puntos(var x1,y1,x2,y2:integer);
+begin
+    clrscr;
+    writeln('INGRESE EL VALOR DE X1: ');
+    readln(x1);
+    writeln('INGRESE EL VALOR DE Y1: ');
+    readln(y1);
+    writeln('INGRESE EL VALOR DE X2: ');
+    readln(x2);
+    writeln('INGRESE EL VALOR DE Y2: ');
+    readln(y2);
+end;
+function distancia(x,y,xx,yy:integer):real;
+begin
+   distancia:=sqrt(((xx-x)*(xx-x))+((yy-y)*(yy-y)));
+end;
+procedure ver();
+var dis:real;
+    a,b,c,d:integer;
+begin
+        dis:=1.0;
+        while (dis<>0) do
+        begin
+        puntos(a,b,c,d);
+        dis:=distancia(a,b,c,d);
+        writeln('La distancia es: ',dis);
+        repeat until keypressed; 
+        end;
+end;
+begin
+ver();
+repeat until keypressed;
+end.
+
+

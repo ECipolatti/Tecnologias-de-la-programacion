@@ -1,0 +1,27 @@
+(define concat
+  (lambda (l1 l2)
+    (if (null? l1)
+        l2
+        (cons (car l1)(concat (cdr l1) l2))
+         )
+  )
+)
+(define invertir
+  (lambda (lista)
+    (if (or (null? lista)(real? lista))
+        lista
+        (concat (invertir (cdr lista))(list(car lista)))
+        )
+    )
+  )
+(define escapicua
+  (lambda (lista)
+    (if (null? lista)
+        #t
+        (if (equal? lista (invertir lista))
+            #t
+            #f)
+        )
+    )
+  )
+(escapicua '(1 3 5 (2 4 6 (8) 6 4 2) 5 3 1))

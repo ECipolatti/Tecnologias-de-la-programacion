@@ -1,0 +1,89 @@
+ESTACIONES DE TREN
+
+(define sumh
+  (lambda (x y)
+    (let ((hh (+(car x)(car y))) 
+          (mm (+ (car(cdr x)) (car(cdr y)))) 
+          (ss (+ (car (cdr (cdr x))) (car (cdr (cdr y))))))
+      (if(> ss 59)
+         (if (> mm 58)
+             (list (+ hh 1) (- mm 59) (- ss 60))
+             (list hh (+ mm 1) (- ss 59)))
+         (if (> mm 59)
+             (list (+ hh 1)(- mm 60) ss)
+             (list hh mm ss))
+         )
+      )
+    )
+  )
+
+(define est '("FEDERICO LACROZE" "JOSE ARTIGAS" "PN ARATA" "DR FCO BEIRO" "EL LIBERTADOR" "ANTONIO DEVOTO" "CNEL FCO LYNCH" "FERNANDEZ MORENO" "LOURDES" "TROPEZON" "JOSE M BOSCH" "MARTIN CORONADO" "PABLO PODESTA" "JORGE NEWBERY" "RUBEN DARIO" "E DE LOS ANDES" "JUAN B DE LA SALLE" "SGTO BARRUFFALDI" "CAPITAN LOZANO" "TNTE AGNETA" "CAMPO DE MAYO" "SGTO CABRAL" "GENERAL LEMOS"))
+(define ret '((0 3 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 1 0)(0 4 0)(0 1 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)(0 2 0)))
+
+(define viaje
+  (lambda (est ret s e)
+   (if (null? est) 
+       '()
+       (if (string=? (car est) e)
+           (viaje2 est (cdr ret) s)
+           (viaje est (cdr ret) s e)
+           )
+       )
+    )
+  )
+
+(define viaje_aux
+  (lambda (est ret s)
+    (cons (list (car est) s) (viaje2 (cdr est) ret s))))
+
+(define viaje2
+  (lambda (est ret s)
+    (if (null? ret)
+        '()
+        (cons (list (car est) s) (viaje2 (cdr est) (cdr ret) (sumh s (car ret))))
+      )
+    )
+  )
+
+
+(viaje est ret '(20 30 20) "FEDERICO LACROZE")
+
+
+
+
+
+------------------------
+PUNTO DE INTERSECCION DE 2 RECTAS
+
+(define-struct punto(x y))
+
+(define pendiente
+  (lambda (p1 p2)
+    (if (eqv? 0 (-(punto-x p2) (punto-x p1)))
+        '()
+        (/ (-(punto-y p2) (punto-y p1)) (-(punto-x p2) (punto-x p1)))
+        )
+    )
+  )
+
+(define ordenada
+  (lambda (m p)
+    (- (punto-y p) (* m (punto-x p)))
+    )
+  )
+(define interseccion
+  (lambda (p1 p2 p3 p4)
+    (let* ((m1 (pendiente p1 p2)) (m2 (pendiente p3 p4)) (b1 (ordenada m1 p1)) (b2 (ordenada m2 p3)))
+      (if (eqv? m1 m2) 
+          (if (eqv? b1 b2)
+              (display ("Infinitos puntos"))
+              (display ("rectas paralelas")))
+          (list(/(- b2 b1)(- m1 m2))
+                   (+(* m1 (/(- b2 b1)(- m1 m2))) b1))
+            )
+          )
+      )
+    )
+ 
+
+(interseccion (make-punto 0 0) (make-punto 2 2) (make-punto 0 2) (make-punto 2 0))

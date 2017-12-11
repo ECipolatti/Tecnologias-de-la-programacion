@@ -1,0 +1,12 @@
+(define decrece
+  (lambda (l1)
+    (if (null? (cdr l1))
+        #t
+        (if(> (car l1) (car(cdr l1)))
+           (decrece (cdr l1))
+           #f
+           )
+        )
+    )
+  )
+(decrece '(8 5 4 2 1))

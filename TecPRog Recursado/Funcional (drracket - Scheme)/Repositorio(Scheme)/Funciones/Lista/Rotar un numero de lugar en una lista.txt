@@ -1,0 +1,20 @@
+;Concatena dos listas
+(define concatenar (lambda (L1 L2) (if (null? L1) 
+                                        L2
+                                        (cons (car L1) (concatenar (cdr L1) L2)))))
+;Invierte los elementos de una lista
+(define invertir (lambda (L) (if (null? L) 
+                                 (list ) 
+                                 (concatenar (invertir (cdr L)) (list (car L))))))
+
+(define ls (list ))
+(define rotar (lambda (dir L) (if (eqv? dir 'izquierda)
+                                  (if (null? L)
+                                      (list )
+                                      (concatenar (cdr L) (list (car L))))
+                                  (if (null? (cdr L))
+                                      (list )
+                                      (concatenar (list (car (invertir L))) (invertir (cdr (invertir L))))))))
+(define lista (list 1 2 3 4 5 6 7 8 9 0))
+(rotar 'izquierda lista)
+(rotar 'derecha lista)

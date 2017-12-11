@@ -1,0 +1,34 @@
+(define tolist
+  (lambda (lista)
+    (if (null? lista)
+        '()
+        (cons (string->list (car lista)) (tolist (cdr lista)))
+    )))
+(define peso
+  (lambda (lista)
+    (if (null? lista)
+        0
+        (+ (char->integer(car lista))(peso (cdr lista)))
+        )))
+(define concatena
+  (lambda (x y)
+    (if (null? x)
+        (if (null? y)
+            '()
+            (cons (car y) (concatena x (cdr y))))
+        (cons (car x) (concatena (cdr x) y)))
+      )
+   )
+ 
+(define ordena
+  (lambda (l1)
+      (if (null? (cdr l1))
+          l1
+          (if (<= (peso (car(tolist l1)))(peso (car(cdr (tolist l1)))))
+              (concatena (list(car l1))(ordena (cdr l1)))
+              (concatena (ordena (cdr l1))(list(car l1)))
+              )
+          )
+      )
+  )
+(ordena '("moto" "auto" "casa" "juego" "aire"));--> ("casa" "aire" "auto" "moto" "juego")

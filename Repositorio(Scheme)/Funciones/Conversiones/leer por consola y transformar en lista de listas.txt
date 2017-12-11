@@ -1,0 +1,9 @@
+(define conver
+  (lambda (re)
+    (let ((tempo (read re)))
+     (if (eof-object? tempo)
+       '()
+        (cons(cons tempo '())(conver re))
+    ))))
+
+(conver (open-input-string (read-line)))

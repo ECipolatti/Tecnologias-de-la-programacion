@@ -1,0 +1,4 @@
+;Cuenta la cantidad de elementos que se encuantran a la izquierda de x en la lista L
+(define cant-izq (lambda (x L) (if (eqv? (car L) x)
+                                   0
+                                   (+ 1 (cant-izq x (cdr L))))))

@@ -1,0 +1,68 @@
+#|INVIERTE LA LISTA IMPROPIA|#
+(define invertir
+  (lambda (l)
+    (if (null? l)
+        '()
+    (if (> (car l)  (cdr l))
+        (cons (cdr l) (car l))
+        l
+        ))))
+
+#|INVIERTE TODOS LOS PARES DE LA LISTA|#
+(define order-pair
+  (lambda (lista)
+    (map invertir lista)))
+
+
+#|DEVUELVE ELMENOR DE DOS PARES, MIRAR COMO COMPARA|#
+(define menor-l
+  (lambda (l1 l2)
+    
+    (if (< (car l1) (car l2))
+        l1
+        (if (< (car l2) (car l1))
+        l2
+        (if (< (cdr l1) (cdr l2))
+            l1
+            (if (<= (cdr l2) (cdr l1))
+                l2
+        ))))))
+
+#|DEVUELVE EL MENOR DE UNA LISTA TENIENDO EN CUENTA EL MENOR-L|#
+(define minl
+  
+  (lambda (lista) 
+    
+    (if (null? (cdr lista))
+        (car lista)
+        (menor-l (car lista) (minl (cdr lista)))
+        
+        ))) 
+
+#|ELIMINA EL ELEMENTO VALOR|#
+(define elimina
+  (lambda (valor lista)
+    (if (null? lista)
+        '() 
+       (if (and (= (car valor) (car (car lista))) (= (cdr valor) (cdr (car lista))))
+            (elimina valor (cdr lista))
+            (cons (car lista) (elimina valor (cdr lista)))
+            ))
+    )
+  )
+
+#|ORDENA UNA LISTA DE PARES DE MENOR A MAYOR TENIENDO EL MENOR-L|#
+(define ordenar<=
+  (lambda (lista)
+    (if (null? lista)
+        '()
+        (cons (minl lista) (ordenar<= (elimina (minl lista) lista)))
+        )
+    ))
+
+#|DEVUELVE LA LISTA CON TODOS LOS CAR<CDR Y ORDENADA DE ACUERDO AL MENOR-L|#
+(define ordenatodo
+  (lambda (lista)
+     (ordenar<=  (order-pair lista))))
+
+(ordenatodo '((1 . 2) (0 . 1) (4 . 5) (5 . 0)))

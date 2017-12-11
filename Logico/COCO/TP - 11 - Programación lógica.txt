@@ -1,0 +1,488 @@
+-------------------------------------------------------------------------------
+Tecnologías de programación 2012					      
+Alumno: Zaburlín Carlos							      
+DNI: 34116346								      
+TP-11-Programación lógica.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 1----------------------------------
+
+Crear un programa en prolog que dada un conjunto de palabras (definidas como
+hechos mediante el predicado "p/1") y un patrón de búsqueda, retorne una lista
+con todas las palabras que coincidan con el patrón de búsqueda.
+
+Se puede tomar como ejemplo las siguientes declaraciones:
+
+p(árbol).
+p(animal).
+p(base).
+p(caramelo).
+p(caracol).
+p(curso).
+p(dedo).
+p(dedal).
+p(diferencia).
+p(diferencial).
+p(diferente).
+p(elefante).
+p(electricidad).
+p(esfera).
+p(fenómeno).
+p(fiera).
+p(guante).
+p(hormiga).
+p(hormigón).
+p(irlanda).
+
+El patrón de búsqueda será cualquier átomo que contenga letras en minúsculas
+y los símbolos '*' (representa una secuencia de cero o más letras no
+definidas), y '?' (representa una letra no definida). La búsqueda no debe
+diferenciar entre vocales con y sin acento y solo se manejarán letras en
+minúscula tanto en la definición como en el patrón de búsqueda.
+
+Ejemplos:
+
+   ?- buscar(*, L).
+   L = [árbol, animal, base, caramelo, caracol, curso, dedo, dedal, diferencia,
+       diferencial, diferente, elefante, electricidad, esfera, fenómeno, fiera,
+       guante, hormiga, hormigón, irlanda].
+
+   ?- buscar(arbol, L).
+   L = [árbol].
+
+   ?- buscar(arbol*, L).
+   L = [árbol].
+
+   ?- buscar(arbol?, L).
+   L = [].
+
+   ?- buscar(ele*, L).
+   L = [elefante, electricidad].
+   
+   ?- buscar(ele*ad, L).
+   L = [electricidad].
+
+   ?- buscar(*l, L).
+   L = [árbol, animal, caracol, dedal, diferencial].
+
+ATENCIÓN: Se puede usar cualquier predicado predefinido. En particular para
+pasar un átomo a lista de átomos de los caracteres que lo componen se puede
+usar el predicado "atom_chars/2", por ejemplo:
+
+?- atom_chars(hola, L).
+L = [h, o, l, a].
+
+ATENCIÓN: En caso de ser necesario, utilizar el apóstrofe para deliminar y
+explicitar los átomos.
+
+-------------------------------------------------------------------------------
+transforma una palabra atom en chars.
+
+transforma(P):- p(D), atom_chars(D,P).
+
+pone todas las palabras en una lista como chars y le quita los acentos.
+
+unir_todos(Final):- findall(X, transforma(X), Palabras), quita_acentos_todas(Palabras,Final).
+
+Quito los acentos de cada palabra.
+
+quita_acentos_todas([],[]):- !.
+quita_acentos_todas([A|S],[AFin|C]):- quita_ace_palabra(A,AFin), quita_acentos_todas(S,C), !.
+-------------------------------------------------------------------------------
+quita_ace_palabra([],[]):- !.
+quita_ace_palabra([A|S],['a'|C]):- A='á', quita_ace_palabra(S,C), !.
+quita_ace_palabra([A|S],['e'|C]):- A='é', quita_ace_palabra(S,C), !.
+quita_ace_palabra([A|S],['i'|C]):- A='í', quita_ace_palabra(S,C), !.
+quita_ace_palabra([A|S],['o'|C]):- A='ó', quita_ace_palabra(S,C), !.
+quita_ace_palabra([A|S],['u'|C]):- A='ú', quita_ace_palabra(S,C), !.
+quita_ace_palabra([A|S],[A|C]):- quita_ace_palabra(S,C).
+-------------------------------------------------------------------------------
+De lista chars a lista atom.
+
+vuelve([],[]):- !.
+vuelve([A|S],[D|C]):- atom_chars(D,A), vuelve(S,C).
+-------------------------------------------------------------------------------
+Verifica si A es exactamente igual a una palabra de la lista dle segundo
+parametro.
+
+es_igual(A,[]):- !, fail.
+es_igual(A,[E|S]):- A = E, !, true.
+es_igual(A,[E|S]):- es_igual(A,S).
+-------------------------------------------------------------------------------
+Caso para *
+
+llega la Palabra y la lista de palabras y verifica de a una. todo llega como
+chars. devuelve como atom.
+
+busqueda_todas(P,[],[]):- !.
+busqueda_todas(P,[A|Palabras],[AA|C]):-  busqueda_asteris_pala(P,A), atom_chars(AA,A), busqueda_todas(P,Palabras,C), !.
+busqueda_todas(P,[A|Palabras],C):- busqueda_todas(P,Palabras,C).
+-------------------------------------------------------------------------------
+busqueda_asteris_pala([A|S],[B|C]):- A=B, busqueda_asteris_pala(S,C), !.
+
+%Si el asterisco esta al principio o al medio, doy vuelta y verifico el resto
+(que 'S' puede ser vacio(para el caso de asterisco al final), o letras).
+
+busqueda_asteris_pala([A|S],B):- A='*', reverse(S,Re1), reverse(B,Re2), verifica_sublis(Re1,Re2).
+-------------------------------------------------------------------------------
+Verifica si lo que esta despeus del asterisco es sublista de alguna palabra que
+termine igual.
+
+verifica_sublis([],L):- !, true.
+verifica_sublis([A|C],[B|S]):- A=B, verifica_sublis(C,S).
+-------------------------------------------------------------------------------
+Caso para tiene_un_preg([]):- !,fail.
+
+tiene_un_preg([A|S]):- A= '?', !, true.
+tiene_un_preg([A|S]):- tiene_un_preg(S).
+-------------------------------------------------------------------------------
+Devuelvo todas aquellas paalbras que se verifiquen correctas con el ?. llegan
+como chars. Devuelvo como atom
+
+analiza_preg_todas(X,[],[]):- !.
+
+Si la palabra a comparar es una alternativa posible, la devuelvo como chars.
+
+analiza_preg_todas(X,[A|S],[AA|C]):- length(X,L1), length(A,L2), L1=L2, 
+				     analiza_palabra_preg(X,A), atom_chars(AA,A), 
+				     analiza_preg_todas(X,S,C),!.
+
+%Si la palabra no satisface, sigo con las demas.
+
+analiza_preg_todas(X,[A|S],C):- analiza_preg_todas(X,S,C).
+-------------------------------------------------------------------------------
+Si da true, es poruqe la palabra se verifica con ?.
+
+analiza_palabra_preg([],[]):- !, true.
+analiza_palabra_preg([X|A],[Y|B]):- X=Y, analiza_palabra_preg(A,B), !.
+analiza_palabra_preg([X|A],[Y|B]):- X\=Y, X\='?', fail, !.
+analiza_palabra_preg([X|A],[Y|B]):- X\=Y, X= '?', analiza_palabra_preg(A,B).
+-------------------------------------------------------------------------------
+Resuelve 
+
+si doy la palabra vacia.
+buscar([],[]):- !.
+
+Si doy solo el asterico.
+buscar(X,Lista):- X = '*', unir_todos(Palabras), vuelve(Palabras,Lista), !.
+
+Si doy la palabra entera, la devuelvo.
+buscar(X,X):- atom_chars(X,P), unir_todos(Palabras), es_igual(P,Palabras), !.
+
+Si doy la palabra con un signo de pregunta '?'.
+buscar(X,Resul):- atom_chars(X,P), unir_todos(Palabras), tiene_un_preg(P), analiza_preg_todas(P,Palabras,Resul), !.
+
+Si doy la palabra con un asterisco *.
+buscar(X,Resul):- atom_chars(X,P), unir_todos(Palabras),busqueda_todas(P,Palabras,Resul).
+
+
+Ejemplo: buscar('ar*',D).     ---> D=[arbol].
+Ejemplo buscar('ar??l', D) ------>D=[arbol].
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 2----------------------------------
+
+Genere un programa en prolog que resuelva el siguiente problema: teniendo una
+matriz de 3x3, se deben colocar todos y cada uno de los números de 1 al 9 de
+tal forma que la suma de cada una de las filas, cada una de las columnas y cada
+una de las diagonales principales dé el mismo número.
+
+-------------------------------------------------------------------------------
+insertar(X, [ Y | L1 ], [ Y | L2 ]) :- insertar(X, L1, L2).
+insertar(X, L, [ X | L ]).
+
+% Calculamos todas las combinaciones (permutaciones) posibles de los 9 números pasados y vamos probando si con alguna combinación se da la condición de "verificar".
+permutaciones([],[]).  
+permutaciones([ X | L ], Lp) :- permutaciones(L, L1), insertar(X, L1, Lp).
+
+
+numeros([1,2,3,4,5,6,7,8,9]).
+
+
+resuelve([X1,X2,X3,X4,X5,X6,X7,X8,X9],[ 'filas =' ,[X1,X2,X3],[X4,X5,X6],[X7,X8,X9]]):-  S1 is X1 + X2 + X3,%Filas
+									 	      	 S2 is X4 + X5 + X6,
+										      	 S3 is X7 + X8 + X9,
+										      	 S4 is X1 + X4 + X7,%Columnas											
+										     	 S5 is X2 + X5 + X8,
+										      	 S6 is X3 + X6 + X9,
+											 S7 is X1 + X5 + X9,%Diagonales
+										         S8 is X3 + X5 + X7,
+										      
+										      S1=S2,S2=S3,S3=S4,S4=S5,S5=S6,S6=S7,S7=S8.
+
+matriz(D):- numeros(N), permutaciones(N,P),resuelve(P,D).
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 3----------------------------------
+
+Dado una lista de números enteros, crear un programa en prolog que compruebe si
+agregando operaciones aritméticas (+, -, *, /) y uno y solo un signo de
+igualdad (=) entre los números de la lista, se puede obtener una igualdad en la
+misma. 
+
+Ejemplo:
+   ?- igualdad([2, 3, 4, 2], X).
+   X = [2, *, 3, =, 4, +, 2]
+   X = [2, *, 3, -, 4, =, 2]
+
+NOTA 1: Validar que la lista contenga al menos dos elementos y solo contenga
+números enteros.
+
+NOTA 2: Para simplificar el desarrollo, no se debe tener en cuenta la
+precedencia de los operadores, es decir lo que se opera es el resultado parcial
+obtenido hasta ahora con el próximo número de la lista.
+
+NOTA 3: Al definir la operación a agregar, tener en cuenta que si el próximo
+número es cero, no se puede agregar una división.
+
+Predicados aconsejados:
+lista_valida/1: valida que el parámetro recibido sea una lista válida.
+
+lista_aritmetica/2: recibe como primer argumento una lista de enteros y retorna
+en el segundo la lista con los operadores aritméticos intercalados.
+
+operar/3: recibe en el primer argumento el resultado parcial, en el segunto una lista con
+el resto de la operación, y retorna en el tercer argumento el resultado final.
+
+igualdad/2: recibe una lista de números enteros y retorna una lista con los
+números, los operadores y la igualdad.
+
+-------------------------------------------------------------------------------
+oper(+).
+oper(-).
+oper(*).
+oper(/).
+
+%Pone un operador entre cada par de números.
+arma([A|[]],[A]):- !.
+arma([A,B|C],[A,O|Fa]):- B\=0, oper(O), arma([B|C],Fa).
+
+%Para que no haga la división por cero.
+arma([A,B|C],[A,O|Fa]):- B=0, oper(O), O\= '/', arma([B|C],Fa).
+
+
+calcular([A|[]],A)   :- !.
+calcular([A,B|C],E)  :- B = '+',  calcular(C,D1),  E is D1 + A, !.
+calcular([A,B|C],E)  :- B = '/',   calcular(C,D1),  E is D1 / A, !.
+calcular([A,B|C],E)  :- B = '*',   calcular(C,D1),  E is D1 * A, !.
+calcular([A,B|C],E)  :- B = '-',   calcular(C,D1),  E is D1 - A, !.
+
+
+igualdad(D,[AA,'=',BB]):- append(A,B,D), A\=[], B\=[],
+			  arma(A,AA),
+			  arma(B,BB),
+			  reverse(AA,AAAux), 
+		          reverse(BB,BBAux),
+			  calcular(AAAux,N1),
+			  calcular(BBAux,N2),
+			  N1=N2.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 4----------------------------------
+
+Implemente en prolog los predicados que se describen a continuación teniendo en
+cuenta las siguientes consideraciones:
+   - No se deben usar predicados predefinidos   
+   - Se estará trabajando con conjuntos
+   - Los mismos se representarán como listas de elementos
+   - Los conjuntos no pueden tener elementos repetidos, condición que hay que
+     validar en los conjuntos de entradas y asegurar en el de salida.
+
+------------------------------------------------------------------------------- 
+a) union(C1, C1, U): El predicado union/3 ejecuta la unión entre los conjuntos
+   C1 y C2 y devuelve el resultado en el conjunto U.
+
+   union([1, 2, 3], [3, 4, 5], U).
+   U = [1, 2, 3, 4, 5].
+-------------------------------------------------------------------------------
+insertar(X,[],[X]).
+insertar(X,[C|R1],[C|R2])   :-  X>C ,insertar(X,R1,R2).
+insertar(X,[C|R1],[X,C|R1]) :-  X=<C.
+
+ordenar([],[]).
+ordenar([C|R],LFinal):-ordenar(R,LF),insertar(C,LF,LFinal).
+
+comprime-lista([],[]).
+comprime-lista([X],[X]).
+comprime-lista([X,X|R],Zs):- comprime-lista([X|R],Zs),!.
+comprime-lista([X,Y|R1],[X|R2]):- X \= Y, comprime-lista([Y|R1],R2).
+
+unionABC1([],[],[]).
+unionABC1([C1|R1],[C2|R2],[C1,C2|L3]) :- unionABC1(R1,R2,L3).
+unionABC1([C1|R1],[C1|R2],[C1|L3])    :- unionABC1(R1,R2,L3).
+unionABC1([C1|R1],[],[C1|L3])         :- unionABC1(R1,[],L3).
+unionABC1([],[C2|R2],[C2|L3])         :- unionABC1([],R2,L3).
+
+unionABC(A,B,C) :- unionABC1(A,B,D), ordenar(D,E), comprime-lista(E,C), !.
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+b) Interseccion(C1, C1, U): El predicado interseccion/3 ejecuta la intersección
+   entre los conjuntos C1 y C2, y devuelve el resultado en el conjunto U.
+
+   interseccion([1, 2, 3], [3, 4, 5], U).
+   U = [3].
+-------------------------------------------------------------------------------
+insertar(X,[],[X]).
+insertar(X,[C|R1],[C|R2])   :-  X>C ,insertar(X,R1,R2).
+insertar(X,[C|R1],[X,C|R1]) :-  X=<C.
+
+ordenar([],[]).
+ordenar([C|R],LFinal):- ordenar(R,LF), insertar(C,LF,LFinal), !.
+
+agregaElemento([],X,[X]).
+agregaElemento([X|R],X,[X|R]) :- !.
+agregaElemento([C|R],X,[C|LF]) :- agregaElemento(R,X,LF),!.
+
+pertenece(X,[X|_Y]).
+pertenece(X,[_C|Y]):- pertenece(X,Y),!.
+
+concatena([],L2,L2).
+concatena([C|R],L2,[C|L3]) :- concatena(R,L2,L3).
+
+interseccion1(_,[],[]) :- !.
+interseccion1([],[],[]).
+interseccion1([],_,[]).
+interseccion1([C1|R1],L2,LFinal) :- interseccion1(R1,L2,LF), pertenece(C1,L2), agregaElemento(LF,C1,LFinal), !.
+interseccion1([C1|R1],L2,LFinal) :- interseccion1(R1,L2,LF), not(pertenece(C1,L2)), concatena(LF,[],LFinal), !.
+
+interseccion(A,B,C) :- interseccion1(A,B,D), ordenar(D,C).
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+c) Diferencia(C1, C1, U): El predicado diferencia/3 ejecuta la operación
+   diferencia de conjuntos entre los conjuntos C1 y C2, y devuelve el resultado
+   en el conjunto U.
+
+   Diferencia([1, 2, 3], [3, 4, 5], U).
+   U = [1, 2].
+-------------------------------------------------------------------------------
+insertar(X,[],[X]).
+insertar(X,[C|R1],[C|R2])   :-  X>C ,insertar(X,R1,R2).
+insertar(X,[C|R1],[X,C|R1]) :-  X=<C.
+
+ordenar([],[]).
+ordenar([C|R],LFinal):- ordenar(R,LF), insertar(C,LF,LFinal), !.
+
+agregaElemento([],X,[X]).
+agregaElemento([X|R],X,[X|R]) :- !.
+agregaElemento([C|R],X,[C|LF]) :- agregaElemento(R,X,LF),!.
+
+pertenece(X,[X|_Y]).
+pertenece(X,[_C|Y]):- pertenece(X,Y),!.
+
+concatena([],L2,L2).
+concatena([C|R],L2,[C|L3]) :- concatena(R,L2,L3).
+
+diferencia1(_,[],[]) :- !.
+diferencia1([],[],[]).
+diferencia1([],_,[]).
+diferencia1([C1|R1],L2,LFinal) :- diferencia1(R1,L2,LF), pertenece(C1,L2), concatena(LF,[],LFinal), !.
+diferencia1([C1|R1],L2,LFinal) :- diferencia1(R1,L2,LF), not(pertenece(C1,L2)), agregaElemento(LF,C1,LFinal), !.
+
+diferencia(A,B,C) :- diferencia1(A,B,D), ordenar(D,C).
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+IMPORTANTE: No utilizar predicados predefinidos y verificar que los conjuntos
+de entrada sean válidos, es decir que no contengan elementos repetidos, en caso
+de ser inválidos alguno de los dos, el predicado debe fallar.
+-------------------------------------------------------------------------------
+
+
+
+
+----------------------------------Ejercicio 5----------------------------------
+
+Un árbol binario es vacío o consta de tres partes: la raíz (que debe ser un
+átomo), la rama izquierda (que debe ser un árbol binario) y la rama derecha 
+(que debe ser un árbol binario). La raíz se denota rá por un número entero . Al
+árbol vació lo representamos por medio del átomo "nil".
+* nil representa el árbol vacío.
+* t(I, R, D) representa el árbol de raíz R, rama izquierda I y rama derecha D.
+
+   1  nivel 0 peso 1
+  / \
+  3 2 nivel 1 peso 5
+ /
+7     nivel 2 peso 7
+
+así el árbol del ejemplo sería: t( t( nil, 3, nil ), 1, t( t( nil, 7, nil ), 2, nil ) ).
+Se debe construir un programa en prolog que valide que la representación del
+árbol sea correcta:
+   - que la forma del árbol sea correcta, es decir un nodo y dos ramas por
+     nodo, las ramas pueden ser otro nodo o nil en caso de no existir
+   - que cada nodo esté representado por un número "Entero" En caso de ser
+     válido el árbol, se debe determinar el peso de un nivel en particular del
+     mismo, siendo el peso del nivel la suma de los nodos del mismo. En caso de
+     requerir un nivel mayor al de los contenidos por el árbol, devolver cero.
+ 
+   1  nivel 0 peso 1
+  / \
+  2 3 nivel 1 peso 5
+ / 
+5     nivel 2 peso 5
+
+?- peso_nivel(t( t( nil, 2, nil ), 1, t( t( nil, 5, nil ), 3, nil ) ), 0, Peso ).
+Peso = 1
+
+?- peso_nivel(t( t( nil, 2, nil ), 1, t( t( nil, 5, nil ), 3, nil ) ), 2, Peso ).
+Peso = 5
+
+?- peso_nivel(t( t( nil, 2, nil ), 1, t( t( nil, 5, nil ), 3, nil ) ), 3, Peso ).
+Peso = 0
+
+   1 nivel 0 peso 1
+ /  \
+ 2   3 nivel 1 peso 5
+/ \ / \
+3 3 8 4 nivel 2 peso 18
+
+?- peso_nivel( t(t( t( nil, 3, nil ), 2, t( nil, 3, nil )), 1, t( t( nil, 8, nil ), 3, t( nil, 4, nil ))), 1,
+Peso ).
+Peso = 5
+
+?- peso_nivel( t(t( t( nil, 3, nil ), 2, t( nil, 3, nil )), 1, t( t( nil, 8, nil ), 3, t( nil, 4, nil ))), 2,
+Peso ).
+Peso = 18
+
+?- peso_nivel( t(t( t( nil, 3, nil ), 2, t( nil, 3, nil )), 1, t( t( nil, 8, nil ), 3, t( nil, 4, nil ))), 10, Peso
+).
+Peso = 0
+-------------------------------------------------------------------------------
+Condiciones para las cuales las ramas del arbol seran validas.
+
+t(I,N,D):- integer(N).
+t(nil,N,D):- integer(N).
+t(I,N,nil):- integer(N).
+t(nil,N,nil):- integer(N).
+
+
+valida(nil). %NIL represetan el arbol vacio [], y es valido.
+valida(t(I,N,D)):- valida(I),valida(D), integer(N).                                           
+
+
+%Ejemplo:  peso_nivel(  t(   t( nil, 3, nil ),  1 ,  t( t( nil, 7, nil ), 2, nil )     ), 2, Peso ).
+
+peso(t(_,N,_),0,N):- !.                       
+peso(nil,_,0):- !.                            
+peso(t(I,N,D),Ni,P):- N1 is Ni - 1,           
+        		peso(I,N1,P2),                        
+			peso(D,N1,P1),                        
+       			P is P1 + P2.                       
+
+peso_nivel(t(I,N,D),Ni,Pe):- not(valida(t(I,N,D))), !, write('no es un arbol'), fail.  % Si el arbol no es valido, entonces FAIL.
+peso_nivel(t(I,N,D),Ni,Pe):- peso(t(I,N,D),Ni,Pe).                                    
+-------------------------------------------------------------------------------

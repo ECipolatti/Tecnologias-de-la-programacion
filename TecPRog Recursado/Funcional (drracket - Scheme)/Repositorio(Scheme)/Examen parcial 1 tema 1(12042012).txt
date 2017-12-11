@@ -1,0 +1,32 @@
+(define  promedio-edad
+  
+(lambda (e)
+    
+  (letrec ((suma
+             
+     (lambda (x)
+                (if (null? x) 0
+                    (+ (car x) (suma (cdr x)))))))
+     
+    (letrec ((promedio
+                (lambda (l)
+                  (/ (suma l) (length l)))))
+        
+     (letrec ((promedio-flias
+                  (lambda (m)
+                    (map (lambda (f) (promedio f)) m))))
+          
+     (letrec ((transforma
+                    (lambda (g)
+                      (map (lambda (x) (string->number (list->string (cons (cadr (string->list x)) (cddr (string->list x)))))) g))))
+            
+    (letrec ((transforma-todo
+                      (lambda (y)
+                        (map (lambda (x) (transforma x)) y))))
+              (promedio (promedio-flias (transforma-todo e))))))))))
+
+
+
+
+(promedio-edad '(("F36" "M41" "M10" "F6") ("M54" "F50" "M20") ("M34" "F2")))
+

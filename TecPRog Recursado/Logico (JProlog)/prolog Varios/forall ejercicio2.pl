@@ -1,0 +1,1 @@
+validar(L):-forall(L,(member(X,L),number(X))).

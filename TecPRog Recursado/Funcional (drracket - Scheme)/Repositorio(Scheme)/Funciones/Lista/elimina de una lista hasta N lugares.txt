@@ -1,0 +1,7 @@
+(define eliminar 
+  (lambda (lista n)
+    (if (null? lista)
+        '()
+        (if (= n 1)
+            (cdr lista)
+            (eliminar (cdr lista) (- n 1) )))))

@@ -1,0 +1,11 @@
+(define ejemplo
+  (lambda (c)
+    (let ((tempo (read c)))
+    (if (eof-object? tempo)
+        '()
+        (cons (cons tempo '())(ejemplo c))
+        )
+      )
+    )
+  )
+(ejemplo (open-input-file "prueba.txt"))

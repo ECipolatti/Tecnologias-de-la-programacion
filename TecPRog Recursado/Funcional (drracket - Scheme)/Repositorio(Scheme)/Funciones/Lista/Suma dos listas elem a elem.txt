@@ -1,0 +1,11 @@
+(define suma
+  (lambda (x y)
+    (if (null?  x)
+      '()
+       (cons (+ (car x) (car y)) (suma (cdr x) (cdr y))))))
+
+(define sumalist  //LE PASO UNA SOLA LISTA CON DOS LISTAS..Y AL LLAMAR A LA OTRA LA VOY DIVIDIENDO
+  (lambda (x)
+    (if (null? (cdr x))
+        (car x)
+        (suma (car x) (sumalist (cdr x))))))
